@@ -15,13 +15,11 @@ const DEFAULT_GENRES = [
   'G-Funk', 'Soulful House', 'Classic House', 'R&B', 'Afrobeat',
 ]
 
-// Default hero slideshow images
 const DEFAULT_IMAGES = [
   'https://dj50spann.se/wp-content/uploads/067/dj50s_ep067_hero_210.jpg',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFaeeGu8tnsjOSiqHuDf_OPzPWfrOcz37xw&s',
 ]
 
-// Frequency → RGB: deep crimson (sub-bass) → orange → gold → cyan → ice white (brilliance)
 function specRGB(t: number): [number, number, number] {
   if (t < 0.20) {
     const u = t / 0.20
@@ -59,6 +57,10 @@ export default function Hero() {
   const freqDataRef = useRef<Uint8Array<ArrayBuffer> | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
 
+  // ── Sensitivity ──────────────────────────────────────────────────────────
+  const [sensitivity, setSensitivity] = useState(2.5)
+  const sensitivityRef = useRef(2.5)
+
   const activateMic = async () => {
     if (micStateRef.current === 'requesting' || micStateRef.current === 'active') return
     setMicState('requesting')
@@ -69,9 +71,9 @@ export default function Hero() {
       const ctx = new AudioCtx()
       const analyser = ctx.createAnalyser()
       analyser.fftSize = 8192
-      analyser.smoothingTimeConstant = 0.80
-      analyser.minDecibels = -90
-      analyser.maxDecibels = -10
+      analyser.smoothingTimeConstant = 0.65
+      analyser.minDecibels = -100
+      analyser.maxDecibels = -20
       ctx.createMediaStreamSource(stream).connect(analyser)
       audioCtxRef.current = ctx
       analyserRef.current = analyser
@@ -85,13 +87,11 @@ export default function Hero() {
     }
   }
 
-  // Auto-request mic on mount
   useEffect(() => {
     activateMic()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Cleanup mic on unmount
   useEffect(() => {
     return () => {
       micStreamRef.current?.getTracks().forEach((tr) => tr.stop())
@@ -100,10 +100,8 @@ export default function Hero() {
     }
   }, [])
 
-  // ── Per-bar smoothed display levels ──────────────────────────────────────
   const displayRef = useRef<number[]>(Array.from({ length: TOTAL_BARS }, () => 0))
 
-  // ── Content data ──────────────────────────────────────────────────────────
   const [genres, setGenres]               = useState<string[]>(DEFAULT_GENRES)
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null)
   const [heroImages, setHeroImages]       = useState<string[]>(DEFAULT_IMAGES)
@@ -111,8 +109,8 @@ export default function Hero() {
 
   useEffect(() => { bgModeRef.current = bgMode }, [bgMode])
   useEffect(() => { micStateRef.current = micState }, [micState])
+  useEffect(() => { sensitivityRef.current = sensitivity }, [sensitivity])
 
-  // Load DB data
   useEffect(() => {
     supabase.from('site_settings').select('key, value').in('key', ['hero_genres', 'hero_images'])
       .then(({ data }) => {
@@ -141,7 +139,6 @@ export default function Hero() {
       })
   }, [])
 
-  // Slideshow timer
   useEffect(() => {
     if (bgMode !== 'images' || heroImages.length < 2) return
     const id = setInterval(() => setSlideIdx((i) => (i + 1) % heroImages.length), 5000)
@@ -156,8 +153,8 @@ export default function Hero() {
     if (!ctx) return
 
     const resize = () => {
-      canvas.width  = window.innerWidth
-      canvas.height = window.innerHeight
+      canvas.width  = canvas.offsetWidth
+      canvas.height = canvas.offsetHeight
     }
     resize()
     window.addEventListener('resize', resize)
@@ -166,7 +163,6 @@ export default function Hero() {
       const W = canvas.width
       const H = canvas.height
 
-      // Only render when in spectrum mode AND mic is active
       if (bgModeRef.current !== 'spectrum' || micStateRef.current !== 'active' || !analyserRef.current || !freqDataRef.current) {
         ctx.clearRect(0, 0, W, H)
         animRef.current = requestAnimationFrame(draw)
@@ -189,15 +185,14 @@ export default function Hero() {
         const freq  = 20 * Math.pow(1000, tPos)
         const numBins = freqDataRef.current.length
         const bin   = Math.min(Math.round((freq / nyquist) * numBins), numBins - 1)
-        const raw   = freqDataRef.current[bin] / 255
+        const raw   = Math.min(1, (freqDataRef.current[bin] / 255) * sensitivityRef.current)
 
-        // Fast attack, slow release
         const diff = raw - displayRef.current[i]
         displayRef.current[i] += diff > 0 ? diff * 0.60 : diff * 0.15
         displayRef.current[i] = Math.max(0, Math.min(1, displayRef.current[i]))
 
         const lvl = displayRef.current[i]
-        if (lvl < 0.005) continue  // skip silent bars
+        if (lvl < 0.005) continue
 
         const x    = i * slot + gap * 0.5
         const barH = lvl * H * 0.75
@@ -221,7 +216,6 @@ export default function Hero() {
           ctx.restore()
         }
 
-        // Floor reflection
         const refGrad = ctx.createLinearGradient(0, H, 0, H + barH * 0.28)
         refGrad.addColorStop(0, `rgba(${r},${g},${bl},${(alpha * 0.22).toFixed(3)})`)
         refGrad.addColorStop(1, `rgba(${r},${g},${bl},0)`)
@@ -246,8 +240,8 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col overflow-x-hidden grain pt-[92px]"
-      style={{ background: 'var(--bg)' }}
+      className="relative flex flex-col overflow-hidden grain pt-[92px]"
+      style={{ height: '100dvh', background: 'var(--bg)' }}
     >
       {/* ── Spectrum canvas ── */}
       <canvas
@@ -283,13 +277,13 @@ export default function Hero() {
       }} />
 
       {/* ── Main content — left aligned ── */}
-      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[180px] flex flex-col items-start justify-center">
+      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[9rem] sm:pb-[11rem] flex flex-col items-start justify-center min-h-0">
 
-        <p className="section-label mb-10">{t.hero.location}</p>
+        <p className="section-label mb-4 sm:mb-10">{t.hero.location}</p>
 
         <h1
-          className="font-black leading-none tracking-tight mb-10 whitespace-nowrap"
-          style={{ fontSize: 'clamp(2.5rem, 10vw, 8rem)', letterSpacing: '-0.03em', color: 'var(--text)' }}
+          className="font-black leading-none tracking-tight mb-4 sm:mb-10 whitespace-nowrap"
+          style={{ fontSize: 'clamp(2.2rem, 10vw, 8rem)', letterSpacing: '-0.03em', color: 'var(--text)' }}
         >
           KENNY{' '}
           <span style={{
@@ -301,33 +295,39 @@ export default function Hero() {
           </span>
         </h1>
 
-        <p className="font-bold mb-6 tracking-wider"
+        <p className="font-bold mb-3 sm:mb-6 tracking-wider"
           style={{ fontSize: 'clamp(0.7rem, 2vw, 0.9rem)', color: 'var(--muted)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
           {t.hero.tagline}
         </p>
 
-        <p className="max-w-lg mb-14 leading-relaxed" style={{ color: 'var(--muted)', fontSize: '1rem' }}>
+        <p className="max-w-lg mb-6 sm:mb-14 leading-relaxed" style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           {t.hero.description}
         </p>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        {/* CTAs — always side by side */}
+        <div className="flex flex-row gap-3 w-full sm:w-auto">
           <a href="#book" onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
-            className="px-14 py-8 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center"
-            style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem' }}>
+            className="flex-1 sm:flex-initial px-7 sm:px-12 py-4 sm:py-5 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center rounded-full"
+            style={{ background: 'var(--accent)', color: '#fff', fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', whiteSpace: 'nowrap' }}>
             {t.hero.bookCta}
           </a>
           <a href="#about" onClick={(e) => { e.preventDefault(); window.location.hash = '#about' }}
-            className="px-14 py-8 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center"
-            style={{ borderColor: 'var(--border)', color: 'var(--text)', background: 'transparent', fontSize: '0.8rem' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)' }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)' }}>
+            className="flex-1 sm:flex-initial px-7 sm:px-12 py-4 sm:py-5 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center rounded-full"
+            style={{ borderColor: 'var(--accent)', color: 'var(--text)', background: 'transparent', fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', whiteSpace: 'nowrap' }}
+            onMouseEnter={(e) => {
+              ;(e.currentTarget as HTMLElement).style.background = 'var(--accent)'
+              ;(e.currentTarget as HTMLElement).style.color = '#fff'
+            }}
+            onMouseLeave={(e) => {
+              ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+              ;(e.currentTarget as HTMLElement).style.color = 'var(--text)'
+            }}>
             {t.hero.learnMore}
           </a>
         </div>
 
         {/* Stats */}
-        <div className="mt-20 grid grid-cols-3 gap-10 border-t pt-10" style={{ borderColor: 'var(--border)', minWidth: '280px' }}>
+        <div className="mt-8 sm:mt-16 grid grid-cols-3 gap-6 sm:gap-10 border-t pt-6 sm:pt-10" style={{ borderColor: 'var(--border)', minWidth: '240px' }}>
           {[
             { value: '40+', label: t.hero.stats.years },
             { value: '1982', label: t.hero.stats.since },
@@ -343,7 +343,7 @@ export default function Hero() {
         {/* Featured event */}
         {featuredEvent && (
           <a href="#events" onClick={(e) => { e.preventDefault(); window.location.hash = '#events' }}
-            className="mt-10 flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-md transition-all duration-200"
+            className="mt-6 sm:mt-10 flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-md transition-all duration-200"
             style={{ borderColor: 'var(--accent)', background: 'var(--surface)' }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)' }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface)' }}>
@@ -366,7 +366,7 @@ export default function Hero() {
       </div>
 
       {/* ── Background mode switcher ── */}
-      <div className="absolute bottom-44 right-9 z-20 flex flex-col gap-1.5">
+      <div className="absolute bottom-36 sm:bottom-32 right-9 z-20 flex flex-col gap-1.5">
         <button
           onClick={() => setBgMode('spectrum')}
           title="Spectrum"
@@ -409,9 +409,9 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* ── Mic status indicator ── */}
+      {/* ── Mic status + sensitivity slider ── */}
       {bgMode === 'spectrum' && (
-        <div className="absolute bottom-44 left-9 z-20">
+        <div className="absolute bottom-36 sm:bottom-32 left-9 z-20 flex flex-col gap-2">
           {micState === 'requesting' && (
             <div className="flex items-center gap-2 px-3 py-2"
               style={{
@@ -424,16 +424,47 @@ export default function Hero() {
             </div>
           )}
           {micState === 'active' && (
-            <div className="flex items-center gap-2 px-3 py-2"
-              style={{
-                fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase',
-                background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
-                border: '1px solid var(--accent)', color: 'var(--accent)', backdropFilter: 'blur(8px)',
-              }}>
-              <span className="w-1.5 h-1.5 rounded-full"
-                style={{ background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', animation: 'pulse 1.5s ease-in-out infinite' }} />
-              Live
-            </div>
+            <>
+              <div className="flex items-center gap-2 px-3 py-2"
+                style={{
+                  fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase',
+                  background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
+                  border: '1px solid var(--accent)', color: 'var(--accent)', backdropFilter: 'blur(8px)',
+                }}>
+                <span className="w-1.5 h-1.5 rounded-full"
+                  style={{ background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', animation: 'pulse 1.5s ease-in-out infinite' }} />
+                Live
+              </div>
+              {/* Sensitivity slider */}
+              <div className="px-3 py-2"
+                style={{
+                  background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
+                  border: '1px solid var(--border)', backdropFilter: 'blur(8px)',
+                  minWidth: '130px',
+                }}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span style={{ fontSize: '0.52rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+                    Sensitivity
+                  </span>
+                  <span style={{ fontSize: '0.52rem', fontWeight: 900, color: 'var(--accent)', letterSpacing: '0.05em' }}>
+                    {sensitivity.toFixed(1)}×
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={0.5}
+                  max={8}
+                  step={0.1}
+                  value={sensitivity}
+                  onChange={(e) => {
+                    const v = parseFloat(e.target.value)
+                    setSensitivity(v)
+                    sensitivityRef.current = v
+                  }}
+                  style={{ width: '100%', accentColor: 'var(--accent)', cursor: 'pointer', height: '3px' }}
+                />
+              </div>
+            </>
           )}
           {micState === 'denied' && (
             <button onClick={activateMic}
@@ -467,7 +498,7 @@ export default function Hero() {
 
       {/* Slideshow dots */}
       {bgMode === 'images' && heroImages.length > 1 && (
-        <div className="absolute bottom-44 left-9 z-20 flex gap-1.5">
+        <div className="absolute bottom-36 sm:bottom-32 left-9 z-20 flex gap-1.5">
           {heroImages.map((_, i) => (
             <button key={i} onClick={() => setSlideIdx(i)}
               className="transition-all duration-300"
