@@ -1,20 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import type { Database, OrderItem } from '@/types/database'
 import QRCode from 'qrcode'
 import nodemailer from 'nodemailer'
 
 export const runtime = 'nodejs'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-04-22.dahlia',
-})
-
-const supabase = createClient<Database>(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
 
 function orderNumber() {
   const d = new Date()
@@ -29,19 +20,31 @@ function ticketCode() {
 }
 
 export async function POST(req: NextRequest) {
+  const stripeKey = process.env.STRIPE_SECRET_KEY
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+  if (!stripeKey || !webhookSecret) {
+    return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
+  }
+  const stripe = new Stripe(stripeKey, { apiVersion: '2026-04-22.dahlia' })
+
+  const supabase = createClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
   const body = await req.text()
   const sig = req.headers.get('stripe-signature') || ''
 
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
+    event = stripe.webhooks.constructEvent(body, sig, webhookSecret)
   } catch {
     return NextResponse.json({ error: 'Webhook signature invalid' }, { status: 400 })
   }
 
   if (event.type === 'checkout.session.completed') {
     try {
-      await handleCompleted(event.data.object as Stripe.Checkout.Session)
+      await handleCompleted(event.data.object as Stripe.Checkout.Session, supabase)
     } catch (e) {
       console.error('Webhook handler error:', e)
     }
@@ -50,7 +53,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true })
 }
 
-async function handleCompleted(session: Stripe.Checkout.Session) {
+async function handleCompleted(session: Stripe.Checkout.Session, supabase: SupabaseClient<Database>) {
   // Reconstruct cart from split metadata
   const raw = (session.metadata?.cart || '') + (session.metadata?.cart2 || '')
   const cartPayload: Array<{
@@ -127,7 +130,7 @@ async function handleCompleted(session: Stripe.Checkout.Session) {
   // Printful fulfillment for merch items with shipping address
   const printfulItems = items.filter((i) => i.fulfillment === 'printful')
   if (printfulItems.length && shippingAddress) {
-    await submitPrintfulOrder(order, printfulItems, shippingAddress)
+    await submitPrintfulOrder(order, printfulItems, shippingAddress, supabase)
   }
 
   // Email confirmation
@@ -137,7 +140,8 @@ async function handleCompleted(session: Stripe.Checkout.Session) {
 async function submitPrintfulOrder(
   order: { id: string; order_number: string; customer_email: string },
   items: OrderItem[],
-  address: { name: string; line1: string; line2?: string; city: string; postal_code: string; country: string }
+  address: { name: string; line1: string; line2?: string; city: string; postal_code: string; country: string },
+  supabase: SupabaseClient<Database>
 ) {
   try {
     const res = await fetch('https://api.printful.com/orders', {
