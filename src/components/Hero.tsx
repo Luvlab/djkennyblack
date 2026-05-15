@@ -15,17 +15,11 @@ const DEFAULT_GENRES = [
   'G-Funk', 'Soulful House', 'Classic House', 'R&B', 'Afrobeat',
 ]
 
-// Fallback simulation: 80 bars across 7 frequency bands
-const SPEC_BANDS = [
-  { count: 6,  amp: 0.90, ny: 0.46, smooth: 0.93 },
-  { count: 10, amp: 0.76, ny: 0.74, smooth: 0.88 },
-  { count: 14, amp: 0.59, ny: 1.10, smooth: 0.82 },
-  { count: 18, amp: 0.42, ny: 1.65, smooth: 0.75 },
-  { count: 16, amp: 0.26, ny: 2.35, smooth: 0.67 },
-  { count: 10, amp: 0.14, ny: 3.50, smooth: 0.58 },
-  { count: 6,  amp: 0.07, ny: 5.20, smooth: 0.49 },
+// Default hero slideshow images
+const DEFAULT_IMAGES = [
+  'https://dj50spann.se/wp-content/uploads/067/dj50s_ep067_hero_210.jpg',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzFaeeGu8tnsjOSiqHuDf_OPzPWfrOcz37xw&s',
 ]
-const TOTAL_BARS = SPEC_BANDS.reduce((s, b) => s + b.count, 0) // 80
 
 // Frequency → RGB: deep crimson (sub-bass) → orange → gold → cyan → ice white (brilliance)
 function specRGB(t: number): [number, number, number] {
@@ -47,12 +41,13 @@ function specRGB(t: number): [number, number, number] {
   }
 }
 
+const TOTAL_BARS = 80
+
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animRef = useRef<number>(0)
+  const animRef   = useRef<number>(0)
   const { t } = useLang()
 
-  // Background mode — only 2 choices
   const [bgMode, setBgMode] = useState<HeroBg>('spectrum')
   const bgModeRef = useRef<HeroBg>('spectrum')
 
@@ -65,6 +60,7 @@ export default function Hero() {
   const micStreamRef = useRef<MediaStream | null>(null)
 
   const activateMic = async () => {
+    if (micStateRef.current === 'requesting' || micStateRef.current === 'active') return
     setMicState('requesting')
     micStateRef.current = 'requesting'
     try {
@@ -72,7 +68,6 @@ export default function Hero() {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
       const ctx = new AudioCtx()
       const analyser = ctx.createAnalyser()
-      // fftSize 8192 → 4096 bins → ~5.4 Hz/bin at 44100 Hz — proper sub-bass resolution
       analyser.fftSize = 8192
       analyser.smoothingTimeConstant = 0.80
       analyser.minDecibels = -90
@@ -90,27 +85,29 @@ export default function Hero() {
     }
   }
 
+  // Auto-request mic on mount
+  useEffect(() => {
+    activateMic()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Cleanup mic on unmount
   useEffect(() => {
     return () => {
-      micStreamRef.current?.getTracks().forEach((t) => t.stop())
+      micStreamRef.current?.getTracks().forEach((tr) => tr.stop())
       audioCtxRef.current?.close()
       cancelAnimationFrame(animRef.current)
     }
   }, [])
 
-  // ── Simulation state (fallback when mic is off) ───────────────────────────
-  const simLevelsRef = useRef<number[]>(Array.from({ length: TOTAL_BARS }, () => 0.02))
-  const phasesRef    = useRef<number[]>(Array.from({ length: TOTAL_BARS }, (_, i) => i * 1.618))
-
-  // ── Per-bar smoothed display levels (used for both mic + simulation) ──────
-  const displayRef = useRef<number[]>(Array.from({ length: TOTAL_BARS }, () => 0.02))
+  // ── Per-bar smoothed display levels ──────────────────────────────────────
+  const displayRef = useRef<number[]>(Array.from({ length: TOTAL_BARS }, () => 0))
 
   // ── Content data ──────────────────────────────────────────────────────────
-  const [genres, setGenres]             = useState<string[]>(DEFAULT_GENRES)
+  const [genres, setGenres]               = useState<string[]>(DEFAULT_GENRES)
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null)
-  const [heroImages, setHeroImages]     = useState<string[]>([])
-  const [slideIdx, setSlideIdx]         = useState(0)
+  const [heroImages, setHeroImages]       = useState<string[]>(DEFAULT_IMAGES)
+  const [slideIdx, setSlideIdx]           = useState(0)
 
   useEffect(() => { bgModeRef.current = bgMode }, [bgMode])
   useEffect(() => { micStateRef.current = micState }, [micState])
@@ -125,7 +122,8 @@ export default function Hero() {
             if (list.length > 0) setGenres(list)
           }
           if (d.key === 'hero_images' && d.value) {
-            setHeroImages(d.value.split(',').map((u: string) => u.trim()).filter(Boolean))
+            const dbImgs = d.value.split(',').map((u: string) => u.trim()).filter(Boolean)
+            if (dbImgs.length > 0) setHeroImages(dbImgs)
           }
         })
       })
@@ -140,8 +138,6 @@ export default function Hero() {
           setGenres((prev) => (prev === DEFAULT_GENRES ? [...allGenres] : prev))
         const next = data.find((e) => e.is_upcoming && e.is_featured) || data.find((e) => e.is_upcoming)
         if (next) setFeaturedEvent(next as Event)
-        const imgs = data.filter((e) => e.image_url).map((e) => e.image_url as string)
-        if (imgs.length > 0) setHeroImages((prev) => (prev.length === 0 ? imgs : prev))
       })
   }, [])
 
@@ -159,10 +155,8 @@ export default function Hero() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    let tick = 0
-
     const resize = () => {
-      canvas.width = window.innerWidth
+      canvas.width  = window.innerWidth
       canvas.height = window.innerHeight
     }
     resize()
@@ -172,99 +166,68 @@ export default function Hero() {
       const W = canvas.width
       const H = canvas.height
 
-      if (bgModeRef.current !== 'spectrum') {
+      // Only render when in spectrum mode AND mic is active
+      if (bgModeRef.current !== 'spectrum' || micStateRef.current !== 'active' || !analyserRef.current || !freqDataRef.current) {
         ctx.clearRect(0, 0, W, H)
         animRef.current = requestAnimationFrame(draw)
         return
       }
 
       ctx.clearRect(0, 0, W, H)
-      tick += 0.020
 
-      const useMic = micStateRef.current === 'active' && analyserRef.current && freqDataRef.current
       const sampleRate = audioCtxRef.current?.sampleRate ?? 44100
       const nyquist    = sampleRate / 2
-
-      // Snapshot frequency data once per frame
-      if (useMic) analyserRef.current!.getByteFrequencyData(freqDataRef.current!)
+      analyserRef.current.getByteFrequencyData(freqDataRef.current)
 
       const n    = TOTAL_BARS
       const slot = W / n
       const barW = Math.max(1, slot * 0.62)
       const gap  = slot - barW
 
-      let bandStart = 0
+      for (let i = 0; i < n; i++) {
+        const tPos = i / (n - 1)
+        const freq  = 20 * Math.pow(1000, tPos)
+        const numBins = freqDataRef.current.length
+        const bin   = Math.min(Math.round((freq / nyquist) * numBins), numBins - 1)
+        const raw   = freqDataRef.current[bin] / 255
 
-      SPEC_BANDS.forEach((band) => {
-        for (let b = 0; b < band.count; b++) {
-          const i    = bandStart + b
-          const tPos = i / (n - 1)  // 0 = sub-bass, 1 = brilliance
+        // Fast attack, slow release
+        const diff = raw - displayRef.current[i]
+        displayRef.current[i] += diff > 0 ? diff * 0.60 : diff * 0.15
+        displayRef.current[i] = Math.max(0, Math.min(1, displayRef.current[i]))
 
-          let target: number
+        const lvl = displayRef.current[i]
+        if (lvl < 0.005) continue  // skip silent bars
 
-          if (useMic) {
-            // ── Real microphone path ──────────────────────────────────────
-            // Map bar index to frequency (logarithmic: 20 Hz → 20 000 Hz)
-            const freq    = 20 * Math.pow(1000, tPos)
-            const numBins = freqDataRef.current!.length
-            const bin     = Math.min(Math.round((freq / nyquist) * numBins), numBins - 1)
-            target = freqDataRef.current![bin] / 255
+        const x    = i * slot + gap * 0.5
+        const barH = lvl * H * 0.75
+        const [r, g, bl] = specRGB(tPos)
 
-            // Apply per-bar exponential smoothing on top of analyser smoothing
-            const diff = target - displayRef.current[i]
-            displayRef.current[i] += diff > 0
-              ? diff * 0.60   // fast attack
-              : diff * 0.15   // slow release
-          } else {
-            // ── Simulation fallback ───────────────────────────────────────
-            const ph    = phasesRef.current[i]
-            const noise = Math.sin(tick * band.ny + ph) *
-                          Math.cos(tick * band.ny * 0.71 + ph * 1.37) *
-                          Math.sin(tick * band.ny * 0.43 + b * 0.88 + ph * 0.8)
-            target = band.amp * (0.06 + 0.94 * Math.abs(noise))
-            simLevelsRef.current[i] += (target - simLevelsRef.current[i]) * (
-              target > simLevelsRef.current[i]
-                ? (1 - band.smooth) * 3.5
-                : (1 - band.smooth)
-            )
-            simLevelsRef.current[i] = Math.max(0.02, Math.min(1, simLevelsRef.current[i]))
-            displayRef.current[i]   = simLevelsRef.current[i]
-          }
+        const alpha = 0.15 + lvl * 0.38
+        const grad  = ctx.createLinearGradient(0, H - barH, 0, H)
+        grad.addColorStop(0,   `rgba(${r},${g},${bl},${(alpha * 0.95).toFixed(3)})`)
+        grad.addColorStop(0.5, `rgba(${r},${g},${bl},${(alpha * 0.55).toFixed(3)})`)
+        grad.addColorStop(1,   `rgba(${r},${g},${bl},${(alpha * 0.08).toFixed(3)})`)
+        ctx.fillStyle = grad
+        ctx.fillRect(x, H - barH, barW, barH)
 
-          const lvl = Math.max(0, Math.min(1, displayRef.current[i]))
-          const x   = i * slot + gap * 0.5
-          const barH = lvl * H * 0.75
-          const [r, g, bl] = specRGB(tPos)
-
-          // Main bar — vertical gradient, bright at top, dim at base
-          const alpha = 0.15 + lvl * 0.38
-          const grad  = ctx.createLinearGradient(0, H - barH, 0, H)
-          grad.addColorStop(0,   `rgba(${r},${g},${bl},${(alpha * 0.95).toFixed(3)})`)
-          grad.addColorStop(0.5, `rgba(${r},${g},${bl},${(alpha * 0.55).toFixed(3)})`)
-          grad.addColorStop(1,   `rgba(${r},${g},${bl},${(alpha * 0.08).toFixed(3)})`)
-          ctx.fillStyle = grad
-          ctx.fillRect(x, H - barH, barW, barH)
-
-          // Glowing peak cap
-          if (lvl > 0.28) {
-            const peakA = (lvl - 0.28) * 0.60
-            ctx.save()
-            ctx.shadowColor = `rgba(${r},${g},${bl},${peakA})`
-            ctx.shadowBlur  = 18
-            ctx.fillStyle   = `rgba(${r},${g},${bl},${(peakA * 2.0).toFixed(3)})`
-            ctx.fillRect(x, H - barH - 1, barW, 2.5)
-            ctx.restore()
-          }
-
-          // Floor reflection
-          const refGrad = ctx.createLinearGradient(0, H, 0, H + barH * 0.28)
-          refGrad.addColorStop(0, `rgba(${r},${g},${bl},${(alpha * 0.22).toFixed(3)})`)
-          refGrad.addColorStop(1, `rgba(${r},${g},${bl},0)`)
-          ctx.fillStyle = refGrad
-          ctx.fillRect(x, H, barW, barH * 0.28)
+        if (lvl > 0.28) {
+          const peakA = (lvl - 0.28) * 0.60
+          ctx.save()
+          ctx.shadowColor = `rgba(${r},${g},${bl},${peakA})`
+          ctx.shadowBlur  = 18
+          ctx.fillStyle   = `rgba(${r},${g},${bl},${(peakA * 2.0).toFixed(3)})`
+          ctx.fillRect(x, H - barH - 1, barW, 2.5)
+          ctx.restore()
         }
-        bandStart += band.count
-      })
+
+        // Floor reflection
+        const refGrad = ctx.createLinearGradient(0, H, 0, H + barH * 0.28)
+        refGrad.addColorStop(0, `rgba(${r},${g},${bl},${(alpha * 0.22).toFixed(3)})`)
+        refGrad.addColorStop(1, `rgba(${r},${g},${bl},0)`)
+        ctx.fillStyle = refGrad
+        ctx.fillRect(x, H, barW, barH * 0.28)
+      }
 
       animRef.current = requestAnimationFrame(draw)
     }
@@ -312,36 +275,34 @@ export default function Hero() {
           }}
         />
       ))}
-      {bgMode === 'images' && heroImages.length === 0 && (
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(135deg, rgba(255,69,0,0.12) 0%, transparent 60%)',
-          pointerEvents: 'none',
-        }} />
-      )}
 
       {/* ── Radial glow overlay ── */}
       <div className="absolute inset-0" style={{
-        background: 'radial-gradient(ellipse 80% 55% at 50% 55%, rgba(255,69,0,0.07) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 70% 60% at 20% 50%, rgba(255,69,0,0.06) 0%, transparent 65%)',
         pointerEvents: 'none',
       }} />
 
-      {/* ── Main content ── */}
-      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[180px] flex flex-col items-center justify-center text-center">
+      {/* ── Main content — left aligned ── */}
+      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[180px] flex flex-col items-start justify-center">
 
-        <div className="section-label mb-10 flex items-center gap-3">
-          <span className="accent-line" />
-          {t.hero.location}
-          <span className="accent-line" />
-        </div>
+        <p className="section-label mb-10">{t.hero.location}</p>
 
-        <h1 className="font-black leading-none tracking-tight mb-10"
-          style={{ fontSize: 'clamp(3.5rem, 16vw, 11rem)', color: 'var(--text)', letterSpacing: '-0.03em' }}>
-          KENNY<br />
-          <span style={{ color: 'var(--accent)' }} className="text-glow">BLACK</span>
+        <h1
+          className="font-black leading-none tracking-tight mb-10 whitespace-nowrap"
+          style={{ fontSize: 'clamp(2.5rem, 10vw, 8rem)', letterSpacing: '-0.03em', color: 'var(--text)' }}
+        >
+          KENNY{' '}
+          <span style={{
+            color: 'transparent',
+            WebkitTextStroke: '2px var(--accent)',
+            filter: 'drop-shadow(0 0 24px rgba(255,69,0,0.6))',
+          }}>
+            BLACK
+          </span>
         </h1>
 
         <p className="font-bold mb-6 tracking-wider"
-          style={{ fontSize: 'clamp(0.75rem, 2.5vw, 1rem)', color: 'var(--muted)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+          style={{ fontSize: 'clamp(0.7rem, 2vw, 0.9rem)', color: 'var(--muted)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
           {t.hero.tagline}
         </p>
 
@@ -350,13 +311,13 @@ export default function Hero() {
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:w-auto">
-          <a href="/#book" onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <a href="#book" onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
             className="px-14 py-8 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center"
             style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem' }}>
             {t.hero.bookCta}
           </a>
-          <a href="/#about" onClick={(e) => { e.preventDefault(); window.location.hash = '#about' }}
+          <a href="#about" onClick={(e) => { e.preventDefault(); window.location.hash = '#about' }}
             className="px-14 py-8 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center"
             style={{ borderColor: 'var(--border)', color: 'var(--text)', background: 'transparent', fontSize: '0.8rem' }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)' }}
@@ -366,13 +327,13 @@ export default function Hero() {
         </div>
 
         {/* Stats */}
-        <div className="mt-20 grid grid-cols-3 gap-8 w-full max-w-sm border-t pt-10" style={{ borderColor: 'var(--border)' }}>
+        <div className="mt-20 grid grid-cols-3 gap-10 border-t pt-10" style={{ borderColor: 'var(--border)', minWidth: '280px' }}>
           {[
             { value: '40+', label: t.hero.stats.years },
             { value: '1982', label: t.hero.stats.since },
             { value: 'Vinyl', label: t.hero.stats.vinyl },
           ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center">
+            <div key={stat.label} className="flex flex-col items-start">
               <span className="font-black text-2xl" style={{ color: 'var(--accent)' }}>{stat.value}</span>
               <span className="tracking-widest uppercase mt-1" style={{ color: 'var(--muted)', fontSize: '0.65rem' }}>{stat.label}</span>
             </div>
@@ -381,8 +342,8 @@ export default function Hero() {
 
         {/* Featured event */}
         {featuredEvent && (
-          <a href="/#events" onClick={(e) => { e.preventDefault(); window.location.hash = '#events' }}
-            className="mt-10 flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-sm transition-all duration-200"
+          <a href="#events" onClick={(e) => { e.preventDefault(); window.location.hash = '#events' }}
+            className="mt-10 flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-md transition-all duration-200"
             style={{ borderColor: 'var(--accent)', background: 'var(--surface)' }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)' }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface)' }}>
@@ -404,10 +365,8 @@ export default function Hero() {
         )}
       </div>
 
-      {/* ── Background mode switcher (2 buttons) ── */}
+      {/* ── Background mode switcher ── */}
       <div className="absolute bottom-44 right-9 z-20 flex flex-col gap-1.5">
-
-        {/* Spectrum button */}
         <button
           onClick={() => setBgMode('spectrum')}
           title="Spectrum"
@@ -429,8 +388,6 @@ export default function Hero() {
             <line x1="20" y1="20" x2="20" y2="12"/>
           </svg>
         </button>
-
-        {/* Photos button */}
         <button
           onClick={() => setBgMode('images')}
           title="Slideshow"
@@ -452,82 +409,65 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* ── Microphone permission prompt (spectrum mode only) ── */}
-      {bgMode === 'spectrum' && micState === 'idle' && (
+      {/* ── Mic status indicator ── */}
+      {bgMode === 'spectrum' && (
         <div className="absolute bottom-44 left-9 z-20">
-          <button
-            onClick={activateMic}
-            className="flex items-center gap-2 px-3 py-2 font-bold tracking-widest uppercase transition-all duration-200"
-            style={{
-              fontSize: '0.6rem',
-              background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
-              border: '1px solid var(--border)',
-              color: 'var(--muted)',
-              backdropFilter: 'blur(8px)',
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
-              ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'
-              ;(e.currentTarget as HTMLElement).style.color = 'var(--muted)'
-            }}
-          >
-            {/* Mic icon */}
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="9" y="2" width="6" height="12" rx="3"/>
-              <path d="M5 10a7 7 0 0 0 14 0"/>
-              <line x1="12" y1="19" x2="12" y2="22"/>
-              <line x1="8" y1="22" x2="16" y2="22"/>
-            </svg>
-            Activate Live Spectrum
-          </button>
-        </div>
-      )}
-
-      {/* Requesting mic */}
-      {bgMode === 'spectrum' && micState === 'requesting' && (
-        <div className="absolute bottom-44 left-9 z-20 flex items-center gap-2 px-3 py-2"
-          style={{
-            fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-            background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
-            border: '1px solid var(--border)', color: 'var(--muted)', backdropFilter: 'blur(8px)',
-          }}>
-          <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent)' }} />
-          Allow microphone…
-        </div>
-      )}
-
-      {/* Mic active — LIVE indicator */}
-      {bgMode === 'spectrum' && micState === 'active' && (
-        <div className="absolute bottom-44 left-9 z-20 flex items-center gap-2 px-3 py-2"
-          style={{
-            fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase',
-            background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
-            border: '1px solid var(--accent)', color: 'var(--accent)', backdropFilter: 'blur(8px)',
-          }}>
-          <span className="w-1.5 h-1.5 rounded-full"
-            style={{ background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', animation: 'pulse 1.5s ease-in-out infinite' }} />
-          Live
-        </div>
-      )}
-
-      {/* Mic denied */}
-      {bgMode === 'spectrum' && micState === 'denied' && (
-        <div className="absolute bottom-44 left-9 z-20 flex items-center gap-2 px-3 py-2"
-          style={{
-            fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
-            background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
-            border: '1px solid var(--border)', color: 'var(--muted-2)', backdropFilter: 'blur(8px)',
-          }}>
-          Mic blocked — simulated
+          {micState === 'requesting' && (
+            <div className="flex items-center gap-2 px-3 py-2"
+              style={{
+                fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
+                border: '1px solid var(--border)', color: 'var(--muted)', backdropFilter: 'blur(8px)',
+              }}>
+              <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent)' }} />
+              Allow microphone…
+            </div>
+          )}
+          {micState === 'active' && (
+            <div className="flex items-center gap-2 px-3 py-2"
+              style={{
+                fontSize: '0.6rem', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase',
+                background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
+                border: '1px solid var(--accent)', color: 'var(--accent)', backdropFilter: 'blur(8px)',
+              }}>
+              <span className="w-1.5 h-1.5 rounded-full"
+                style={{ background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', animation: 'pulse 1.5s ease-in-out infinite' }} />
+              Live
+            </div>
+          )}
+          {micState === 'denied' && (
+            <button onClick={activateMic}
+              className="flex items-center gap-2 px-3 py-2 transition-all duration-200"
+              style={{
+                fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
+                border: '1px solid var(--border)', color: 'var(--muted-2)', backdropFilter: 'blur(8px)',
+                cursor: 'pointer',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
+                ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'
+                ;(e.currentTarget as HTMLElement).style.color = 'var(--muted-2)'
+              }}
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="9" y="2" width="6" height="12" rx="3"/>
+                <path d="M5 10a7 7 0 0 0 14 0"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="8" y1="22" x2="16" y2="22"/>
+              </svg>
+              Retry mic
+            </button>
+          )}
         </div>
       )}
 
       {/* Slideshow dots */}
       {bgMode === 'images' && heroImages.length > 1 && (
-        <div className="absolute bottom-44 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
+        <div className="absolute bottom-44 left-9 z-20 flex gap-1.5">
           {heroImages.map((_, i) => (
             <button key={i} onClick={() => setSlideIdx(i)}
               className="transition-all duration-300"

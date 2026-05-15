@@ -65,7 +65,7 @@ function EventCard({ event }: { event: Event }) {
       </div>
 
       {/* Card body */}
-      <div className="p-4 flex-1 flex flex-col gap-2">
+      <div className="p-6 flex-1 flex flex-col gap-3">
         <div>
           <h3 className="font-black mb-1 leading-tight" style={{ color: 'var(--text)', fontSize: '1rem' }}>
             {event.title}
@@ -128,14 +128,14 @@ export default function Events() {
   })
 
   return (
-    <section id="events" className="py-24 px-9 min-h-screen" style={{ background: 'var(--surface)' }}>
-      <div className="max-w-screen-xl mx-auto">
+    <section id="events" className="py-28 min-h-screen" style={{ background: 'var(--surface)' }}>
+      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
 
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
           <div>
-            <p className="section-label mb-3">{t.events.label}</p>
-            <div className="accent-line mb-5" />
+            <p className="section-label mb-4">{t.events.label}</p>
+            <div className="accent-line mb-8" />
             <h2
               className="font-black leading-none tracking-tight"
               style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', color: 'var(--text)' }}
@@ -169,7 +169,7 @@ export default function Events() {
 
         {/* Content */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse aspect-[9/16] sm:aspect-[16/9]"
                 style={{ background: 'var(--surface-2)' }} />
@@ -192,7 +192,7 @@ export default function Events() {
             {t.events.noEvents}
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}

@@ -89,28 +89,28 @@ export default function BookingForm() {
   return (
     <section
       id="book"
-      className="py-24 px-9"
+      className="py-28"
       style={{ background: 'var(--surface)' }}
     >
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left: copy */}
           <div>
-            <p className="section-label mb-3">{t.booking.label}</p>
-            <div className="accent-line mb-6" />
+            <p className="section-label mb-4">{t.booking.label}</p>
+            <div className="accent-line mb-8" />
             <h2
-              className="font-black leading-none tracking-tight mb-6"
+              className="font-black leading-none tracking-tight mb-8"
               style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', color: 'var(--text)' }}
             >
               {t.booking.heading1}
               <br />
               <span style={{ color: 'var(--accent)' }}>{t.booking.heading2}</span>
             </h2>
-            <p className="text-sm leading-relaxed mb-8" style={{ color: 'var(--muted)' }}>
+            <p className="text-sm leading-relaxed mb-10" style={{ color: 'var(--muted)' }}>
               {t.booking.description}
             </p>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               {[
                 { icon: '📍', title: t.booking.contact.base, desc: t.booking.contact.baseValue },
                 { icon: '📞', title: t.booking.contact.phone, desc: '+46 73 941 40 65' },
@@ -162,7 +162,7 @@ export default function BookingForm() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 {/* Row: name + email */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>

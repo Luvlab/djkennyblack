@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import VUMeter from './VUMeter'
 import { useLang } from '@/context/LangContext'
 
 const mixes = [
@@ -78,11 +77,6 @@ export default function MixcloudPlayer() {
         borderTop: '1px solid var(--border)',
       }}
     >
-      {/* VU Meter strip */}
-      <div className="px-9 pt-2 pb-0">
-        <VUMeter isPlaying={isPlaying} barCount={40} height={20} accentColor="#ff4500" />
-      </div>
-
       {/* Now playing info row */}
       <div className="px-9 py-1.5 flex items-center gap-3 min-w-0">
         <div

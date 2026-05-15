@@ -40,14 +40,14 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="py-24 px-9"
+      className="py-28"
       style={{ background: 'var(--bg)' }}
     >
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
         {/* Header */}
-        <div className="mb-14">
-          <p className="section-label mb-3">{t.testimonials.label}</p>
-          <div className="accent-line mb-6" />
+        <div className="mb-20">
+          <p className="section-label mb-4">{t.testimonials.label}</p>
+          <div className="accent-line mb-8" />
           <h2
             className="font-black leading-none tracking-tight"
             style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', color: 'var(--text)' }}
@@ -57,7 +57,7 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonials */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((item) => (
             <div
               key={item.id}
@@ -82,7 +82,7 @@ export default function Testimonials() {
               <div className="relative">
                 <Stars count={item.rating} />
                 <blockquote
-                  className="mt-4 mb-6 text-base leading-relaxed"
+                  className="mt-5 mb-8 text-base leading-relaxed"
                   style={{ color: 'var(--text)', fontStyle: 'italic' }}
                 >
                   "{item.message}"

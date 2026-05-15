@@ -41,11 +41,11 @@ export default function ShopSection() {
   const filtered = filter === 'all' ? products : products.filter((p) => p.type === filter)
 
   return (
-    <section id="shop" className="py-20 px-9 min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-screen-xl mx-auto">
+    <section id="shop" className="py-28 min-h-screen" style={{ background: 'var(--bg)' }}>
+      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
 
         {/* Section header — left aligned, consistent with other sections */}
-        <div className="mb-14">
+        <div className="mb-20">
           <p className="section-label mb-4">Store</p>
           <h2
             className="font-black tracking-tight leading-none mb-6"
@@ -59,7 +59,7 @@ export default function ShopSection() {
         </div>
 
         {/* Filter tabs */}
-        <div className="flex gap-2 flex-wrap pb-8 mb-8" style={{ borderBottom: '1px solid var(--border)' }}>
+        <div className="flex gap-2 flex-wrap pb-10 mb-10" style={{ borderBottom: '1px solid var(--border)' }}>
           {FILTERS.map((f) => (
             <button
               key={f.key}
@@ -78,15 +78,15 @@ export default function ShopSection() {
 
         {/* Product grid */}
         {loading ? (
-          <div className="py-24 text-center text-xs tracking-widest uppercase" style={{ color: 'var(--muted)' }}>
+          <div className="py-24 text-xs tracking-widest uppercase" style={{ color: 'var(--muted)' }}>
             Loading…
           </div>
         ) : filtered.length === 0 ? (
-          <div className="py-24 text-center text-xs tracking-widest uppercase" style={{ color: 'var(--muted)' }}>
+          <div className="py-24 text-xs tracking-widest uppercase" style={{ color: 'var(--muted)' }}>
             No products found.
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filtered.map((product) => (
               <ProductCard key={product.id} product={product} onAdd={add} />
             ))}
@@ -126,7 +126,7 @@ function ProductCard({
         </div>
       </Link>
 
-      <div className="flex flex-col flex-1 p-5 gap-4">
+      <div className="flex flex-col flex-1 p-6 gap-5">
         <div className="flex items-start gap-2">
           <Link href={`/shop/${product.slug}`} className="flex-1">
             <h3 className="text-sm font-bold leading-tight hover:underline">{product.name}</h3>

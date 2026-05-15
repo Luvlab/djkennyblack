@@ -15,12 +15,12 @@ export default function DJSchool() {
   const formats = ['private', 'group', 'vinyl'] as const
 
   return (
-    <section className="py-20 px-9 min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-screen-xl mx-auto">
+    <section className="py-28 min-h-screen" style={{ background: 'var(--bg)' }}>
+      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
 
         {/* Header */}
-        <div className="mb-14">
-          <p className="section-label mb-3">{s.label}</p>
+        <div className="mb-20">
+          <p className="section-label mb-4">{s.label}</p>
           <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-wider leading-none mb-5">
             <span style={{ color: 'var(--text)' }}>{s.heading1}</span>
             <br />
@@ -31,7 +31,7 @@ export default function DJSchool() {
           </p>
 
           {/* Book CTA */}
-          <div className="flex flex-col sm:flex-row gap-3 mt-8">
+          <div className="flex flex-col sm:flex-row gap-4 mt-10">
             <a
               href="#book"
               onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
@@ -62,7 +62,7 @@ export default function DJSchool() {
 
         {/* Book callout */}
         <div
-          className="mb-14 p-6 sm:p-8 border flex flex-col sm:flex-row gap-6 items-start"
+          className="mb-20 p-6 sm:p-8 border flex flex-col sm:flex-row gap-6 items-start"
           style={{ borderColor: 'var(--accent)', background: 'rgba(255,69,0,0.04)' }}
         >
           <div className="text-5xl">📖</div>
@@ -85,11 +85,11 @@ export default function DJSchool() {
             <h3 className="text-xs font-bold tracking-widest uppercase mb-6" style={{ color: 'var(--muted)' }}>
               {s.levels.heading}
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {levels.map(({ key, icon, color }) => (
                 <div
                   key={key}
-                  className="p-5 border transition-colors duration-200"
+                  className="p-7 border transition-colors duration-200"
                   style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
                 >
                   <div className="flex items-start gap-4">
@@ -115,7 +115,7 @@ export default function DJSchool() {
             <h3 className="text-xs font-bold tracking-widest uppercase mb-6" style={{ color: 'var(--muted)' }}>
               {s.curriculum.heading}
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-5">
               {s.curriculum.items.map((item: string, i: number) => (
                 <li key={i} className="flex items-start gap-3 text-sm" style={{ color: 'var(--text)' }}>
                   <span className="mt-0.5 flex-shrink-0 text-xs font-black" style={{ color: 'var(--accent)' }}>
@@ -129,15 +129,15 @@ export default function DJSchool() {
         </div>
 
         {/* Formats */}
-        <div className="mt-12">
+        <div className="mt-14">
           <h3 className="text-xs font-bold tracking-widest uppercase mb-6" style={{ color: 'var(--muted)' }}>
             {s.formats.heading}
           </h3>
-          <div className="grid sm:grid-cols-3 gap-4">
+          <div className="grid sm:grid-cols-3 gap-6">
             {formats.map((key) => (
               <div
                 key={key}
-                className="p-5 border"
+                className="p-6 border"
                 style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
               >
                 <p className="font-black uppercase tracking-wider text-sm mb-2" style={{ color: 'var(--text)' }}>
@@ -153,7 +153,7 @@ export default function DJSchool() {
 
         {/* Contact */}
         <div
-          className="mt-12 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border"
+          className="mt-14 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border"
           style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
         >
           <div>

@@ -19,14 +19,14 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-24 px-9"
+      className="relative py-28"
       style={{ background: 'var(--surface)' }}
     >
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
         {/* Header */}
-        <div className="mb-14">
-          <p className="section-label mb-3">{t.about.label}</p>
-          <div className="accent-line mb-6" />
+        <div className="mb-20">
+          <p className="section-label mb-4">{t.about.label}</p>
+          <div className="accent-line mb-8" />
           <h2
             className="font-black leading-none tracking-tight"
             style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', color: 'var(--text)' }}
@@ -43,7 +43,7 @@ export default function About() {
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
           {/* Left: Bio */}
           <div>
-            <div className="space-y-5" style={{ color: 'var(--muted)', lineHeight: '1.8' }}>
+            <div className="space-y-6" style={{ color: 'var(--muted)', lineHeight: '1.8' }}>
               {t.about.bio.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
               ))}
@@ -51,7 +51,7 @@ export default function About() {
 
             {/* Fact grid */}
             <div
-              className="mt-10 grid grid-cols-2 gap-px"
+              className="mt-14 grid grid-cols-2 gap-px"
               style={{ border: '1px solid var(--border)' }}
             >
               {facts.map((f) => (
@@ -130,7 +130,7 @@ export default function About() {
             </div>
 
             {/* Social links */}
-            <div className="mt-12 flex flex-wrap gap-3">
+            <div className="mt-14 flex flex-wrap gap-3">
               {[
                 { label: 'Instagram', href: 'https://instagram.com/djkennyblackevent' },
                 { label: 'Mixcloud', href: 'https://www.mixcloud.com/soulcorner-kennyblack/' },
