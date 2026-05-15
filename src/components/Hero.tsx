@@ -240,10 +240,10 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex flex-col overflow-hidden grain pt-[92px]"
+      className="relative overflow-hidden grain"
       style={{ height: '100dvh', background: 'var(--bg)' }}
     >
-      {/* ── Spectrum canvas ── */}
+      {/* ── Spectrum canvas — fills full section ── */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full"
@@ -276,97 +276,106 @@ export default function Hero() {
         pointerEvents: 'none',
       }} />
 
-      {/* ── Main content — left aligned ── */}
-      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-5 lg:px-8 pb-[9rem] sm:pb-[11rem] flex flex-col items-start justify-center min-h-0">
+      {/* ── Main content — pinned exactly between header (92px) and player (130px) ── */}
+      <div
+        className="absolute inset-x-0 z-10 overflow-hidden"
+        style={{ top: '92px', bottom: '130px' }}
+      >
+        <div className="h-full max-w-screen-xl mx-auto px-5 lg:px-8 flex flex-col items-start justify-center">
 
-        <p className="section-label mb-4 sm:mb-10">{t.hero.location}</p>
+          <p className="section-label mb-3 sm:mb-6">{t.hero.location}</p>
 
-        <h1
-          className="font-black leading-none tracking-tight mb-4 sm:mb-10 whitespace-nowrap"
-          style={{ fontSize: 'clamp(2.2rem, 10vw, 8rem)', letterSpacing: '-0.03em', color: 'var(--text)' }}
-        >
-          KENNY{' '}
-          <span style={{
-            color: 'transparent',
-            WebkitTextStroke: '2px var(--accent)',
-            filter: 'drop-shadow(0 0 24px rgba(255,69,0,0.6))',
-          }}>
-            BLACK
-          </span>
-        </h1>
-
-        <p className="font-bold mb-3 sm:mb-6 tracking-wider"
-          style={{ fontSize: 'clamp(0.7rem, 2vw, 0.9rem)', color: 'var(--muted)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-          {t.hero.tagline}
-        </p>
-
-        <p className="max-w-lg mb-6 sm:mb-14 leading-relaxed" style={{ color: 'var(--muted)', fontSize: '1rem' }}>
-          {t.hero.description}
-        </p>
-
-        {/* CTAs — always side by side */}
-        <div className="flex flex-row gap-3 w-full sm:w-auto">
-          <a href="#book" onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
-            className="flex-1 sm:flex-initial px-7 sm:px-12 py-4 sm:py-5 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center rounded-full"
-            style={{ background: 'var(--accent)', color: '#fff', fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', whiteSpace: 'nowrap' }}>
-            {t.hero.bookCta}
-          </a>
-          <a href="#about" onClick={(e) => { e.preventDefault(); window.location.hash = '#about' }}
-            className="flex-1 sm:flex-initial px-7 sm:px-12 py-4 sm:py-5 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center rounded-full"
-            style={{ borderColor: 'var(--accent)', color: 'var(--text)', background: 'transparent', fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', whiteSpace: 'nowrap' }}
-            onMouseEnter={(e) => {
-              ;(e.currentTarget as HTMLElement).style.background = 'var(--accent)'
-              ;(e.currentTarget as HTMLElement).style.color = '#fff'
-            }}
-            onMouseLeave={(e) => {
-              ;(e.currentTarget as HTMLElement).style.background = 'transparent'
-              ;(e.currentTarget as HTMLElement).style.color = 'var(--text)'
+          <h1
+            className="font-black leading-none tracking-tight mb-3 sm:mb-6 whitespace-nowrap"
+            style={{ fontSize: 'clamp(2.2rem, 10vw, 8rem)', letterSpacing: '-0.03em', color: 'var(--text)' }}
+          >
+            KENNY{' '}
+            <span style={{
+              color: 'transparent',
+              WebkitTextStroke: '2px var(--accent)',
+              filter: 'drop-shadow(0 0 24px rgba(255,69,0,0.6))',
             }}>
-            {t.hero.learnMore}
-          </a>
-        </div>
+              BLACK
+            </span>
+          </h1>
 
-        {/* Stats */}
-        <div className="mt-8 sm:mt-16 grid grid-cols-3 gap-6 sm:gap-10 border-t pt-6 sm:pt-10" style={{ borderColor: 'var(--border)', minWidth: '240px' }}>
-          {[
-            { value: '40+', label: t.hero.stats.years },
-            { value: '1982', label: t.hero.stats.since },
-            { value: 'Vinyl', label: t.hero.stats.vinyl },
-          ].map((stat) => (
-            <div key={stat.label} className="flex flex-col items-start">
-              <span className="font-black text-2xl" style={{ color: 'var(--accent)' }}>{stat.value}</span>
-              <span className="tracking-widest uppercase mt-1" style={{ color: 'var(--muted)', fontSize: '0.65rem' }}>{stat.label}</span>
-            </div>
-          ))}
-        </div>
+          <p className="font-bold mb-3 sm:mb-5 tracking-wider"
+            style={{ fontSize: 'clamp(0.7rem, 2vw, 0.9rem)', color: 'var(--muted)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+            {t.hero.tagline}
+          </p>
 
-        {/* Featured event */}
-        {featuredEvent && (
-          <a href="#events" onClick={(e) => { e.preventDefault(); window.location.hash = '#events' }}
-            className="mt-6 sm:mt-10 flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-md transition-all duration-200"
-            style={{ borderColor: 'var(--accent)', background: 'var(--surface)' }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)' }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface)' }}>
-            {featuredDate && (
-              <div className="flex-shrink-0 text-center" style={{ minWidth: '2.5rem' }}>
-                <div className="font-black text-xl leading-none" style={{ color: 'var(--accent)' }}>{format(featuredDate, 'dd')}</div>
-                <div className="font-bold tracking-widest uppercase" style={{ color: 'var(--muted)', fontSize: '0.6rem' }}>{format(featuredDate, 'MMM')}</div>
+          <p className="max-w-lg mb-5 sm:mb-10 leading-relaxed hidden sm:block" style={{ color: 'var(--muted)', fontSize: '1rem' }}>
+            {t.hero.description}
+          </p>
+          <p className="max-w-xs mb-4 leading-snug sm:hidden" style={{ color: 'var(--muted)', fontSize: '0.875rem' }}>
+            {t.hero.description}
+          </p>
+
+          {/* CTAs — always side by side */}
+          <div className="flex flex-row gap-3 w-full sm:w-auto">
+            <a href="#book" onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
+              className="flex-1 sm:flex-initial px-7 sm:px-12 py-3 sm:py-5 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center rounded-full"
+              style={{ background: 'var(--accent)', color: '#fff', fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', whiteSpace: 'nowrap' }}>
+              {t.hero.bookCta}
+            </a>
+            <a href="#about" onClick={(e) => { e.preventDefault(); window.location.hash = '#about' }}
+              className="flex-1 sm:flex-initial px-7 sm:px-12 py-3 sm:py-5 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center rounded-full"
+              style={{ borderColor: 'var(--accent)', color: 'var(--text)', background: 'transparent', fontSize: 'clamp(0.7rem, 2.5vw, 0.85rem)', whiteSpace: 'nowrap' }}
+              onMouseEnter={(e) => {
+                ;(e.currentTarget as HTMLElement).style.background = 'var(--accent)'
+                ;(e.currentTarget as HTMLElement).style.color = '#fff'
+              }}
+              onMouseLeave={(e) => {
+                ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+                ;(e.currentTarget as HTMLElement).style.color = 'var(--text)'
+              }}>
+              {t.hero.learnMore}
+            </a>
+          </div>
+
+          {/* Stats */}
+          <div className="mt-5 sm:mt-10 grid grid-cols-3 gap-6 sm:gap-10 border-t pt-4 sm:pt-8" style={{ borderColor: 'var(--border)', minWidth: '240px' }}>
+            {[
+              { value: '40+', label: t.hero.stats.years },
+              { value: '1982', label: t.hero.stats.since },
+              { value: 'Vinyl', label: t.hero.stats.vinyl },
+            ].map((stat) => (
+              <div key={stat.label} className="flex flex-col items-start">
+                <span className="font-black text-xl sm:text-2xl" style={{ color: 'var(--accent)' }}>{stat.value}</span>
+                <span className="tracking-widest uppercase mt-1" style={{ color: 'var(--muted)', fontSize: '0.6rem' }}>{stat.label}</span>
               </div>
-            )}
-            <div className="min-w-0">
-              <p className="font-black uppercase tracking-wider truncate" style={{ color: 'var(--text)', fontSize: '0.75rem' }}>{featuredEvent.title}</p>
-              <p className="truncate" style={{ color: 'var(--muted)', fontSize: '0.7rem' }}>{featuredEvent.venue} · {featuredEvent.city}</p>
-            </div>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-              className="flex-shrink-0 ml-auto" style={{ color: 'var(--accent)' }}>
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </a>
-        )}
+            ))}
+          </div>
+
+          {/* Featured event — hidden on small mobile to save space */}
+          {featuredEvent && (
+            <a href="#events" onClick={(e) => { e.preventDefault(); window.location.hash = '#events' }}
+              className="mt-4 sm:mt-8 hidden sm:flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-md transition-all duration-200"
+              style={{ borderColor: 'var(--accent)', background: 'var(--surface)' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--surface)' }}>
+              {featuredDate && (
+                <div className="flex-shrink-0 text-center" style={{ minWidth: '2.5rem' }}>
+                  <div className="font-black text-xl leading-none" style={{ color: 'var(--accent)' }}>{format(featuredDate, 'dd')}</div>
+                  <div className="font-bold tracking-widest uppercase" style={{ color: 'var(--muted)', fontSize: '0.6rem' }}>{format(featuredDate, 'MMM')}</div>
+                </div>
+              )}
+              <div className="min-w-0">
+                <p className="font-black uppercase tracking-wider truncate" style={{ color: 'var(--text)', fontSize: '0.75rem' }}>{featuredEvent.title}</p>
+                <p className="truncate" style={{ color: 'var(--muted)', fontSize: '0.7rem' }}>{featuredEvent.venue} · {featuredEvent.city}</p>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                className="flex-shrink-0 ml-auto" style={{ color: 'var(--accent)' }}>
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          )}
+
+        </div>
       </div>
 
-      {/* ── Background mode switcher ── */}
-      <div className="absolute bottom-36 sm:bottom-32 right-9 z-20 flex flex-col gap-1.5">
+      {/* ── Background mode switcher — sits just above player ── */}
+      <div className="absolute z-20 flex flex-col gap-1.5" style={{ bottom: '138px', right: '1.25rem' }}>
         <button
           onClick={() => setBgMode('spectrum')}
           title="Spectrum"
@@ -411,7 +420,7 @@ export default function Hero() {
 
       {/* ── Mic status + sensitivity slider ── */}
       {bgMode === 'spectrum' && (
-        <div className="absolute bottom-36 sm:bottom-32 left-9 z-20 flex flex-col gap-2">
+        <div className="absolute z-20 flex flex-col gap-2" style={{ bottom: '138px', left: '1.25rem' }}>
           {micState === 'requesting' && (
             <div className="flex items-center gap-2 px-3 py-2"
               style={{
@@ -498,7 +507,7 @@ export default function Hero() {
 
       {/* Slideshow dots */}
       {bgMode === 'images' && heroImages.length > 1 && (
-        <div className="absolute bottom-36 sm:bottom-32 left-9 z-20 flex gap-1.5">
+        <div className="absolute z-20 flex gap-1.5" style={{ bottom: '138px', left: '1.25rem' }}>
           {heroImages.map((_, i) => (
             <button key={i} onClick={() => setSlideIdx(i)}
               className="transition-all duration-300"
