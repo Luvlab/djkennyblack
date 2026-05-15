@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { ThemeProvider } from '@/context/ThemeContext'
 import ThemeToggle from '@/components/ThemeToggle'
+import { supabase } from '@/lib/supabase'
 
 const navItems = [
   { href: '/admin',                  label: 'Dashboard',     icon: '📊' },
@@ -36,7 +37,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }
 
   const signOut = async () => {
-    await fetch('/api/admin/auth', { method: 'DELETE' })
+    await supabase.auth.signOut()
     router.replace('/admin/login')
   }
 
