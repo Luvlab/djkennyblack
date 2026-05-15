@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import VUMeter from './VUMeter'
 
 const mixes = [
+  { slug: '/soulcorner-kennyblack/', title: 'All Mixes', genres: 'Full Channel Feed', isFeed: true },
   { slug: '/soulcorner-kennyblack/sss-366-kenny-black/', title: 'SSS #36.6 Kenny Black', genres: 'Deep House · Tech House' },
   { slug: '/soulcorner-kennyblack/funk-soul-mix-body-soul/', title: 'Funk-Soul Mix (Body & Soul)', genres: 'Soul · Funk · Vinyl Only' },
   { slug: '/soulcorner-kennyblack/deep-adventure-somewhere-in-stockholm/', title: 'Deep Adventure – Stockholm', genres: 'Classic House · Deep Tech' },
@@ -23,6 +24,7 @@ export default function MixcloudPlayer() {
   const widgetRef = useRef<MixcloudWidget | null>(null)
 
   const currentMix = mixes[currentIndex]
+  // Profile feed uses feed= directly; individual mixes also use feed=
   const embedUrl = `https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(currentMix.slug)}&autoplay=0&dark=1`
 
   useEffect(() => {
