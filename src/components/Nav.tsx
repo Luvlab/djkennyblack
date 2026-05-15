@@ -52,6 +52,7 @@ export default function Nav() {
     { hash: '#testimonials', label: t.nav.press },
     { hash: '#school',       label: t.nav.school },
     { hash: '#book',         label: t.nav.book },
+    { hash: '#shop',         label: 'Shop' },
   ]
 
   const isActive = (hash: string) =>
@@ -109,8 +110,8 @@ export default function Nav() {
                   key={l.hash}
                   href={hrefFor(l.hash)}
                   onClick={goHash(l.hash)}
-                  className="flex flex-col items-center justify-center px-4 py-2 gap-1.5 tracking-widest uppercase font-black"
-                  style={{ ...mixerBtn(active), minWidth: '72px', fontSize: '0.6rem', textDecoration: 'none' }}
+                  className="flex flex-col items-center justify-center px-5 py-2 gap-1.5 tracking-widest uppercase font-black"
+                  style={{ ...mixerBtn(active), minWidth: '80px', fontSize: '0.6rem', textDecoration: 'none' }}
                   onMouseEnter={(e) => {
                     if (!active) {
                       (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
@@ -138,35 +139,6 @@ export default function Nav() {
               )
             })}
 
-            {/* Shop — actual page, keep Link for prefetch */}
-            <Link
-              href="/shop"
-              onClick={close}
-              className="flex flex-col items-center justify-center px-4 py-2 gap-1.5 tracking-widest uppercase font-black"
-              style={{ ...mixerBtn(pathname.startsWith('/shop')), minWidth: '72px', fontSize: '0.6rem' }}
-              onMouseEnter={(e) => {
-                if (!pathname.startsWith('/shop')) {
-                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
-                  ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!pathname.startsWith('/shop')) {
-                  const el = e.currentTarget as HTMLElement
-                  el.style.borderColor = 'var(--border)'
-                  el.style.color = 'var(--muted)'
-                }
-              }}
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                style={{
-                  background: pathname.startsWith('/shop') ? '#fff' : 'var(--surface-3)',
-                  boxShadow: pathname.startsWith('/shop') ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
-                }}
-              />
-              Shop
-            </Link>
           </div>
 
           {/* Right controls */}
@@ -214,7 +186,7 @@ export default function Nav() {
             <a
               href={hrefFor('#book')}
               onClick={goHash('#book')}
-              className="hidden lg:flex items-center justify-center px-8 py-3 font-black tracking-widest uppercase transition-all duration-200"
+              className="hidden lg:flex items-center justify-center px-10 py-3 font-black tracking-widest uppercase transition-all duration-200"
               style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem', textDecoration: 'none' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1' }}
@@ -281,22 +253,6 @@ export default function Nav() {
               </a>
             )
           })}
-
-          <Link
-            href="/shop"
-            onClick={close}
-            className="w-full flex items-center justify-between px-5 py-4 font-black tracking-widest uppercase"
-            style={{ ...mixerBtn(pathname.startsWith('/shop')), fontSize: '0.8rem' }}
-          >
-            <span>Shop</span>
-            <span
-              className="w-2 h-2 rounded-full"
-              style={{
-                background: pathname.startsWith('/shop') ? '#fff' : 'var(--surface-3)',
-                boxShadow: pathname.startsWith('/shop') ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
-              }}
-            />
-          </Link>
 
           <button
             onClick={() => { close(); openCart() }}

@@ -83,7 +83,7 @@ export default function ProductPage() {
       <main className="min-h-screen pt-12 pb-44" style={{ background: 'var(--bg)' }}>
         <div className="max-w-screen-lg mx-auto px-9 py-10">
           <Link
-            href="/shop"
+            href="/#shop"
             className="inline-block text-xs font-bold tracking-widest uppercase mb-8"
             style={{ color: 'var(--muted)' }}
           >

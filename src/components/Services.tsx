@@ -117,6 +117,7 @@ export default function Services() {
         <div className="mt-10 text-center">
           <a
             href="#book"
+            onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
             className="inline-flex px-8 py-4 font-bold text-sm tracking-widest uppercase rounded transition-all duration-200 glow-accent"
             style={{ background: 'var(--accent)', color: '#fff' }}
           >

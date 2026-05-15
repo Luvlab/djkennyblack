@@ -280,12 +280,10 @@ export default function Hero() {
     ? (() => { const d = new Date(featuredEvent.event_date); return isValid(d) ? d : null })()
     : null
 
-  const ticker = [...genres, ...genres]
-
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col overflow-hidden grain pt-12"
+      className="relative min-h-screen flex flex-col overflow-x-hidden grain pt-[92px]"
       style={{ background: 'var(--bg)' }}
     >
       {/* ── Spectrum canvas ── */}
@@ -327,45 +325,32 @@ export default function Hero() {
         pointerEvents: 'none',
       }} />
 
-      {/* ── Genre ticker ── */}
-      <div className="relative z-10 overflow-hidden border-b py-3" style={{ borderColor: 'var(--border)' }}>
-        <div className="ticker-track flex gap-8 whitespace-nowrap w-max">
-          {ticker.map((g, i) => (
-            <span key={i} className="font-black tracking-widest uppercase flex items-center gap-8"
-              style={{ color: 'var(--muted-2)', fontSize: '0.65rem' }}>
-              {g}
-              <span style={{ color: 'var(--accent)', fontSize: '0.4rem' }}>◆</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* ── Main content ── */}
-      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[168px] flex flex-col items-center justify-center text-center">
+      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[180px] flex flex-col items-center justify-center text-center">
 
-        <div className="section-label mb-6 flex items-center gap-3">
+        <div className="section-label mb-10 flex items-center gap-3">
           <span className="accent-line" />
           {t.hero.location}
           <span className="accent-line" />
         </div>
 
-        <h1 className="font-black leading-none tracking-tight mb-8"
+        <h1 className="font-black leading-none tracking-tight mb-10"
           style={{ fontSize: 'clamp(3.5rem, 16vw, 11rem)', color: 'var(--text)', letterSpacing: '-0.03em' }}>
           KENNY<br />
           <span style={{ color: 'var(--accent)' }} className="text-glow">BLACK</span>
         </h1>
 
-        <p className="font-bold mb-5 tracking-wider"
+        <p className="font-bold mb-6 tracking-wider"
           style={{ fontSize: 'clamp(0.75rem, 2.5vw, 1rem)', color: 'var(--muted)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
           {t.hero.tagline}
         </p>
 
-        <p className="max-w-lg mb-12 leading-relaxed" style={{ color: 'var(--muted)', fontSize: '1rem' }}>
+        <p className="max-w-lg mb-14 leading-relaxed" style={{ color: 'var(--muted)', fontSize: '1rem' }}>
           {t.hero.description}
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-4 w-full max-w-xs sm:max-w-none sm:w-auto">
           <a href="/#book" onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
             className="px-14 py-8 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center"
             style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem' }}>
@@ -381,7 +366,7 @@ export default function Hero() {
         </div>
 
         {/* Stats */}
-        <div className="mt-16 grid grid-cols-3 gap-8 w-full max-w-sm border-t pt-8" style={{ borderColor: 'var(--border)' }}>
+        <div className="mt-20 grid grid-cols-3 gap-8 w-full max-w-sm border-t pt-10" style={{ borderColor: 'var(--border)' }}>
           {[
             { value: '40+', label: t.hero.stats.years },
             { value: '1982', label: t.hero.stats.since },

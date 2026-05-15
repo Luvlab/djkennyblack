@@ -8,19 +8,24 @@ import Events from './Events'
 import Testimonials from './Testimonials'
 import BookingForm from './BookingForm'
 import DJSchool from './DJSchool'
+import ShopSection from './ShopSection'
 
-type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'school' | 'book'
+// Nav (48px) + TickerTape (~44px) = 92px — all non-home content must start below both
+const TOP_OFFSET = '92px'
+
+type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'school' | 'book' | 'shop'
 
 const HASH_MAP: Record<string, Tab> = {
-  '': 'home',
-  home: 'home',
-  about: 'about',
-  services: 'services',
-  events: 'events',
-  testimonials: 'testimonials',
-  press: 'testimonials',
-  school: 'school',
-  book: 'book',
+  '':            'home',
+  home:          'home',
+  about:         'about',
+  services:      'services',
+  events:        'events',
+  testimonials:  'testimonials',
+  press:         'testimonials',
+  school:        'school',
+  book:          'book',
+  shop:          'shop',
 }
 
 function getTab(): Tab {
@@ -29,7 +34,7 @@ function getTab(): Tab {
 }
 
 export default function TabView() {
-  const [active, setActive] = useState<Tab>('home')
+  const [active, setActive]   = useState<Tab>('home')
   const [mounted, setMounted] = useState<Set<Tab>>(new Set<Tab>(['home']))
 
   useEffect(() => {
@@ -43,8 +48,6 @@ export default function TabView() {
       window.scrollTo(0, 0)
     }
     sync()
-    // hashchange fires for native <a href="#..."> clicks
-    // popstate fires for browser back/forward navigation
     window.addEventListener('hashchange', sync)
     window.addEventListener('popstate', sync)
     return () => {
@@ -57,7 +60,7 @@ export default function TabView() {
     <div
       key={tab}
       style={{
-        display: active === tab ? 'block' : 'none',
+        display:   active === tab ? 'block' : 'none',
         animation: active === tab ? 'tabFadeIn 0.18s ease' : 'none',
       }}
     >
@@ -65,15 +68,25 @@ export default function TabView() {
     </div>
   )
 
+  const isHome = active === 'home'
+
   return (
-    <main className="min-h-screen" style={{ background: 'var(--bg)', paddingTop: active === 'home' ? 0 : '48px', paddingBottom: active === 'home' ? 0 : '168px' }}>
+    <main
+      className="min-h-screen"
+      style={{
+        background:    'var(--bg)',
+        paddingTop:    isHome ? 0 : TOP_OFFSET,
+        paddingBottom: isHome ? 0 : '180px',
+      }}
+    >
       {panel('home', <Hero />)}
-      {mounted.has('about') && panel('about', <About />)}
-      {mounted.has('services') && panel('services', <Services />)}
-      {mounted.has('events') && panel('events', <Events />)}
+      {mounted.has('about')        && panel('about',        <About />)}
+      {mounted.has('services')     && panel('services',     <Services />)}
+      {mounted.has('events')       && panel('events',       <Events />)}
       {mounted.has('testimonials') && panel('testimonials', <Testimonials />)}
-      {mounted.has('school') && panel('school', <DJSchool />)}
-      {mounted.has('book') && panel('book', <BookingForm />)}
+      {mounted.has('school')       && panel('school',       <DJSchool />)}
+      {mounted.has('book')         && panel('book',         <BookingForm />)}
+      {mounted.has('shop')         && panel('shop',         <ShopSection />)}
     </main>
   )
 }

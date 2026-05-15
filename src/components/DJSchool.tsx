@@ -20,9 +20,7 @@ export default function DJSchool() {
 
         {/* Header */}
         <div className="mb-14">
-          <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'var(--accent)' }}>
-            {s.label}
-          </p>
+          <p className="section-label mb-3">{s.label}</p>
           <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-wider leading-none mb-5">
             <span style={{ color: 'var(--text)' }}>{s.heading1}</span>
             <br />
@@ -35,7 +33,8 @@ export default function DJSchool() {
           {/* Book CTA */}
           <div className="flex flex-col sm:flex-row gap-3 mt-8">
             <a
-              href="/#book"
+              href="#book"
+              onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
               className="inline-flex items-center justify-center px-8 py-5 text-sm font-black tracking-widest uppercase transition-opacity duration-200 hover:opacity-80"
               style={{ background: 'var(--accent)', color: '#fff' }}
             >
