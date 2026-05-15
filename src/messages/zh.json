@@ -1,0 +1,13 @@
+{
+  "nav": { "about": "关于", "services": "服务", "events": "活动", "press": "媒体", "book": "预约", "bookNow": "立即预约" },
+  "hero": { "location": "瑞典斯德哥尔摩", "tagline": "先驱 · 黑胶专家 · 40余年经验", "description": "瑞典嘻哈先驱、黑胶DJ与音乐史学家。从私密晚宴到音乐节舞台——营造令人难忘的氛围。", "bookCta": "预约DJ", "learnMore": "了解更多", "stats": { "years": "年", "since": "自", "vinyl": "黑胶" } },
+  "about": { "label": "关于", "heading1": "先驱。", "heading2": "史学家。", "heading3": "DJ。", "timelineLabel": "时间线", "timeline": ["斯德哥尔摩发现嘻哈，Kenny Black从一开始就在场。", "出版《Electric Boogie: When Hip Hop Came to Sweden 1982–1988》", "创立Finest Blend Recordings——融合电子放克风格的底特律音乐厂牌", "建立Soul Corner——斯德哥尔摩最具代表性的深度浩室驻场", "创办DJ学校——从黑胶起步，面向各年龄层传授DJ技艺", "依然在路上。依然黑胶。依然引领潮流。"], "bio": ["Kenny Black不只是一位DJ——他是瑞典音乐史上的一个章节。1982年嘻哈音乐来到斯德哥尔摩时，Kenny就在现场。", "作为Finest Blend Recordings的创始人和《Electric Boogie: When Hip Hop Came to Sweden》的作者，Kenny将学识与灵魂融入他所做的一切。", "在唱片机后面，他的理念很简单：黑胶优先，观众至上。", "他的DJ学校传承知识——为各年龄层初学者和进阶学生提供实践性的黑胶与数字培训。"] },
+  "services": { "label": "服务", "heading1": "我为您的", "heading2": "活动带来的", "checkAvailability": "查询档期" },
+  "events": { "label": "活动", "heading": "舞台上的他", "all": "全部", "upcoming": "即将举行", "past": "往期", "noEvents": "暂无活动。" },
+  "testimonials": { "label": "客户评价", "heading": "他们怎么说" },
+  "booking": { "label": "预约", "heading1": "预约Kenny", "heading2": "参加您的活动", "description": "填写表格，Kenny将在24小时内回复，讨论您的活动、音乐偏好和报价。无论活动大小都欢迎。", "fields": { "name": "姓名", "email": "邮箱", "phone": "电话", "eventType": "活动类型", "eventDate": "活动日期", "guests": "宾客人数", "venue": "场地/地点", "message": "留言/音乐偏好", "namePlaceholder": "您的姓名", "emailPlaceholder": "您的@邮箱.com", "phonePlaceholder": "+46 ...", "guestsPlaceholder": "大约宾客人数", "venuePlaceholder": "场地名称或城市", "messagePlaceholder": "告诉Kenny您的活动详情、音乐口味和特殊要求..." }, "required": "必填", "submit": "提交预约申请", "sending": "发送中...", "successTitle": "预约申请已提交！", "successMessage": "感谢您的联系。Kenny将在24小时内回复您。", "submitAnother": "再次提交", "noPayment": "无需预付款。Kenny将确认档期和报价。", "contact": { "base": "所在地", "baseValue": "瑞典斯德哥尔摩 — 全国可约", "phone": "电话", "email": "邮箱" }, "eventTypes": { "wedding": "婚礼", "corporate": "企业活动", "birthday": "生日派对", "club": "俱乐部夜场", "bar": "酒吧/餐厅", "festival": "音乐节/户外", "private": "私人派对", "afterwork": "下班后派对", "other": "其他" } },
+  "footer": { "rights": "版权所有。", "tagline": "先驱 · 史学家 · 黑胶专家" },
+  "player": { "nowPlaying": "正在播放", "selectMix": "选择混音", "mixcloud": "Mixcloud" },
+  "theme": { "dark": "深色", "light": "浅色", "system": "跟随系统" },
+  "language": "语言"
+}

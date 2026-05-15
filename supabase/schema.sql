@@ -87,3 +87,56 @@ INSERT INTO testimonials (client_name, event_type, message, rating, is_featured)
   ('Sofia Bergström', 'Birthday Party', 'I wanted deep house and soul — Kenny delivered something far beyond what I imagined. The vinyl setup alone was a talking point all evening.', 5, true),
   ('Medborgarplatsen Events', 'Festival / Public Event', 'Eight hours of vinyl music that kept the crowd completely captivated. Kenny is a true master of his craft.', 5, true),
   ('Johan Eriksson', 'Corporate Launch Party', 'From the first track to the last, Kenny created exactly the atmosphere we needed for our product launch. Sophisticated, energetic, and perfectly timed.', 5, true);
+
+-- ─────────────────────────────────────────────
+-- ADMIN & SETTINGS TABLES (run after initial schema)
+-- ─────────────────────────────────────────────
+
+-- Admin users (whitelist)
+CREATE TABLE IF NOT EXISTS admin_users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  role TEXT DEFAULT 'admin' CHECK (role IN ('admin', 'superadmin')),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Site settings (key-value store for theme, CSS, text overrides)
+CREATE TABLE IF NOT EXISTS site_settings (
+  key TEXT PRIMARY KEY,
+  value TEXT,
+  label TEXT,
+  type TEXT DEFAULT 'text' CHECK (type IN ('text', 'color', 'css', 'boolean', 'number')),
+  group_name TEXT DEFAULT 'general',
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- RLS
+ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
+
+-- Public can read site settings (for theme/CSS injection)
+CREATE POLICY "Public read site_settings" ON site_settings FOR SELECT USING (true);
+-- Only authenticated admins can modify bookings/events/testimonials/services
+CREATE POLICY "Admin insert/update bookings" ON bookings FOR ALL USING (
+  auth.jwt() ->> 'email' IN (SELECT email FROM admin_users)
+);
+
+-- Seed admin users
+INSERT INTO admin_users (email, role) VALUES
+  ('kennyblack@gmail.com', 'superadmin'),
+  ('gordoncyrus@gmail.com', 'superadmin')
+ON CONFLICT (email) DO NOTHING;
+
+-- Seed site settings
+INSERT INTO site_settings (key, value, label, type, group_name) VALUES
+  ('accent_color', '#ff4500', 'Accent Color', 'color', 'theme'),
+  ('accent_gold', '#ffd700', 'Gold Accent', 'color', 'theme'),
+  ('custom_css', '', 'Custom CSS', 'css', 'theme'),
+  ('hero_title_line1', 'KENNY', 'Hero Title Line 1', 'text', 'content'),
+  ('hero_title_line2', 'BLACK', 'Hero Title Line 2', 'text', 'content'),
+  ('hero_tagline', 'Pioneer · Vinyl Specialist · 40+ Years', 'Hero Tagline', 'text', 'content'),
+  ('contact_phone', '+46 73 941 40 65', 'Contact Phone', 'text', 'contact'),
+  ('contact_email', 'kennyblack@gmail.com', 'Contact Email', 'text', 'contact'),
+  ('show_booking_form', 'true', 'Show Booking Form', 'boolean', 'features'),
+  ('show_events', 'true', 'Show Events Section', 'boolean', 'features')
+ON CONFLICT (key) DO NOTHING;

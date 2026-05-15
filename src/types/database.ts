@@ -141,6 +141,18 @@ export interface Database {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: { key: string; value: string | null; label: string | null; type: string | null; group_name: string | null; updated_at: string | null }
+        Insert: { key: string; value?: string | null; label?: string | null; type?: string | null; group_name?: string | null; updated_at?: string | null }
+        Update: { key?: string; value?: string | null; label?: string | null; type?: string | null; group_name?: string | null; updated_at?: string | null }
+        Relationships: []
+      }
+      admin_users: {
+        Row: { id: string; email: string; role: string; created_at: string }
+        Insert: { id?: string; email: string; role?: string; created_at?: string }
+        Update: { id?: string; email?: string; role?: string; created_at?: string }
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
