@@ -19,7 +19,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-24 px-5 sm:px-8"
+      className="relative py-24 px-9"
       style={{ background: 'var(--surface)' }}
     >
       <div className="max-w-screen-xl mx-auto">

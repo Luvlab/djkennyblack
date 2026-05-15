@@ -80,8 +80,8 @@ export default function ProductPage() {
   return (
     <>
       <Nav />
-      <main className="min-h-screen pt-14 pb-20" style={{ background: 'var(--bg)' }}>
-        <div className="max-w-screen-lg mx-auto px-4 py-10">
+      <main className="min-h-screen pt-12 pb-44" style={{ background: 'var(--bg)' }}>
+        <div className="max-w-screen-lg mx-auto px-9 py-10">
           <Link
             href="/shop"
             className="inline-block text-xs font-bold tracking-widest uppercase mb-8"

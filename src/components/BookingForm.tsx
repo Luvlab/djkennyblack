@@ -89,7 +89,7 @@ export default function BookingForm() {
   return (
     <section
       id="book"
-      className="py-24 px-5 sm:px-8"
+      className="py-24 px-9"
       style={{ background: 'var(--surface)' }}
     >
       <div className="max-w-screen-xl mx-auto">

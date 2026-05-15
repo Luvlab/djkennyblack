@@ -84,8 +84,8 @@ export default function OrderConfirmPage() {
   return (
     <>
       <Nav />
-      <main className="min-h-screen pt-14 pb-20" style={{ background: 'var(--bg)' }}>
-        <div className="max-w-screen-sm mx-auto px-4 py-12">
+      <main className="min-h-screen pt-12 pb-44" style={{ background: 'var(--bg)' }}>
+        <div className="max-w-screen-sm mx-auto px-9 py-12">
           {/* Success badge */}
           <div className="text-center mb-8">
             <div

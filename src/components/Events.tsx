@@ -128,7 +128,7 @@ export default function Events() {
   })
 
   return (
-    <section id="events" className="py-24 px-5 sm:px-8 min-h-screen" style={{ background: 'var(--surface)' }}>
+    <section id="events" className="py-24 px-9 min-h-screen" style={{ background: 'var(--surface)' }}>
       <div className="max-w-screen-xl mx-auto">
 
         {/* Header */}

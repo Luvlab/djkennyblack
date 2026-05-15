@@ -71,72 +71,47 @@ export default function MixcloudPlayer() {
 
   return (
     <div
-      className="w-full"
+      className="fixed bottom-0 left-0 right-0 z-40"
       style={{
-        background: 'var(--surface)',
+        background: 'color-mix(in srgb, var(--bg) 96%, transparent)',
+        backdropFilter: 'blur(20px)',
         borderTop: '1px solid var(--border)',
       }}
     >
       {/* VU Meter strip */}
-      <div className="px-4 pt-3 pb-1">
-        <VUMeter isPlaying={isPlaying} barCount={40} height={36} accentColor="#ff4500" />
+      <div className="px-9 pt-2 pb-0">
+        <VUMeter isPlaying={isPlaying} barCount={40} height={20} accentColor="#ff4500" />
       </div>
 
-      {/* Mix selector */}
-      <div
-        className="px-4 py-2 overflow-x-auto flex gap-2 no-scrollbar"
-        style={{ borderBottom: '1px solid var(--border)' }}
-      >
-        {mixes.map((mix, i) => (
-          <button
-            key={i}
-            onClick={() => handleMixSelect(i)}
-            className="flex-shrink-0 px-3 py-1.5 text-xs font-bold tracking-wider rounded transition-all duration-200 whitespace-nowrap"
-            style={{
-              background: currentIndex === i ? 'var(--accent)' : 'var(--surface-2)',
-              color: currentIndex === i ? '#fff' : 'var(--muted)',
-              border: `1px solid ${currentIndex === i ? 'var(--accent)' : 'var(--border)'}`,
-            }}
+      {/* Now playing info row */}
+      <div className="px-9 py-1.5 flex items-center gap-3 min-w-0">
+        <div
+          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+          style={{
+            background: isPlaying ? 'var(--accent)' : 'var(--muted-2)',
+            boxShadow: isPlaying ? '0 0 8px var(--accent)' : 'none',
+            animation: isPlaying ? 'pulse 1.5s ease-in-out infinite' : 'none',
+          }}
+        />
+        <div className="flex-1 min-w-0 flex items-center gap-2">
+          <span
+            className="font-bold text-xs truncate"
+            style={{ color: 'var(--text)' }}
           >
-            {mix.title}
-          </button>
-        ))}
-      </div>
-
-      {/* Now playing info + iframe */}
-      <div className="px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center gap-3">
-        {/* Track info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-0.5">
-            <div
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-              style={{
-                background: isPlaying ? 'var(--accent)' : 'var(--muted-2)',
-                boxShadow: isPlaying ? '0 0 8px var(--accent)' : 'none',
-                animation: isPlaying ? 'pulse 1.5s ease-in-out infinite' : 'none',
-              }}
-            />
-            <span
-              className="text-xs font-bold tracking-widest uppercase"
-              style={{ color: isPlaying ? 'var(--accent)' : 'var(--muted)' }}
-            >
-              {isPlaying ? t.player.nowPlaying : t.player.selectMix}
-            </span>
-          </div>
-          <p className="font-bold text-sm truncate" style={{ color: 'var(--text)' }}>
             {currentMix.title}
-          </p>
-          <p className="text-xs" style={{ color: 'var(--muted)' }}>
-            {currentMix.genres}
-          </p>
+          </span>
+          <span
+            className="hidden sm:block text-xs flex-shrink-0"
+            style={{ color: 'var(--muted-2)' }}
+          >
+            · {currentMix.genres}
+          </span>
         </div>
-
-        {/* Mixcloud link */}
         <a
           href="https://www.mixcloud.com/soulcorner-kennyblack/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-shrink-0 flex items-center gap-2 px-3 py-1.5 text-xs font-bold tracking-wider rounded border transition-all duration-200"
+          className="flex-shrink-0 flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold tracking-wider border transition-all duration-200"
           style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = 'var(--accent)'
@@ -147,15 +122,15 @@ export default function MixcloudPlayer() {
             e.currentTarget.style.color = 'var(--muted)'
           }}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.25 0a4.75 4.75 0 1 0-9.5 0 4.75 4.75 0 0 0 9.5 0z"/>
           </svg>
-          {t.player.mixcloud}
+          <span className="hidden sm:inline">{t.player.mixcloud}</span>
         </a>
       </div>
 
       {/* Iframe player */}
-      <div className="px-4 pb-4">
+      <div className="px-9">
         <iframe
           ref={iframeRef}
           key={currentIndex}
@@ -166,12 +141,29 @@ export default function MixcloudPlayer() {
           allow="autoplay"
           style={{
             display: 'block',
-            borderRadius: '2px',
             border: '1px solid var(--border)',
           }}
           title={`Kenny Black – ${currentMix.title}`}
           onLoad={() => setLoaded(true)}
         />
+      </div>
+
+      {/* Mix selector */}
+      <div className="px-9 py-1.5 overflow-x-auto flex gap-1.5 no-scrollbar">
+        {mixes.map((mix, i) => (
+          <button
+            key={i}
+            onClick={() => handleMixSelect(i)}
+            className="flex-shrink-0 px-2.5 py-1 text-xs font-bold tracking-wide transition-all duration-200 whitespace-nowrap"
+            style={{
+              background: currentIndex === i ? 'var(--accent)' : 'var(--surface-2)',
+              color: currentIndex === i ? '#fff' : 'var(--muted)',
+              border: `1px solid ${currentIndex === i ? 'var(--accent)' : 'var(--border)'}`,
+            }}
+          >
+            {mix.title}
+          </button>
+        ))}
       </div>
     </div>
   )

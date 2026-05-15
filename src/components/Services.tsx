@@ -40,7 +40,7 @@ export default function Services() {
   return (
     <section
       id="services"
-      className="py-24 px-5 sm:px-8"
+      className="py-24 px-9"
       style={{ background: 'var(--bg)' }}
     >
       <div className="max-w-screen-xl mx-auto">

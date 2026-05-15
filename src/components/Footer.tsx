@@ -1,6 +1,5 @@
 'use client'
 
-import MixcloudPlayer from './MixcloudPlayer'
 import { useLang } from '@/context/LangContext'
 
 const socials = [
@@ -16,13 +15,9 @@ export default function Footer() {
 
   return (
     <footer style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)' }}>
-      {/* Mixcloud player with VU meter */}
-      <MixcloudPlayer />
-
       {/* Footer content */}
       <div
-        className="max-w-screen-xl mx-auto px-4 py-8"
-        style={{ borderTop: '1px solid var(--border)' }}
+        className="max-w-screen-xl mx-auto px-9 py-8"
       >
         <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
           {/* Brand */}

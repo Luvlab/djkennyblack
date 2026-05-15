@@ -15,7 +15,7 @@ export default function DJSchool() {
   const formats = ['private', 'group', 'vinyl'] as const
 
   return (
-    <section className="py-20 px-5 sm:px-8 min-h-screen" style={{ background: 'var(--bg)' }}>
+    <section className="py-20 px-9 min-h-screen" style={{ background: 'var(--bg)' }}>
       <div className="max-w-screen-xl mx-auto">
 
         {/* Header */}

@@ -64,7 +64,7 @@ export default function Nav() {
           borderBottom: scrolled ? '1px solid var(--border)' : 'none',
         }}
       >
-        <div className="max-w-screen-2xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between gap-4">
+        <div className="max-w-screen-2xl mx-auto px-9 h-12 flex items-center justify-between gap-4">
 
           {/* Logo */}
           <Link
@@ -200,7 +200,7 @@ export default function Nav() {
             <Link
               href={href('#book')}
               onClick={close}
-              className="hidden lg:flex items-center justify-center px-5 py-3 font-black tracking-widest uppercase transition-all duration-200"
+              className="hidden lg:flex items-center justify-center px-6 py-4 font-black tracking-widest uppercase transition-all duration-200"
               style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1' }}

@@ -119,7 +119,7 @@ export default function Hero() {
       />
 
       {/* Main content */}
-      <div className="relative z-10 max-w-screen-xl mx-auto px-5 sm:px-8 pt-32 pb-16 flex flex-col items-center text-center">
+      <div className="relative z-10 max-w-screen-xl mx-auto px-9 pt-16 pb-[168px] flex flex-col items-center text-center">
 
         <div className="section-label mb-6 flex items-center gap-3">
           <span className="accent-line" />

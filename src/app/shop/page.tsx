@@ -48,10 +48,10 @@ export default function ShopPage() {
   return (
     <>
       <Nav />
-      <main className="min-h-screen pt-14 pb-20" style={{ background: 'var(--bg)' }}>
+      <main className="min-h-screen pt-12 pb-44" style={{ background: 'var(--bg)' }}>
         {/* Header */}
         <section
-          className="py-14 px-4 text-center"
+          className="py-14 px-9 text-center"
           style={{ borderBottom: '1px solid var(--border)' }}
         >
           <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'var(--accent)' }}>
@@ -65,7 +65,7 @@ export default function ShopPage() {
           </p>
         </section>
 
-        <div className="max-w-screen-xl mx-auto px-4">
+        <div className="max-w-screen-xl mx-auto px-9">
           {/* Filter tabs */}
           <div className="flex gap-2 flex-wrap py-6" style={{ borderBottom: '1px solid var(--border)' }}>
             {FILTERS.map((f) => (

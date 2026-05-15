@@ -60,7 +60,7 @@ export default function TabView() {
   )
 
   return (
-    <main className="min-h-screen" style={{ background: 'var(--bg)', paddingTop: active === 'home' ? 0 : '80px' }}>
+    <main className="min-h-screen" style={{ background: 'var(--bg)', paddingTop: active === 'home' ? 0 : '48px', paddingBottom: active === 'home' ? 0 : '168px' }}>
       {panel('home', <Hero />)}
       {mounted.has('about') && panel('about', <About />)}
       {mounted.has('services') && panel('services', <Services />)}
