@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ── DARK THEME (default) ── */
+/* ── CSS custom properties — stay outside layers (just variables, no conflicts) ── */
 :root,
 [data-theme="dark"] {
   --bg: #080808;
@@ -18,7 +18,6 @@
   color-scheme: dark;
 }
 
-/* ── LIGHT THEME ── */
 [data-theme="light"] {
   --bg: #f7f5f2;
   --surface: #ffffff;
@@ -42,72 +41,81 @@
   --font-mono: var(--font-geist-mono);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-html { scroll-behavior: smooth; overflow-x: hidden; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-::selection { background: var(--accent); color: #fff; }
-
-html { font-size: 16px; }
-
-.section-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-.accent-line { width: 40px; height: 2px; background: var(--accent); }
-
-.grain::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: overlay;
-}
-
-.glow-accent { box-shadow: 0 0 20px var(--accent-glow), 0 0 60px rgba(255,69,0,0.12); }
-.text-glow { text-shadow: 0 0 30px rgba(255,69,0,0.6); }
-
+/* ── Keyframes — outside layers is fine, no property conflicts ── */
 @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 @keyframes tabFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-.ticker-track { animation: ticker 30s linear infinite; }
-.ticker-track:hover { animation-play-state: paused; }
 
-/* RTL support */
-[dir="rtl"] .accent-line { margin-right: 0; margin-left: auto; }
+/* ── Base reset — MUST be in @layer base so Tailwind utility classes win ── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* Hide scrollbar for mix selector */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
 
-/* Admin styles */
-.admin-sidebar a.active { background: var(--surface-2); color: var(--accent); }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
 
-/* Theme transition */
-*, *::before, *::after {
-  transition-property: background-color, border-color, color;
-  transition-duration: 0.2s;
-  transition-timing-function: ease;
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* Subtle theme transition on element-level props only — in base so transitions utility wins */
+  *, *::before, *::after {
+    transition-property: background-color, border-color, color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+  }
+
+  canvas, [data-no-transition] {
+    transition: none !important;
+  }
 }
-/* Exclude animation-heavy elements */
-canvas, [data-no-transition] {
-  transition: none !important;
+
+/* ── Component classes — after @layer base, before utilities ── */
+@layer components {
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .accent-line { width: 40px; height: 2px; background: var(--accent); }
+
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: overlay;
+  }
+
+  .glow-accent { box-shadow: 0 0 20px var(--accent-glow), 0 0 60px rgba(255,69,0,0.12); }
+  .text-glow { text-shadow: 0 0 30px rgba(255,69,0,0.6); }
+
+  .ticker-track { animation: ticker 30s linear infinite; }
+  .ticker-track:hover { animation-play-state: paused; }
+
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .admin-sidebar a.active { background: var(--surface-2); color: var(--accent); }
+
+  /* RTL support */
+  [dir="rtl"] .accent-line { margin-right: 0; margin-left: auto; }
 }
 
 /* Custom CSS vars injected by admin settings */
