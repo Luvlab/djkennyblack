@@ -1,59 +1,29 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/lib/supabase'
 import { ThemeProvider } from '@/context/ThemeContext'
 import ThemeToggle from '@/components/ThemeToggle'
 
-const ADMIN_EMAILS = ['kennyblack@gmail.com', 'gordoncyrus@gmail.com']
-
 const navItems = [
-  { href: '/admin', label: 'Dashboard', icon: '📊' },
-  { href: '/admin/bookings', label: 'Bookings', icon: '📅' },
-  { href: '/admin/events', label: 'Events', icon: '🎵' },
-  { href: '/admin/testimonials', label: 'Testimonials', icon: '⭐' },
-  { href: '/admin/services', label: 'Services', icon: '🎧' },
-  { href: '/admin/shop/products', label: 'Products', icon: '🛍️' },
-  { href: '/admin/shop/orders', label: 'Orders', icon: '📦' },
-  { href: '/admin/settings', label: 'Settings & CSS', icon: '⚙️' },
+  { href: '/admin',                  label: 'Dashboard',     icon: '📊' },
+  { href: '/admin/bookings',         label: 'Bookings',      icon: '📅' },
+  { href: '/admin/events',           label: 'Events',        icon: '🎵' },
+  { href: '/admin/testimonials',     label: 'Testimonials',  icon: '⭐' },
+  { href: '/admin/services',         label: 'Services',      icon: '🎧' },
+  { href: '/admin/shop/products',    label: 'Products',      icon: '🛍️' },
+  { href: '/admin/shop/orders',      label: 'Orders',        icon: '📦' },
+  { href: '/admin/settings',         label: 'Settings',      icon: '⚙️' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
-  const [user, setUser] = useState<{ email: string } | null>(null)
-  const [checking, setChecking] = useState(true)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  useEffect(() => {
-    const check = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session || !ADMIN_EMAILS.includes(session.user.email || '')) {
-        router.replace('/admin/login')
-        return
-      }
-      setUser({ email: session.user.email! })
-      setChecking(false)
-    }
-    check()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT') router.replace('/admin/login')
-      if (session && ADMIN_EMAILS.includes(session.user.email || '')) {
-        setUser({ email: session.user.email! })
-        setChecking(false)
-      }
-    })
-    return () => subscription.unsubscribe()
-  }, [router])
-
-  const signOut = async () => {
-    await supabase.auth.signOut()
-    router.replace('/admin/login')
-  }
-
+  // Middleware handles auth — if we're here, we're authenticated
+  // Login page gets plain wrapper
   if (pathname === '/admin/login') {
     return (
       <ThemeProvider>
@@ -64,44 +34,44 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     )
   }
 
-  if (checking) {
-    return (
-      <ThemeProvider>
-        <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--bg)' }}>
-          <div className="text-sm" style={{ color: 'var(--muted)' }}>Authenticating...</div>
-        </div>
-      </ThemeProvider>
-    )
+  const signOut = async () => {
+    await fetch('/api/admin/auth', { method: 'DELETE' })
+    router.replace('/admin/login')
   }
+
+  const currentPage = navItems.find((n) => n.href === pathname)?.label || 'Admin'
 
   return (
     <ThemeProvider>
       <div className="min-h-screen flex" style={{ background: 'var(--bg)' }}>
+
         {/* Sidebar */}
         <aside
-          className={`fixed inset-y-0 left-0 z-50 flex flex-col transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:static lg:flex`}
-          style={{
-            width: '220px',
-            background: 'var(--surface)',
-            borderRight: '1px solid var(--border)',
-          }}
+          className={`fixed inset-y-0 left-0 z-50 flex flex-col transition-transform duration-300 ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } lg:translate-x-0 lg:static lg:flex`}
+          style={{ width: '220px', background: 'var(--surface)', borderRight: '1px solid var(--border)' }}
         >
-          {/* Brand */}
-          <div className="p-4 flex items-center gap-2" style={{ borderBottom: '1px solid var(--border)' }}>
+          {/* Brand — links to public site */}
+          <Link
+            href="/"
+            className="p-4 flex items-center gap-2 transition-opacity hover:opacity-70"
+            style={{ borderBottom: '1px solid var(--border)' }}
+          >
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center font-black text-sm"
+              className="w-8 h-8 flex items-center justify-center font-black text-sm flex-shrink-0"
               style={{ background: 'var(--accent)', color: '#fff' }}
             >
               KB
             </div>
             <div>
-              <p className="font-black text-xs tracking-wider" style={{ color: 'var(--text)' }}>KENNY BLACK</p>
-              <p className="text-xs" style={{ color: 'var(--muted-2)' }}>CMS Admin</p>
+              <p className="font-black tracking-wider" style={{ color: 'var(--text)', fontSize: '0.7rem' }}>KENNY BLACK</p>
+              <p style={{ color: 'var(--muted-2)', fontSize: '0.6rem' }}>CMS Admin</p>
             </div>
-          </div>
+          </Link>
 
-          {/* Nav */}
-          <nav className="flex-1 p-3 space-y-1">
+          {/* Nav items */}
+          <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
             {navItems.map((item) => {
               const active = pathname === item.href
               return (
@@ -109,35 +79,45 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                   key={item.href}
                   href={item.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded text-xs font-bold tracking-wider transition-all duration-150 ${active ? 'active' : ''}`}
+                  className="flex items-center gap-3 px-3 py-2.5 font-bold tracking-wider transition-all duration-150"
                   style={{
                     background: active ? 'var(--surface-2)' : 'transparent',
                     color: active ? 'var(--accent)' : 'var(--muted)',
+                    fontSize: '0.72rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!active) (e.currentTarget as HTMLElement).style.background = 'var(--surface-2)'
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!active) (e.currentTarget as HTMLElement).style.background = 'transparent'
                   }}
                 >
-                  <span>{item.icon}</span>
+                  <span style={{ fontSize: '0.9rem' }}>{item.icon}</span>
                   {item.label}
                 </Link>
               )
             })}
           </nav>
 
-          {/* User footer */}
-          <div className="p-3" style={{ borderTop: '1px solid var(--border)' }}>
-            <p className="text-xs truncate mb-2" style={{ color: 'var(--muted)' }}>{user?.email}</p>
-            <div className="flex items-center gap-2">
+          {/* Footer */}
+          <div className="p-3 space-y-2" style={{ borderTop: '1px solid var(--border)' }}>
+            <div className="flex gap-2">
               <ThemeToggle />
               <Link
                 href="/"
-                className="flex-1 px-3 py-1.5 text-xs font-bold tracking-wider rounded text-center"
-                style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
+                className="flex-1 flex items-center justify-center py-2 font-bold tracking-wider transition-all duration-150"
+                style={{ border: '1px solid var(--border)', color: 'var(--muted)', fontSize: '0.65rem' }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'; (e.currentTarget as HTMLElement).style.color = 'var(--accent)' }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--muted)' }}
               >
-                Site ↗
+                ↗ Site
               </Link>
               <button
                 onClick={signOut}
-                className="flex-1 px-3 py-1.5 text-xs font-bold tracking-wider rounded"
-                style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
+                className="flex-1 py-2 font-bold tracking-wider transition-all duration-150"
+                style={{ border: '1px solid var(--border)', color: 'var(--muted)', fontSize: '0.65rem' }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = '#dc2626'; (e.currentTarget as HTMLElement).style.color = '#dc2626' }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLElement).style.color = 'var(--muted)' }}
               >
                 Sign Out
               </button>
@@ -145,7 +125,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         </aside>
 
-        {/* Mobile overlay */}
+        {/* Mobile sidebar overlay */}
         {sidebarOpen && (
           <div
             className="fixed inset-0 z-40 lg:hidden"
@@ -154,9 +134,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           />
         )}
 
-        {/* Main */}
+        {/* Main content */}
         <div className="flex-1 flex flex-col min-w-0">
-          {/* Top bar */}
           <header
             className="sticky top-0 z-30 flex items-center gap-3 px-4 h-14"
             style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}
@@ -164,16 +143,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <button
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden w-8 h-8 flex items-center justify-center"
-              style={{ color: 'var(--muted)' }}
+              style={{ color: 'var(--muted)', fontSize: '1.1rem' }}
             >
               ☰
             </button>
-            <span className="font-bold text-sm tracking-wider" style={{ color: 'var(--text)' }}>
-              {navItems.find((n) => n.href === pathname)?.label || 'Admin'}
+            <span className="font-black tracking-wider" style={{ color: 'var(--text)', fontSize: '0.85rem' }}>
+              {currentPage}
             </span>
           </header>
 
-          {/* Page content */}
           <main className="flex-1 p-4 lg:p-6 overflow-auto">
             {children}
           </main>
