@@ -8,15 +8,6 @@ import LanguageSwitcher from './LanguageSwitcher'
 import { useLang } from '@/context/LangContext'
 import { useCart } from '@/context/CartContext'
 
-const HASH_MAP: Record<string, string> = {
-  about: '#about',
-  services: '#services',
-  events: '#events',
-  testimonials: '#testimonials',
-  press: '#testimonials',
-  book: '#book',
-}
-
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -39,71 +30,96 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
-  const handleLink = () => setMenuOpen(false)
-
-  // On home: use hash links for instant tab switching. On other pages: use /#hash to navigate home first.
+  const close = () => setMenuOpen(false)
   const href = (hash: string) => (isHome ? hash : `/${hash}`)
 
   const links = [
-    { hash: '#about', label: t.nav.about },
-    { hash: '#services', label: t.nav.services },
-    { hash: '#events', label: t.nav.events },
+    { hash: '#about',        label: t.nav.about },
+    { hash: '#services',     label: t.nav.services },
+    { hash: '#events',       label: t.nav.events },
     { hash: '#testimonials', label: t.nav.press },
-    { hash: '#school', label: t.nav.school },
-    { hash: '#book', label: t.nav.book },
+    { hash: '#school',       label: t.nav.school },
+    { hash: '#book',         label: t.nav.book },
   ]
 
   const isActive = (hash: string) =>
-    isHome && (activeHash === hash || (hash === '' && activeHash === ''))
+    isHome && (activeHash === hash || (hash === '#about' && activeHash === ''))
+
+  // DJ mixer button style
+  const mixerBtn = (active: boolean) => ({
+    background: active ? 'var(--accent)' : 'var(--surface-2)',
+    border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+    color: active ? '#fff' : 'var(--muted)',
+    boxShadow: active ? '0 0 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.12)' : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+    transition: 'all 0.12s ease',
+  })
 
   return (
     <>
       <nav
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
         style={{
-          background: scrolled
-            ? 'color-mix(in srgb, var(--bg) 95%, transparent)'
-            : 'transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          background: scrolled ? 'color-mix(in srgb, var(--bg) 94%, transparent)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
           borderBottom: scrolled ? '1px solid var(--border)' : 'none',
         }}
       >
-        <div className="max-w-screen-xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
-          {/* Logo — clicking goes home */}
-          <Link href="/#" onClick={() => { handleLink(); setActiveHash('') }} className="flex items-center gap-2 flex-shrink-0">
+        <div className="max-w-screen-2xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between gap-4">
+
+          {/* Logo */}
+          <Link
+            href="/#"
+            onClick={() => { close(); setActiveHash('') }}
+            className="flex items-center gap-2.5 flex-shrink-0"
+          >
             <div
-              className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black"
+              className="w-9 h-9 flex items-center justify-center font-black text-sm"
               style={{ background: 'var(--accent)', color: '#fff' }}
             >
               KB
             </div>
             <span
-              className="font-bold tracking-wider text-sm uppercase hidden sm:block"
-              style={{ color: 'var(--text)' }}
+              className="font-black tracking-widest uppercase hidden sm:block"
+              style={{ color: 'var(--text)', fontSize: '0.8rem', letterSpacing: '0.15em' }}
             >
               Kenny Black
             </span>
           </Link>
 
-          {/* Desktop nav tabs */}
-          <div className="hidden md:flex items-center gap-1 flex-1 justify-center">
+          {/* Desktop nav — DJ mixer channel buttons */}
+          <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
             {links.map((l) => {
               const active = isActive(l.hash)
               return (
                 <Link
                   key={l.hash}
                   href={href(l.hash)}
-                  className="px-3 py-1.5 text-xs font-bold tracking-widest uppercase transition-all duration-200 relative"
-                  style={{ color: active ? 'var(--text)' : 'var(--muted)' }}
-                  onClick={handleLink}
+                  onClick={close}
+                  className="flex flex-col items-center justify-center px-3 py-2 gap-1.5 tracking-widest uppercase font-black"
+                  style={{ ...mixerBtn(active), minWidth: '68px', fontSize: '0.6rem' }}
+                  onMouseEnter={(e) => {
+                    if (!active) {
+                      (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
+                      ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!active) {
+                      const el = e.currentTarget as HTMLElement
+                      el.style.borderColor = 'var(--border)'
+                      el.style.color = 'var(--muted)'
+                    }
+                  }}
                 >
+                  {/* LED indicator */}
+                  <span
+                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    style={{
+                      background: active ? '#fff' : 'var(--surface-3)',
+                      boxShadow: active ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
+                    }}
+                  />
                   {l.label}
-                  {active && (
-                    <span
-                      className="absolute bottom-0 left-3 right-3 h-px"
-                      style={{ background: 'var(--accent)' }}
-                    />
-                  )}
                 </Link>
               )
             })}
@@ -111,21 +127,35 @@ export default function Nav() {
             {/* Shop — separate page */}
             <Link
               href="/shop"
-              className="px-3 py-1.5 text-xs font-bold tracking-widest uppercase transition-all duration-200"
-              style={{ color: pathname.startsWith('/shop') ? 'var(--text)' : 'var(--muted)' }}
-              onClick={handleLink}
+              onClick={close}
+              className="flex flex-col items-center justify-center px-3 py-2 gap-1.5 tracking-widest uppercase font-black"
+              style={{ ...mixerBtn(pathname.startsWith('/shop')), minWidth: '68px', fontSize: '0.6rem' }}
+              onMouseEnter={(e) => {
+                if (!pathname.startsWith('/shop')) {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
+                  ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!pathname.startsWith('/shop')) {
+                  const el = e.currentTarget as HTMLElement
+                  el.style.borderColor = 'var(--border)'
+                  el.style.color = 'var(--muted)'
+                }
+              }}
             >
+              <span
+                className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                style={{
+                  background: pathname.startsWith('/shop') ? '#fff' : 'var(--surface-3)',
+                  boxShadow: pathname.startsWith('/shop') ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
+                }}
+              />
               Shop
-              {pathname.startsWith('/shop') && (
-                <span
-                  className="absolute bottom-0 left-3 right-3 h-px"
-                  style={{ background: 'var(--accent)' }}
-                />
-              )}
             </Link>
           </div>
 
-          {/* Controls */}
+          {/* Right controls */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <ThemeToggle />
             <LanguageSwitcher />
@@ -133,18 +163,32 @@ export default function Nav() {
             {/* Cart */}
             <button
               onClick={openCart}
-              className="relative w-8 h-8 flex items-center justify-center"
+              className="relative flex items-center justify-center transition-all duration-200"
               aria-label="Open cart"
-              style={{ color: 'var(--muted)' }}
+              style={{
+                width: '40px',
+                height: '40px',
+                background: 'var(--surface-2)',
+                border: '1px solid var(--border)',
+                color: 'var(--muted)',
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
+                ;(e.currentTarget as HTMLElement).style.color = 'var(--accent)'
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'
+                ;(e.currentTarget as HTMLElement).style.color = 'var(--muted)'
+              }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                 <line x1="3" y1="6" x2="21" y2="6" />
                 <path d="M16 10a4 4 0 01-8 0" />
               </svg>
               {count > 0 && (
                 <span
-                  className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 flex items-center justify-center px-0.5 rounded-full font-black"
+                  className="absolute -top-1 -right-1 min-w-[18px] h-[18px] flex items-center justify-center px-0.5 font-black"
                   style={{ background: 'var(--accent)', color: '#fff', fontSize: '10px' }}
                 >
                   {count}
@@ -155,9 +199,11 @@ export default function Nav() {
             {/* Book Now CTA */}
             <Link
               href={href('#book')}
-              onClick={handleLink}
-              className="hidden md:flex px-4 py-2 text-xs font-bold tracking-widest uppercase transition-all duration-200"
-              style={{ background: 'var(--accent)', color: '#fff' }}
+              onClick={close}
+              className="hidden lg:flex items-center justify-center px-5 py-3 font-black tracking-widest uppercase transition-all duration-200"
+              style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem' }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1' }}
             >
               {t.nav.bookNow}
             </Link>
@@ -165,22 +211,22 @@ export default function Nav() {
             {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden w-8 h-8 flex flex-col justify-center items-center gap-1.5"
+              className="lg:hidden flex flex-col justify-center items-center gap-1.5"
+              style={{ width: '40px', height: '40px' }}
               aria-label="Toggle menu"
             >
               {[0, 1, 2].map((i) => (
                 <span
                   key={i}
-                  className="block w-5 h-0.5 transition-all duration-300"
+                  className="block w-5 h-0.5"
                   style={{
                     background: 'var(--text)',
                     transform:
-                      i === 0 && menuOpen
-                        ? 'translateY(6px) rotate(45deg)'
-                        : i === 2 && menuOpen
-                        ? 'translateY(-6px) rotate(-45deg)'
-                        : 'none',
+                      i === 0 && menuOpen ? 'translateY(8px) rotate(45deg)'
+                      : i === 2 && menuOpen ? 'translateY(-8px) rotate(-45deg)'
+                      : 'none',
                     opacity: i === 1 && menuOpen ? 0 : 1,
+                    transition: 'all 0.25s ease',
                   }}
                 />
               ))}
@@ -191,53 +237,83 @@ export default function Nav() {
 
       {/* Mobile full-screen menu */}
       <div
-        className="fixed inset-0 z-40 flex flex-col justify-center items-center md:hidden transition-all duration-300"
+        className="fixed inset-0 z-40 flex flex-col justify-center items-center lg:hidden"
         style={{
           background: 'var(--bg)',
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? 'all' : 'none',
+          transition: 'opacity 0.25s ease',
         }}
       >
-        <div className="flex flex-col items-center gap-7">
-          {links.map((l) => (
-            <Link
-              key={l.hash}
-              href={href(l.hash)}
-              onClick={handleLink}
-              className="text-2xl font-black tracking-widest uppercase"
-              style={{ color: isActive(l.hash) ? 'var(--accent)' : 'var(--text)' }}
-            >
-              {l.label}
-            </Link>
-          ))}
+        <div className="flex flex-col items-center gap-3 px-8 w-full max-w-sm">
+          {links.map((l) => {
+            const active = isActive(l.hash)
+            return (
+              <Link
+                key={l.hash}
+                href={href(l.hash)}
+                onClick={close}
+                className="w-full flex items-center justify-between px-5 py-4 font-black tracking-widest uppercase"
+                style={{ ...mixerBtn(active), fontSize: '0.8rem' }}
+              >
+                <span>{l.label}</span>
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{
+                    background: active ? '#fff' : 'var(--surface-3)',
+                    boxShadow: active ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
+                  }}
+                />
+              </Link>
+            )
+          })}
+
           <Link
             href="/shop"
-            onClick={handleLink}
-            className="text-2xl font-black tracking-widest uppercase"
-            style={{ color: pathname.startsWith('/shop') ? 'var(--accent)' : 'var(--text)' }}
+            onClick={close}
+            className="w-full flex items-center justify-between px-5 py-4 font-black tracking-widest uppercase"
+            style={{ ...mixerBtn(pathname.startsWith('/shop')), fontSize: '0.8rem' }}
           >
-            Shop
+            <span>Shop</span>
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{
+                background: pathname.startsWith('/shop') ? '#fff' : 'var(--surface-3)',
+                boxShadow: pathname.startsWith('/shop') ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
+              }}
+            />
           </Link>
+
           <button
-            onClick={() => { handleLink(); openCart() }}
-            className="text-2xl font-black tracking-widest uppercase"
-            style={{ color: 'var(--text)' }}
+            onClick={() => { close(); openCart() }}
+            className="w-full flex items-center justify-between px-5 py-4 font-black tracking-widest uppercase"
+            style={{ ...mixerBtn(false), fontSize: '0.8rem' }}
           >
-            Cart {count > 0 && <span style={{ color: 'var(--accent)' }}>({count})</span>}
+            <span>Cart</span>
+            {count > 0 && (
+              <span
+                className="px-2 py-0.5 font-black"
+                style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem' }}
+              >
+                {count}
+              </span>
+            )}
           </button>
+
           <Link
             href={href('#book')}
-            onClick={handleLink}
-            className="mt-2 px-8 py-3 text-sm font-bold tracking-widest uppercase"
-            style={{ background: 'var(--accent)', color: '#fff' }}
+            onClick={close}
+            className="w-full mt-2 flex items-center justify-center py-5 font-black tracking-widest uppercase"
+            style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem' }}
           >
             {t.nav.bookNow}
           </Link>
+
           <Link
             href="/admin"
-            onClick={handleLink}
-            className="text-xs font-bold tracking-widest uppercase"
-            style={{ color: 'var(--muted)' }}
+            onClick={close}
+            className="mt-2 font-bold tracking-widest uppercase"
+            style={{ color: 'var(--muted-2)', fontSize: '0.6rem' }}
           >
             Admin
           </Link>

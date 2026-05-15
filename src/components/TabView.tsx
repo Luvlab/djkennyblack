@@ -40,6 +40,7 @@ export default function TabView() {
         if (prev.has(tab)) return prev
         return new Set([...prev, tab])
       })
+      window.scrollTo(0, 0)
     }
     sync()
     window.addEventListener('hashchange', sync)

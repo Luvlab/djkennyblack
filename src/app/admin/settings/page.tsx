@@ -16,6 +16,7 @@ const DEFAULT_SETTINGS: Setting[] = [
   { key: 'accent_gold', value: '#ffd700', label: 'Gold Accent', type: 'color', group_name: 'theme' },
   { key: 'custom_css', value: '', label: 'Custom CSS', type: 'css', group_name: 'theme' },
   { key: 'hero_tagline', value: 'Pioneer · Vinyl Specialist · 40+ Years', label: 'Hero Tagline', type: 'text', group_name: 'content' },
+  { key: 'hero_genres', value: 'Deep House,Soul,Funk,Old School Hip Hop,Vinyl Only,Electro,Boogie,Jazz-Funk,Tech House,Garage House,G-Funk,Soulful House,Classic House,R&B,Afrobeat', label: 'Hero Genre Ticker (comma-separated)', type: 'text', group_name: 'content' },
   { key: 'contact_phone', value: '+46 73 941 40 65', label: 'Contact Phone', type: 'text', group_name: 'contact' },
   { key: 'contact_email', value: 'kennyblack@gmail.com', label: 'Contact Email', type: 'text', group_name: 'contact' },
   { key: 'show_booking_form', value: 'true', label: 'Show Booking Form', type: 'boolean', group_name: 'features' },

@@ -60,8 +60,10 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
 ::selection { background: var(--accent); color: #fff; }
 
+html { font-size: 16px; }
+
 .section-label {
-  font-size: 0.625rem;
+  font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.3em;
   text-transform: uppercase;
