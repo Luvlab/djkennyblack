@@ -31,7 +31,19 @@ export default function Nav() {
   }, [])
 
   const close = () => setMenuOpen(false)
-  const href = (hash: string) => (isHome ? hash : `/${hash}`)
+
+  // For in-page hash links: prevent default + set hash directly so hashchange fires.
+  // For cross-page hash links: let the browser navigate normally.
+  const goHash = (hash: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
+    close()
+    if (isHome) {
+      e.preventDefault()
+      window.location.hash = hash
+    }
+  }
+
+  // Full href for non-home use
+  const hrefFor = (hash: string) => (isHome ? hash : `/${hash}`)
 
   const links = [
     { hash: '#about',        label: t.nav.about },
@@ -50,7 +62,9 @@ export default function Nav() {
     background: active ? 'var(--accent)' : 'var(--surface-2)',
     border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
     color: active ? '#fff' : 'var(--muted)',
-    boxShadow: active ? '0 0 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.12)' : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+    boxShadow: active
+      ? '0 0 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.12)'
+      : 'inset 0 1px 0 rgba(255,255,255,0.04)',
     transition: 'all 0.12s ease',
   })
 
@@ -67,9 +81,9 @@ export default function Nav() {
         <div className="max-w-screen-2xl mx-auto px-9 h-12 flex items-center justify-between gap-4">
 
           {/* Logo */}
-          <Link
+          <a
             href="/#"
-            onClick={() => { close(); setActiveHash('') }}
+            onClick={(e) => { e.preventDefault(); close(); setActiveHash(''); if (isHome) window.location.hash = '' }}
             className="flex items-center gap-2.5 flex-shrink-0"
           >
             <div
@@ -84,19 +98,19 @@ export default function Nav() {
             >
               Kenny Black
             </span>
-          </Link>
+          </a>
 
           {/* Desktop nav — DJ mixer channel buttons */}
           <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
             {links.map((l) => {
               const active = isActive(l.hash)
               return (
-                <Link
+                <a
                   key={l.hash}
-                  href={href(l.hash)}
-                  onClick={close}
-                  className="flex flex-col items-center justify-center px-3 py-2 gap-1.5 tracking-widest uppercase font-black"
-                  style={{ ...mixerBtn(active), minWidth: '68px', fontSize: '0.6rem' }}
+                  href={hrefFor(l.hash)}
+                  onClick={goHash(l.hash)}
+                  className="flex flex-col items-center justify-center px-4 py-2 gap-1.5 tracking-widest uppercase font-black"
+                  style={{ ...mixerBtn(active), minWidth: '72px', fontSize: '0.6rem', textDecoration: 'none' }}
                   onMouseEnter={(e) => {
                     if (!active) {
                       (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
@@ -120,16 +134,16 @@ export default function Nav() {
                     }}
                   />
                   {l.label}
-                </Link>
+                </a>
               )
             })}
 
-            {/* Shop — separate page */}
+            {/* Shop — actual page, keep Link for prefetch */}
             <Link
               href="/shop"
               onClick={close}
-              className="flex flex-col items-center justify-center px-3 py-2 gap-1.5 tracking-widest uppercase font-black"
-              style={{ ...mixerBtn(pathname.startsWith('/shop')), minWidth: '68px', fontSize: '0.6rem' }}
+              className="flex flex-col items-center justify-center px-4 py-2 gap-1.5 tracking-widest uppercase font-black"
+              style={{ ...mixerBtn(pathname.startsWith('/shop')), minWidth: '72px', fontSize: '0.6rem' }}
               onMouseEnter={(e) => {
                 if (!pathname.startsWith('/shop')) {
                   (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
@@ -197,16 +211,16 @@ export default function Nav() {
             </button>
 
             {/* Book Now CTA */}
-            <Link
-              href={href('#book')}
-              onClick={close}
-              className="hidden lg:flex items-center justify-center px-6 py-4 font-black tracking-widest uppercase transition-all duration-200"
-              style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem' }}
+            <a
+              href={hrefFor('#book')}
+              onClick={goHash('#book')}
+              className="hidden lg:flex items-center justify-center px-8 py-3 font-black tracking-widest uppercase transition-all duration-200"
+              style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem', textDecoration: 'none' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1' }}
             >
               {t.nav.bookNow}
-            </Link>
+            </a>
 
             {/* Hamburger */}
             <button
@@ -249,12 +263,12 @@ export default function Nav() {
           {links.map((l) => {
             const active = isActive(l.hash)
             return (
-              <Link
+              <a
                 key={l.hash}
-                href={href(l.hash)}
-                onClick={close}
+                href={hrefFor(l.hash)}
+                onClick={goHash(l.hash)}
                 className="w-full flex items-center justify-between px-5 py-4 font-black tracking-widest uppercase"
-                style={{ ...mixerBtn(active), fontSize: '0.8rem' }}
+                style={{ ...mixerBtn(active), fontSize: '0.8rem', textDecoration: 'none' }}
               >
                 <span>{l.label}</span>
                 <span
@@ -264,7 +278,7 @@ export default function Nav() {
                     boxShadow: active ? '0 0 8px rgba(255,255,255,0.9)' : 'none',
                   }}
                 />
-              </Link>
+              </a>
             )
           })}
 
@@ -300,14 +314,14 @@ export default function Nav() {
             )}
           </button>
 
-          <Link
-            href={href('#book')}
-            onClick={close}
+          <a
+            href={hrefFor('#book')}
+            onClick={goHash('#book')}
             className="w-full mt-2 flex items-center justify-center py-5 font-black tracking-widest uppercase"
-            style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem' }}
+            style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem', textDecoration: 'none' }}
           >
             {t.nav.bookNow}
-          </Link>
+          </a>
 
           <Link
             href="/admin"

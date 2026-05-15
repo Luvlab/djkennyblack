@@ -43,8 +43,14 @@ export default function TabView() {
       window.scrollTo(0, 0)
     }
     sync()
+    // hashchange fires for native <a href="#..."> clicks
+    // popstate fires for browser back/forward navigation
     window.addEventListener('hashchange', sync)
-    return () => window.removeEventListener('hashchange', sync)
+    window.addEventListener('popstate', sync)
+    return () => {
+      window.removeEventListener('hashchange', sync)
+      window.removeEventListener('popstate', sync)
+    }
   }, [])
 
   const panel = (tab: Tab, children: React.ReactNode) => (

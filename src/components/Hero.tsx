@@ -381,7 +381,7 @@ export default function Hero() {
         </div>
 
         <h1
-          className="font-black leading-none tracking-tight mb-4"
+          className="font-black leading-none tracking-tight mb-8"
           style={{
             fontSize: 'clamp(3.5rem, 16vw, 11rem)',
             color: 'var(--text)',
@@ -396,7 +396,7 @@ export default function Hero() {
         </h1>
 
         <p
-          className="font-bold mb-2 tracking-wider"
+          className="font-bold mb-5 tracking-wider"
           style={{
             fontSize: 'clamp(0.75rem, 2.5vw, 1rem)',
             color: 'var(--muted)',
@@ -408,7 +408,7 @@ export default function Hero() {
         </p>
 
         <p
-          className="max-w-lg mb-10 leading-relaxed"
+          className="max-w-lg mb-12 leading-relaxed"
           style={{ color: 'var(--muted)', fontSize: '1rem' }}
         >
           {t.hero.description}
@@ -418,14 +418,16 @@ export default function Hero() {
         <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none sm:w-auto">
           <a
             href="/#book"
-            className="px-10 py-8 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center"
+            onClick={(e) => { e.preventDefault(); window.location.hash = '#book' }}
+            className="px-14 py-8 font-black tracking-widest uppercase transition-all duration-200 glow-accent flex items-center justify-center"
             style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.8rem' }}
           >
             {t.hero.bookCta}
           </a>
           <a
             href="/#about"
-            className="px-10 py-8 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center"
+            onClick={(e) => { e.preventDefault(); window.location.hash = '#about' }}
+            className="px-14 py-8 font-black tracking-widest uppercase border-2 transition-all duration-200 flex items-center justify-center"
             style={{
               borderColor: 'var(--border)',
               color: 'var(--text)',
@@ -471,6 +473,7 @@ export default function Hero() {
         {featuredEvent && (
           <a
             href="/#events"
+            onClick={(e) => { e.preventDefault(); window.location.hash = '#events' }}
             className="mt-10 flex items-center gap-4 px-5 py-3 border-l-2 text-left w-full max-w-sm transition-all duration-200"
             style={{ borderColor: 'var(--accent)', background: 'var(--surface)' }}
             onMouseEnter={(e) => {
