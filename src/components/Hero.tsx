@@ -8,6 +8,7 @@ import { format, isValid } from 'date-fns'
 
 type HeroBg = 'spectrum' | 'images'
 type MicState = 'idle' | 'requesting' | 'active' | 'denied'
+type CaptureMode = 'mic' | 'system'
 
 const DEFAULT_GENRES = [
   'Deep House', 'Soul', 'Funk', 'Old School Hip Hop', 'Vinyl Only',
@@ -49,41 +50,95 @@ export default function Hero() {
   const [bgMode, setBgMode] = useState<HeroBg>('spectrum')
   const bgModeRef = useRef<HeroBg>('spectrum')
 
-  // ── Real microphone / Web Audio API ──────────────────────────────────────
-  const [micState, setMicState] = useState<MicState>('idle')
-  const micStateRef = useRef<MicState>('idle')
-  const audioCtxRef = useRef<AudioContext | null>(null)
-  const analyserRef = useRef<AnalyserNode | null>(null)
-  const freqDataRef = useRef<Uint8Array<ArrayBuffer> | null>(null)
+  // ── Audio capture ─────────────────────────────────────────────────────────
+  const [micState, setMicState]     = useState<MicState>('idle')
+  const micStateRef                 = useRef<MicState>('idle')
+  const [captureMode, setCaptureMode] = useState<CaptureMode>('mic')
+  const audioCtxRef  = useRef<AudioContext | null>(null)
+  const analyserRef  = useRef<AnalyserNode | null>(null)
+  const freqDataRef  = useRef<Uint8Array<ArrayBuffer> | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
 
   // ── Sensitivity ──────────────────────────────────────────────────────────
   const [sensitivity, setSensitivity] = useState(2.5)
   const sensitivityRef = useRef(2.5)
 
+  // Desktop-only: does this browser support getDisplayMedia?
+  const supportsSystemAudio =
+    typeof window !== 'undefined' &&
+    typeof navigator.mediaDevices?.getDisplayMedia === 'function'
+
+  const stopCurrentStream = () => {
+    micStreamRef.current?.getTracks().forEach((tr) => tr.stop())
+    audioCtxRef.current?.close()
+    audioCtxRef.current  = null
+    analyserRef.current  = null
+    freqDataRef.current  = null
+    micStreamRef.current = null
+  }
+
+  const connectStream = (stream: MediaStream) => {
+    const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    const ctx = new AudioCtx()
+    const analyser = ctx.createAnalyser()
+    analyser.fftSize = 8192
+    analyser.smoothingTimeConstant = 0.65
+    analyser.minDecibels = -100
+    analyser.maxDecibels = -20
+    ctx.createMediaStreamSource(stream).connect(analyser)
+    audioCtxRef.current  = ctx
+    analyserRef.current  = analyser
+    freqDataRef.current  = new Uint8Array(new ArrayBuffer(analyser.frequencyBinCount))
+    micStreamRef.current = stream
+    setMicState('active')
+    micStateRef.current = 'active'
+  }
+
+  // Microphone — echo/noise cancellation OFF so it picks up speaker output
   const activateMic = async () => {
-    if (micStateRef.current === 'requesting' || micStateRef.current === 'active') return
+    if (micStateRef.current === 'requesting') return
+    if (micStateRef.current === 'active') stopCurrentStream()
     setMicState('requesting')
     micStateRef.current = 'requesting'
+    setCaptureMode('mic')
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-      const ctx = new AudioCtx()
-      const analyser = ctx.createAnalyser()
-      analyser.fftSize = 8192
-      analyser.smoothingTimeConstant = 0.65
-      analyser.minDecibels = -100
-      analyser.maxDecibels = -20
-      ctx.createMediaStreamSource(stream).connect(analyser)
-      audioCtxRef.current = ctx
-      analyserRef.current = analyser
-      freqDataRef.current = new Uint8Array(new ArrayBuffer(analyser.frequencyBinCount))
-      micStreamRef.current = stream
-      setMicState('active')
-      micStateRef.current = 'active'
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false,
+          channelCount: 2,
+        },
+        video: false,
+      })
+      connectStream(stream)
     } catch {
       setMicState('denied')
       micStateRef.current = 'denied'
+    }
+  }
+
+  // System audio (desktop Chrome/Edge) — captures tab/app audio directly
+  const activateSystemAudio = async () => {
+    if (micStateRef.current === 'requesting') return
+    if (micStateRef.current === 'active') stopCurrentStream()
+    setMicState('requesting')
+    micStateRef.current = 'requesting'
+    setCaptureMode('system')
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+        video: true,  // required by most browsers; we stop video tracks immediately
+      })
+      stream.getVideoTracks().forEach((tr) => tr.stop())
+      if (stream.getAudioTracks().length === 0) throw new Error('no audio tracks')
+      connectStream(stream)
+    } catch {
+      // Fall back to mic on failure
+      setMicState('idle')
+      micStateRef.current = 'idle'
+      setCaptureMode('mic')
+      activateMic()
     }
   }
 
@@ -94,10 +149,10 @@ export default function Hero() {
 
   useEffect(() => {
     return () => {
-      micStreamRef.current?.getTracks().forEach((tr) => tr.stop())
-      audioCtxRef.current?.close()
+      stopCurrentStream()
       cancelAnimationFrame(animRef.current)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const displayRef = useRef<number[]>(Array.from({ length: TOTAL_BARS }, () => 0))
@@ -418,9 +473,40 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* ── Mic status + sensitivity slider ── */}
+      {/* ── Audio capture status + controls ── */}
       {bgMode === 'spectrum' && (
         <div className="absolute z-20 flex flex-col gap-2" style={{ bottom: '138px', left: '1.25rem' }}>
+
+          {/* Source toggle — mic vs system audio (desktop only) */}
+          {supportsSystemAudio && micState !== 'requesting' && (
+            <div className="flex gap-px" style={{
+              background: 'color-mix(in srgb, var(--bg) 80%, transparent)',
+              border: '1px solid var(--border)', backdropFilter: 'blur(8px)',
+            }}>
+              {([
+                { mode: 'mic' as CaptureMode, label: 'Mic', onClick: activateMic },
+                { mode: 'system' as CaptureMode, label: 'App', onClick: activateSystemAudio },
+              ] as const).map(({ mode, label, onClick }) => (
+                <button
+                  key={mode}
+                  onClick={onClick}
+                  style={{
+                    fontSize: '0.52rem', fontWeight: 900, letterSpacing: '0.12em', textTransform: 'uppercase',
+                    padding: '4px 8px',
+                    background: captureMode === mode && micState === 'active' ? 'var(--accent)' : 'transparent',
+                    color: captureMode === mode && micState === 'active' ? '#fff' : 'var(--muted)',
+                    cursor: 'pointer',
+                    border: 'none',
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Status badge */}
           {micState === 'requesting' && (
             <div className="flex items-center gap-2 px-3 py-2"
               style={{
@@ -429,9 +515,10 @@ export default function Hero() {
                 border: '1px solid var(--border)', color: 'var(--muted)', backdropFilter: 'blur(8px)',
               }}>
               <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent)' }} />
-              Allow microphone…
+              {captureMode === 'system' ? 'Select tab audio…' : 'Allow microphone…'}
             </div>
           )}
+
           {micState === 'active' && (
             <>
               <div className="flex items-center gap-2 px-3 py-2"
@@ -442,8 +529,9 @@ export default function Hero() {
                 }}>
                 <span className="w-1.5 h-1.5 rounded-full"
                   style={{ background: 'var(--accent)', boxShadow: '0 0 8px var(--accent)', animation: 'pulse 1.5s ease-in-out infinite' }} />
-                Live
+                {captureMode === 'system' ? 'App Audio' : 'Live Mic'}
               </div>
+
               {/* Sensitivity slider */}
               <div className="px-3 py-2"
                 style={{
@@ -475,6 +563,7 @@ export default function Hero() {
               </div>
             </>
           )}
+
           {micState === 'denied' && (
             <button onClick={activateMic}
               className="flex items-center gap-2 px-3 py-2 transition-all duration-200"
