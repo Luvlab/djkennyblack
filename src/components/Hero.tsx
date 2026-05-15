@@ -102,7 +102,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden grain"
+      className="relative min-h-screen flex flex-col overflow-hidden grain pt-12"
       style={{ background: 'var(--bg)' }}
     >
       <canvas
@@ -118,8 +118,27 @@ export default function Hero() {
         }}
       />
 
+      {/* Genre ticker — directly under nav */}
+      <div
+        className="relative z-10 overflow-hidden border-b py-3"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <div className="ticker-track flex gap-8 whitespace-nowrap w-max">
+          {ticker.map((g, i) => (
+            <span
+              key={i}
+              className="font-black tracking-widest uppercase flex items-center gap-8"
+              style={{ color: 'var(--muted-2)', fontSize: '0.65rem' }}
+            >
+              {g}
+              <span style={{ color: 'var(--accent)', fontSize: '0.4rem' }}>◆</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* Main content */}
-      <div className="relative z-10 max-w-screen-xl mx-auto px-9 pt-16 pb-[168px] flex flex-col items-center text-center">
+      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[168px] flex flex-col items-center justify-center text-center">
 
         <div className="section-label mb-6 flex items-center gap-3">
           <span className="accent-line" />
@@ -240,24 +259,6 @@ export default function Hero() {
         )}
       </div>
 
-      {/* Genre ticker */}
-      <div
-        className="relative z-10 overflow-hidden border-t border-b py-3"
-        style={{ borderColor: 'var(--border)' }}
-      >
-        <div className="ticker-track flex gap-8 whitespace-nowrap w-max">
-          {ticker.map((g, i) => (
-            <span
-              key={i}
-              className="font-black tracking-widest uppercase flex items-center gap-8"
-              style={{ color: 'var(--muted-2)', fontSize: '0.65rem' }}
-            >
-              {g}
-              <span style={{ color: 'var(--accent)', fontSize: '0.4rem' }}>◆</span>
-            </span>
-          ))}
-        </div>
-      </div>
     </section>
   )
 }
