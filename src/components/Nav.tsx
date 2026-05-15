@@ -82,13 +82,13 @@ export default function Nav() {
           borderBottom: scrolled ? '1px solid var(--border)' : 'none',
         }}
       >
-        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 h-12 flex items-stretch justify-between gap-4">
+        <div className="max-w-screen-2xl mx-auto px-0 sm:px-4 h-12 flex items-stretch justify-between gap-2 sm:gap-4">
 
           {/* Logo */}
           <a
             href="/#"
             onClick={(e) => { e.preventDefault(); close(); setActiveHash(''); if (isHome) window.location.hash = '' }}
-            className="self-stretch flex items-center gap-2.5 flex-shrink-0 py-1"
+            className="self-stretch flex items-center gap-2.5 flex-shrink-0"
           >
             <div
               className="h-full aspect-square flex items-center justify-center font-black text-sm"
@@ -145,7 +145,7 @@ export default function Nav() {
           </div>
 
           {/* Right controls */}
-          <div className="flex items-center gap-2 flex-shrink-0 py-1">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <ThemeToggle />
             <LanguageSwitcher />
 
