@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useLang } from '@/context/LangContext'
 import type { Service } from '@/types/database'
 
 const iconMap: Record<string, string> = {
@@ -23,6 +24,7 @@ const fallbackServices: Service[] = [
 ]
 
 export default function Services() {
+  const { t } = useLang()
   const [services, setServices] = useState<Service[]>(fallbackServices)
 
   useEffect(() => {
@@ -44,20 +46,21 @@ export default function Services() {
       <div className="max-w-screen-xl mx-auto">
         {/* Header */}
         <div className="mb-14">
-          <p className="section-label mb-3">Services</p>
+          <p className="section-label mb-3">{t.services.label}</p>
           <div className="accent-line mb-6" />
           <h2
             className="font-black leading-none tracking-tight"
             style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', color: 'var(--text)' }}
           >
-            What I Bring
+            {t.services.heading1}
             <br />
-            <span style={{ color: 'var(--accent)' }}>to Your Event</span>
+            <span style={{ color: 'var(--accent)' }}>{t.services.heading2}</span>
           </h2>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px"
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px"
           style={{ border: '1px solid var(--border)' }}
         >
           {services.map((service, i) => (
@@ -117,7 +120,7 @@ export default function Services() {
             className="inline-flex px-8 py-4 font-bold text-sm tracking-widest uppercase rounded transition-all duration-200 glow-accent"
             style={{ background: 'var(--accent)', color: '#fff' }}
           >
-            Check Availability
+            {t.services.checkAvailability}
           </a>
         </div>
       </div>

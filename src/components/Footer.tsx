@@ -1,6 +1,7 @@
 'use client'
 
 import MixcloudPlayer from './MixcloudPlayer'
+import { useLang } from '@/context/LangContext'
 
 const socials = [
   { label: 'Instagram', href: 'https://instagram.com/djkennyblackevent' },
@@ -11,10 +12,10 @@ const socials = [
 ]
 
 export default function Footer() {
+  const { t } = useLang()
+
   return (
-    <footer
-      style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)' }}
-    >
+    <footer style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)' }}>
       {/* Mixcloud player with VU meter */}
       <MixcloudPlayer />
 
@@ -33,8 +34,10 @@ export default function Footer() {
               >
                 KB
               </div>
-              <span className="font-black text-sm tracking-widest uppercase"
-                style={{ color: 'var(--text)' }}>
+              <span
+                className="font-black text-sm tracking-widest uppercase"
+                style={{ color: 'var(--text)' }}
+              >
                 DJ Kenny Black
               </span>
             </div>
@@ -77,10 +80,10 @@ export default function Footer() {
           style={{ borderTop: '1px solid var(--border)' }}
         >
           <p className="text-xs" style={{ color: 'var(--muted-2)' }}>
-            © {new Date().getFullYear()} DJ Kenny Black Event AB. All rights reserved.
+            © {new Date().getFullYear()} DJ Kenny Black Event AB. {t.footer.rights}
           </p>
           <p className="text-xs" style={{ color: 'var(--muted-2)' }}>
-            Pioneer · Historian · Vinyl Specialist
+            {t.footer.tagline}
           </p>
         </div>
       </div>

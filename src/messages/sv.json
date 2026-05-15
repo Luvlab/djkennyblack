@@ -1,14 +1,124 @@
 {
-  "nav": { "about": "Om", "services": "Tjänster", "events": "Event", "press": "Press", "school": "DJ-skola", "book": "Boka DJ", "bookNow": "Boka Nu" },
-  "hero": { "location": "Stockholm, Sverige", "tagline": "Pionjär · Vinylspecialist · 40+ År", "description": "Svensk hiphoppionjär, vinyl-DJ och musikhistoriker. Från intima middagar till festivalscenar — vi skapar stämningar du aldrig glömmer.", "bookCta": "Boka DJ:n", "learnMore": "Läs Mer", "stats": { "years": "År", "since": "Sedan", "vinyl": "Vinyl" } },
-  "about": { "label": "Om", "heading1": "Pionjär.", "heading2": "Historiker.", "heading3": "DJ.", "timelineLabel": "Tidslinje", "timeline": ["Stockholm upptäcker hip hop. Kenny Black finns där från början.", "Publicerar \"Electric Boogie: When Hip Hop Came to Sweden 1982–1988\"", "Grundar Finest Blend Recordings — elektrofunk-inspirerad Detroitmusik", "Grundar Soul Corner — Stockholms definitiva deep house-residens", "Lanserar DJ-skolan — lär ut hantverket från vinyl till alla åldrar", "Fortsätter. Fortfarande vinyl. Fortfarande i framkant."], "bio": ["Kenny Black är inte bara en DJ — han är ett kapitel i svensk musikhistoria. När hip hoppen nådde Stockholm 1982 var Kenny med.", "Som grundare av Finest Blend Recordings och författare till Electric Boogie: When Hip Hop Came to Sweden, för Kenny med sig både lärdom och själ.", "Bakom skivspelaren är hans filosofi enkel: vinyl först, publiken alltid.", "Hans DJ-skola för kunskapen vidare — praktisk vinyl- och digitalutbildning för nybörjare till avancerade elever i alla åldrar."] },
-  "services": { "label": "Tjänster", "heading1": "Vad jag tar med", "heading2": "till ditt event", "checkAvailability": "Kontrollera Tillgänglighet" },
-  "events": { "label": "Event", "heading": "Bakom Skivspelarna", "all": "Alla", "upcoming": "Kommande", "past": "Tidigare", "noEvents": "Inga event hittades." },
-  "testimonials": { "label": "Omdömen", "heading": "Vad De Säger" },
-  "booking": { "label": "Bokning", "heading1": "Boka Kenny", "heading2": "till ditt event", "description": "Fyll i formuläret så återkommer Kenny inom 24 timmar för att diskutera ditt event, musikpreferenser och prissättning. Inget event är för litet eller för stort.", "fields": { "name": "Namn", "email": "E-post", "phone": "Telefon", "eventType": "Typ av event", "eventDate": "Eventdatum", "guests": "Gäster", "venue": "Lokal / Plats", "message": "Meddelande / Musikönskemål", "namePlaceholder": "Ditt namn", "emailPlaceholder": "din@epost.se", "phonePlaceholder": "+46 ...", "guestsPlaceholder": "Ungefärligt antal gäster", "venuePlaceholder": "Lokalens namn eller stad", "messagePlaceholder": "Berätta om ditt event, musiksmak, specialönskemål..." }, "required": "obligatorisk", "submit": "Skicka Bokningsförfrågan", "sending": "Skickar...", "successTitle": "Bokningsförfrågan Skickad!", "successMessage": "Tack för att du hörde av dig. Kenny återkommer inom 24 timmar.", "submitAnother": "Skicka En Till", "noPayment": "Ingen betalning krävs. Kenny bekräftar tillgänglighet och pris.", "contact": { "base": "Bas", "baseValue": "Stockholm, Sverige — tillgänglig i hela landet", "phone": "Telefon", "email": "E-post" }, "eventTypes": { "wedding": "Bröllop", "corporate": "Företagsevent", "birthday": "Födelsedag", "club": "Klubbkväll", "bar": "Bar / Restaurang", "festival": "Festival / Utomhus", "private": "Privat fest", "afterwork": "After Work", "other": "Annat" } },
-  "footer": { "rights": "Alla rättigheter förbehållna.", "tagline": "Pionjär · Historiker · Vinylspecialist" },
-  "player": { "nowPlaying": "Spelar Nu", "selectMix": "Välj ett Mix", "mixcloud": "Mixcloud" },
-  "theme": { "dark": "Mörkt", "light": "Ljust", "system": "System" },
+  "nav": {
+    "about": "Om",
+    "services": "Tjänster",
+    "events": "Event",
+    "press": "Press",
+    "school": "DJ-skola",
+    "book": "Boka DJ",
+    "bookNow": "Boka Nu"
+  },
+  "hero": {
+    "location": "Stockholm, Sverige",
+    "tagline": "Pionjär · Vinylspecialist · 40+ År",
+    "description": "Svensk hiphoppionjär, vinyl-DJ och musikhistoriker. Från intima middagar till festivalscenar — vi skapar stämningar du aldrig glömmer.",
+    "bookCta": "Boka DJ:n",
+    "learnMore": "Läs Mer",
+    "stats": {
+      "years": "År",
+      "since": "Sedan",
+      "vinyl": "Vinyl"
+    }
+  },
+  "about": {
+    "label": "Om",
+    "heading1": "Pionjär.",
+    "heading2": "Historiker.",
+    "heading3": "DJ.",
+    "timelineLabel": "Tidslinje",
+    "timeline": [
+      "Stockholm upptäcker hip hop. Kenny Black finns där från början.",
+      "Publicerar \"Electric Boogie: When Hip Hop Came to Sweden 1982–1988\"",
+      "Grundar Finest Blend Recordings — elektrofunk-inspirerad Detroitmusik",
+      "Grundar Soul Corner — Stockholms definitiva deep house-residens",
+      "Lanserar DJ-skolan — lär ut hantverket från vinyl till alla åldrar",
+      "Fortsätter. Fortfarande vinyl. Fortfarande i framkant."
+    ],
+    "bio": [
+      "Kenny Black är inte bara en DJ — han är ett kapitel i svensk musikhistoria. När hip hoppen nådde Stockholm 1982 var Kenny med.",
+      "Som grundare av Finest Blend Recordings och författare till Electric Boogie: When Hip Hop Came to Sweden, för Kenny med sig både lärdom och själ.",
+      "Bakom skivspelaren är hans filosofi enkel: vinyl först, publiken alltid.",
+      "Hans DJ-skola för kunskapen vidare — praktisk vinyl- och digitalutbildning för nybörjare till avancerade elever i alla åldrar."
+    ]
+  },
+  "services": {
+    "label": "Tjänster",
+    "heading1": "Vad jag tar med",
+    "heading2": "till ditt event",
+    "checkAvailability": "Kontrollera Tillgänglighet"
+  },
+  "events": {
+    "label": "Event",
+    "heading": "Bakom Skivspelarna",
+    "all": "Alla",
+    "upcoming": "Kommande",
+    "past": "Tidigare",
+    "noEvents": "Inga event hittades."
+  },
+  "testimonials": {
+    "label": "Omdömen",
+    "heading": "Vad De Säger"
+  },
+  "booking": {
+    "label": "Bokning",
+    "heading1": "Boka Kenny",
+    "heading2": "till ditt event",
+    "description": "Fyll i formuläret så återkommer Kenny inom 24 timmar för att diskutera ditt event, musikpreferenser och prissättning. Inget event är för litet eller för stort.",
+    "fields": {
+      "name": "Namn",
+      "email": "E-post",
+      "phone": "Telefon",
+      "eventType": "Typ av event",
+      "eventDate": "Eventdatum",
+      "guests": "Gäster",
+      "venue": "Lokal / Plats",
+      "message": "Meddelande / Musikönskemål",
+      "namePlaceholder": "Ditt namn",
+      "emailPlaceholder": "din@epost.se",
+      "phonePlaceholder": "+46 ...",
+      "guestsPlaceholder": "Ungefärligt antal gäster",
+      "venuePlaceholder": "Lokalens namn eller stad",
+      "messagePlaceholder": "Berätta om ditt event, musiksmak, specialönskemål..."
+    },
+    "required": "obligatorisk",
+    "submit": "Skicka Bokningsförfrågan",
+    "sending": "Skickar...",
+    "successTitle": "Bokningsförfrågan Skickad!",
+    "successMessage": "Tack för att du hörde av dig. Kenny återkommer inom 24 timmar.",
+    "submitAnother": "Skicka En Till",
+    "noPayment": "Ingen betalning krävs. Kenny bekräftar tillgänglighet och pris.",
+    "contact": {
+      "base": "Bas",
+      "baseValue": "Stockholm, Sverige — tillgänglig i hela landet",
+      "phone": "Telefon",
+      "email": "E-post"
+    },
+    "eventTypes": {
+      "wedding": "Bröllop",
+      "corporate": "Företagsevent",
+      "birthday": "Födelsedag",
+      "club": "Klubbkväll",
+      "bar": "Bar / Restaurang",
+      "festival": "Festival / Utomhus",
+      "private": "Privat fest",
+      "afterwork": "After Work",
+      "other": "Annat"
+    }
+  },
+  "footer": {
+    "rights": "Alla rättigheter förbehållna.",
+    "tagline": "Pionjär · Historiker · Vinylspecialist"
+  },
+  "player": {
+    "nowPlaying": "Spelar Nu",
+    "selectMix": "Välj ett Mix",
+    "mixcloud": "Mixcloud"
+  },
+  "theme": {
+    "dark": "Mörkt",
+    "light": "Ljust",
+    "system": "System"
+  },
   "language": "Språk",
   "school": {
     "label": "DJ-skola",
@@ -21,9 +131,18 @@
     "bookDesc": "\"DJ Skolan — Lär dig DJa med Kenny Black\" täcker 12 grundläggande steg: rytm, BPM, cueing, beatmatching, looping, EQ-teknik och att bygga kompletta DJ-set. För åldrarna 10 och uppåt.",
     "levels": {
       "heading": "Kursnivåer",
-      "beginner": { "title": "Nybörjare", "desc": "Ingen erfarenhet krävs. Lär dig utrustning, grundläggande mixing, musikteori och DJ-kulturens historia." },
-      "intermediate": { "title": "Mellannivå", "desc": "Beatmatching på gehör, set-byggande, EQ och övergångar. Utveckla din egna sound och programmeringsstil." },
-      "advanced": { "title": "Avancerad", "desc": "Professionella tekniker, publikläsning och att utveckla din konstnärliga identitet. Scenredo presentation." }
+      "beginner": {
+        "title": "Nybörjare",
+        "desc": "Ingen erfarenhet krävs. Lär dig utrustning, grundläggande mixing, musikteori och DJ-kulturens historia."
+      },
+      "intermediate": {
+        "title": "Mellannivå",
+        "desc": "Beatmatching på gehör, set-byggande, EQ och övergångar. Utveckla din egna sound och programmeringsstil."
+      },
+      "advanced": {
+        "title": "Avancerad",
+        "desc": "Professionella tekniker, publikläsning och att utveckla din konstnärliga identitet. Scenredo presentation."
+      }
     },
     "curriculum": {
       "heading": "Vad du lär dig",
@@ -39,10 +158,37 @@
     },
     "formats": {
       "heading": "Lektionsformat",
-      "private": { "title": "Privatlektioner", "desc": "En-mot-en med Kenny. Helt anpassad efter din nivå, dina mål och ditt schema." },
-      "group": { "title": "Gruppworkshops", "desc": "Små grupper om max 4 elever. Kollaborativt lärande med delad feedback från Kenny." },
-      "vinyl": { "title": "Vinyl Masterclass", "desc": "Djupdykning i vinylteknik, crate digging, analogt ljud och musikarkeologi." }
+      "private": {
+        "title": "Privatlektioner",
+        "desc": "En-mot-en med Kenny. Helt anpassad efter din nivå, dina mål och ditt schema."
+      },
+      "group": {
+        "title": "Gruppworkshops",
+        "desc": "Små grupper om max 4 elever. Kollaborativt lärande med delad feedback från Kenny."
+      },
+      "vinyl": {
+        "title": "Vinyl Masterclass",
+        "desc": "Djupdykning i vinylteknik, crate digging, analogt ljud och musikarkeologi."
+      }
     },
     "contactLine": "Boka via e-post eller använd bokningsformuläret. Lektioner tillgängliga på svenska och engelska."
+  },
+  "cart": {
+    "title": "Varukorg",
+    "empty": "Din varukorg är tom",
+    "continueShopping": "Fortsätt Handla",
+    "remove": "Ta bort",
+    "subtotal": "Delsumma",
+    "shippingNote": "Frakt beräknas i kassan · Priser i SEK",
+    "checkout": "Till Kassan",
+    "redirecting": "Omdirigerar…",
+    "clearCart": "Töm Varukorg",
+    "checkoutFailed": "Kassan misslyckades. Försök igen."
+  },
+  "pwa": {
+    "installTitle": "Installera Appen",
+    "installDesc": "Lägg till DJ Kenny Black på din hemskärm för snabb bokning.",
+    "install": "Installera",
+    "later": "Senare"
   }
 }

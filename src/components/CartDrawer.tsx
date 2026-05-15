@@ -1,10 +1,12 @@
 'use client'
 
 import { useCart } from '@/context/CartContext'
+import { useLang } from '@/context/LangContext'
 import { useState } from 'react'
 
 export default function CartDrawer() {
   const { items, count, total, remove, setQty, clear, isOpen, closeCart } = useCart()
+  const { t } = useLang()
   const [loading, setLoading] = useState(false)
 
   const checkout = async () => {
@@ -19,7 +21,7 @@ export default function CartDrawer() {
       if (error) throw new Error(error)
       window.location.href = url
     } catch {
-      alert('Checkout failed. Please try again.')
+      alert(t.cart.checkoutFailed)
       setLoading(false)
     }
   }
@@ -49,9 +51,12 @@ export default function CartDrawer() {
         }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
+        <div
+          className="flex items-center justify-between px-4 py-3"
+          style={{ borderBottom: '1px solid var(--border)' }}
+        >
           <h2 className="text-sm font-black tracking-widest uppercase">
-            Cart {count > 0 && <span style={{ color: 'var(--accent)' }}>({count})</span>}
+            {t.cart.title} {count > 0 && <span style={{ color: 'var(--accent)' }}>({count})</span>}
           </h2>
           <button
             onClick={closeCart}
@@ -68,13 +73,18 @@ export default function CartDrawer() {
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full gap-4 py-16 text-center">
               <div className="text-5xl opacity-20">🛒</div>
-              <p className="text-sm tracking-widest uppercase" style={{ color: 'var(--muted)' }}>Your cart is empty</p>
+              <p
+                className="text-sm tracking-widest uppercase"
+                style={{ color: 'var(--muted)' }}
+              >
+                {t.cart.empty}
+              </p>
               <button
                 onClick={closeCart}
                 className="px-4 py-2 text-xs font-bold tracking-widest uppercase border"
                 style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
               >
-                Continue Shopping
+                {t.cart.continueShopping}
               </button>
             </div>
           ) : (
@@ -90,7 +100,11 @@ export default function CartDrawer() {
                   style={{ background: 'var(--bg)' }}
                 >
                   {item.product.images?.[0] ? (
-                    <img src={item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                    <img
+                      src={item.product.images[0]}
+                      alt={item.product.name}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <span className="text-2xl opacity-20">
                       {item.product.type === 'book' ? '📚' : item.product.type === 'ticket' ? '🎫' : '👕'}
@@ -104,7 +118,9 @@ export default function CartDrawer() {
                   {item.variant_name && (
                     <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{item.variant_name}</p>
                   )}
-                  <p className="text-xs font-black mt-1" style={{ color: 'var(--accent)' }}>{fmt(item.unit_price)}</p>
+                  <p className="text-xs font-black mt-1" style={{ color: 'var(--accent)' }}>
+                    {fmt(item.unit_price)}
+                  </p>
 
                   {/* Qty + remove */}
                   <div className="flex items-center gap-2 mt-2">
@@ -128,7 +144,7 @@ export default function CartDrawer() {
                       className="ml-auto text-xs"
                       style={{ color: 'var(--muted)' }}
                     >
-                      Remove
+                      {t.cart.remove}
                     </button>
                   </div>
                 </div>
@@ -141,24 +157,31 @@ export default function CartDrawer() {
         {items.length > 0 && (
           <div className="p-4 space-y-3" style={{ borderTop: '1px solid var(--border)' }}>
             <div className="flex justify-between items-center">
-              <span className="text-xs tracking-widest uppercase" style={{ color: 'var(--muted)' }}>Subtotal</span>
+              <span
+                className="text-xs tracking-widest uppercase"
+                style={{ color: 'var(--muted)' }}
+              >
+                {t.cart.subtotal}
+              </span>
               <span className="font-black text-lg">{fmt(total)}</span>
             </div>
-            <p className="text-xs" style={{ color: 'var(--muted)' }}>Shipping calculated at checkout · Prices in SEK</p>
+            <p className="text-xs" style={{ color: 'var(--muted)' }}>
+              {t.cart.shippingNote}
+            </p>
             <button
               onClick={checkout}
               disabled={loading}
               className="w-full py-3.5 text-sm font-black tracking-widest uppercase transition-opacity"
               style={{ background: 'var(--accent)', color: '#fff', opacity: loading ? 0.7 : 1 }}
             >
-              {loading ? 'Redirecting…' : 'Checkout'}
+              {loading ? t.cart.redirecting : t.cart.checkout}
             </button>
             <button
               onClick={clear}
               className="w-full py-2 text-xs tracking-widest uppercase"
               style={{ color: 'var(--muted)' }}
             >
-              Clear Cart
+              {t.cart.clearCart}
             </button>
           </div>
         )}

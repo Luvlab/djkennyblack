@@ -2,18 +2,7 @@
 
 import { useState, type FormEvent } from 'react'
 import { supabase } from '@/lib/supabase'
-
-const eventTypes = [
-  'Wedding',
-  'Corporate Event',
-  'Birthday Party',
-  'Club Night',
-  'Bar / Restaurant',
-  'Festival / Outdoor',
-  'Private Party',
-  'After Work',
-  'Other',
-]
+import { useLang } from '@/context/LangContext'
 
 type FormState = {
   name: string
@@ -40,9 +29,22 @@ const empty: FormState = {
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
 export default function BookingForm() {
+  const { t } = useLang()
   const [form, setForm] = useState<FormState>(empty)
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
+
+  const eventTypeOptions = [
+    { value: 'Wedding', label: t.booking.eventTypes.wedding },
+    { value: 'Corporate Event', label: t.booking.eventTypes.corporate },
+    { value: 'Birthday Party', label: t.booking.eventTypes.birthday },
+    { value: 'Club Night', label: t.booking.eventTypes.club },
+    { value: 'Bar / Restaurant', label: t.booking.eventTypes.bar },
+    { value: 'Festival / Outdoor', label: t.booking.eventTypes.festival },
+    { value: 'Private Party', label: t.booking.eventTypes.private },
+    { value: 'After Work', label: t.booking.eventTypes.afterwork },
+    { value: 'Other', label: t.booking.eventTypes.other },
+  ]
 
   const set = (key: keyof FormState) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -94,27 +96,25 @@ export default function BookingForm() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left: copy */}
           <div>
-            <p className="section-label mb-3">Booking</p>
+            <p className="section-label mb-3">{t.booking.label}</p>
             <div className="accent-line mb-6" />
             <h2
               className="font-black leading-none tracking-tight mb-6"
               style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', color: 'var(--text)' }}
             >
-              Book Kenny
+              {t.booking.heading1}
               <br />
-              <span style={{ color: 'var(--accent)' }}>for Your Event</span>
+              <span style={{ color: 'var(--accent)' }}>{t.booking.heading2}</span>
             </h2>
             <p className="text-sm leading-relaxed mb-8" style={{ color: 'var(--muted)' }}>
-              Fill in the form and Kenny will get back to you within 24 hours to discuss
-              your event, music preferences, and pricing. No event is too intimate or
-              too large.
+              {t.booking.description}
             </p>
 
             <div className="space-y-4">
               {[
-                { icon: '📍', title: 'Base', desc: 'Stockholm, Sweden — available nationwide' },
-                { icon: '📞', title: 'Phone', desc: '+46 73 941 40 65' },
-                { icon: '✉️', title: 'Email', desc: 'kennyblack@gmail.com' },
+                { icon: '📍', title: t.booking.contact.base, desc: t.booking.contact.baseValue },
+                { icon: '📞', title: t.booking.contact.phone, desc: '+46 73 941 40 65' },
+                { icon: '✉️', title: t.booking.contact.email, desc: 'kennyblack@gmail.com' },
               ].map((item) => (
                 <div
                   key={item.title}
@@ -126,8 +126,10 @@ export default function BookingForm() {
                 >
                   <span className="text-lg mt-0.5">{item.icon}</span>
                   <div>
-                    <p className="text-xs font-bold tracking-widest uppercase mb-0.5"
-                      style={{ color: 'var(--muted)' }}>
+                    <p
+                      className="text-xs font-bold tracking-widest uppercase mb-0.5"
+                      style={{ color: 'var(--muted)' }}
+                    >
                       {item.title}
                     </p>
                     <p className="text-sm" style={{ color: 'var(--text)' }}>{item.desc}</p>
@@ -144,24 +146,19 @@ export default function BookingForm() {
                 className="h-full flex flex-col items-center justify-center text-center py-16 px-8 rounded"
                 style={{ background: 'var(--surface-2)', border: '1px solid var(--accent)' }}
               >
-                <div
-                  className="text-5xl mb-6"
-                  style={{ color: 'var(--accent)' }}
-                >
-                  ✓
-                </div>
+                <div className="text-5xl mb-6" style={{ color: 'var(--accent)' }}>✓</div>
                 <h3 className="font-black text-xl mb-3" style={{ color: 'var(--text)' }}>
-                  Booking Request Sent!
+                  {t.booking.successTitle}
                 </h3>
                 <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                  Thanks for reaching out. Kenny will get back to you within 24 hours.
+                  {t.booking.successMessage}
                 </p>
                 <button
                   onClick={() => setStatus('idle')}
                   className="mt-8 px-6 py-2.5 text-xs font-bold tracking-widest uppercase rounded border transition-all"
                   style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
                 >
-                  Submit Another
+                  {t.booking.submitAnother}
                 </button>
               </div>
             ) : (
@@ -169,13 +166,15 @@ export default function BookingForm() {
                 {/* Row: name + email */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                      style={{ color: 'var(--muted)' }}>
-                      Name *
+                    <label
+                      className="block text-xs font-bold tracking-widest uppercase mb-2"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      {t.booking.fields.name} *
                     </label>
                     <input
                       type="text"
-                      placeholder="Your name"
+                      placeholder={t.booking.fields.namePlaceholder}
                       value={form.name}
                       onChange={set('name')}
                       className={inputClass}
@@ -183,13 +182,15 @@ export default function BookingForm() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                      style={{ color: 'var(--muted)' }}>
-                      Email *
+                    <label
+                      className="block text-xs font-bold tracking-widest uppercase mb-2"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      {t.booking.fields.email} *
                     </label>
                     <input
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder={t.booking.fields.emailPlaceholder}
                       value={form.email}
                       onChange={set('email')}
                       className={inputClass}
@@ -201,22 +202,26 @@ export default function BookingForm() {
                 {/* Row: phone + event type */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                      style={{ color: 'var(--muted)' }}>
-                      Phone
+                    <label
+                      className="block text-xs font-bold tracking-widest uppercase mb-2"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      {t.booking.fields.phone}
                     </label>
                     <input
                       type="tel"
-                      placeholder="+46 ..."
+                      placeholder={t.booking.fields.phonePlaceholder}
                       value={form.phone}
                       onChange={set('phone')}
                       className={inputClass}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                      style={{ color: 'var(--muted)' }}>
-                      Event Type *
+                    <label
+                      className="block text-xs font-bold tracking-widest uppercase mb-2"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      {t.booking.fields.eventType} *
                     </label>
                     <select
                       value={form.event_type}
@@ -225,8 +230,8 @@ export default function BookingForm() {
                       required
                     >
                       <option value="">Select type...</option>
-                      {eventTypes.map((t) => (
-                        <option key={t} value={t}>{t}</option>
+                      {eventTypeOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
                       ))}
                     </select>
                   </div>
@@ -235,9 +240,11 @@ export default function BookingForm() {
                 {/* Row: date + guests */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                      style={{ color: 'var(--muted)' }}>
-                      Event Date *
+                    <label
+                      className="block text-xs font-bold tracking-widest uppercase mb-2"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      {t.booking.fields.eventDate} *
                     </label>
                     <input
                       type="date"
@@ -248,13 +255,15 @@ export default function BookingForm() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                      style={{ color: 'var(--muted)' }}>
-                      Guests
+                    <label
+                      className="block text-xs font-bold tracking-widest uppercase mb-2"
+                      style={{ color: 'var(--muted)' }}
+                    >
+                      {t.booking.fields.guests}
                     </label>
                     <input
                       type="number"
-                      placeholder="Approx. guest count"
+                      placeholder={t.booking.fields.guestsPlaceholder}
                       value={form.guests}
                       onChange={set('guests')}
                       className={inputClass}
@@ -265,13 +274,15 @@ export default function BookingForm() {
 
                 {/* Venue */}
                 <div>
-                  <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                    style={{ color: 'var(--muted)' }}>
-                    Venue / Location
+                  <label
+                    className="block text-xs font-bold tracking-widest uppercase mb-2"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    {t.booking.fields.venue}
                   </label>
                   <input
                     type="text"
-                    placeholder="Venue name or city"
+                    placeholder={t.booking.fields.venuePlaceholder}
                     value={form.event_location}
                     onChange={set('event_location')}
                     className={inputClass}
@@ -280,12 +291,14 @@ export default function BookingForm() {
 
                 {/* Message */}
                 <div>
-                  <label className="block text-xs font-bold tracking-widest uppercase mb-2"
-                    style={{ color: 'var(--muted)' }}>
-                    Message / Music Preferences
+                  <label
+                    className="block text-xs font-bold tracking-widest uppercase mb-2"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    {t.booking.fields.message}
                   </label>
                   <textarea
-                    placeholder="Tell Kenny about your event, music taste, special requests..."
+                    placeholder={t.booking.fields.messagePlaceholder}
                     value={form.message}
                     onChange={set('message')}
                     rows={4}
@@ -308,11 +321,11 @@ export default function BookingForm() {
                     cursor: status === 'loading' ? 'not-allowed' : 'pointer',
                   }}
                 >
-                  {status === 'loading' ? 'Sending...' : 'Send Booking Request'}
+                  {status === 'loading' ? t.booking.sending : t.booking.submit}
                 </button>
 
                 <p className="text-xs text-center" style={{ color: 'var(--muted-2)' }}>
-                  No payment required. Kenny will confirm availability and pricing.
+                  {t.booking.noPayment}
                 </p>
               </form>
             )}

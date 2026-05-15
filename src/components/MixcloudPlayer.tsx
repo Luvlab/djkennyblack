@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import VUMeter from './VUMeter'
+import { useLang } from '@/context/LangContext'
 
 const mixes = [
   { slug: '/soulcorner-kennyblack/', title: 'All Mixes', genres: 'Full Channel Feed', isFeed: true },
@@ -17,6 +18,7 @@ const mixes = [
 ]
 
 export default function MixcloudPlayer() {
+  const { t } = useLang()
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loaded, setLoaded] = useState(false)
@@ -24,11 +26,9 @@ export default function MixcloudPlayer() {
   const widgetRef = useRef<MixcloudWidget | null>(null)
 
   const currentMix = mixes[currentIndex]
-  // Profile feed uses feed= directly; individual mixes also use feed=
   const embedUrl = `https://www.mixcloud.com/widget/iframe/?hide_cover=1&mini=1&feed=${encodeURIComponent(currentMix.slug)}&autoplay=0&dark=1`
 
   useEffect(() => {
-    // Load Mixcloud widget API
     if (typeof window === 'undefined') return
 
     const loadScript = () => {
@@ -120,7 +120,7 @@ export default function MixcloudPlayer() {
               className="text-xs font-bold tracking-widest uppercase"
               style={{ color: isPlaying ? 'var(--accent)' : 'var(--muted)' }}
             >
-              {isPlaying ? 'Now Playing' : 'Select a Mix'}
+              {isPlaying ? t.player.nowPlaying : t.player.selectMix}
             </span>
           </div>
           <p className="font-bold text-sm truncate" style={{ color: 'var(--text)' }}>
@@ -150,7 +150,7 @@ export default function MixcloudPlayer() {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.25 0a4.75 4.75 0 1 0-9.5 0 4.75 4.75 0 0 0 9.5 0z"/>
           </svg>
-          Mixcloud
+          {t.player.mixcloud}
         </a>
       </div>
 
@@ -177,7 +177,6 @@ export default function MixcloudPlayer() {
   )
 }
 
-// Type declarations for Mixcloud Widget API
 interface MixcloudWidget {
   ready: Promise<void>
   events: {

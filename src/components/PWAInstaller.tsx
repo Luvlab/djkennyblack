@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useLang } from '@/context/LangContext'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -8,11 +9,11 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export default function PWAInstaller() {
+  const { t } = useLang()
   const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(null)
   const [shown, setShown] = useState(false)
 
   useEffect(() => {
-    // Register service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {})
     }
@@ -20,7 +21,6 @@ export default function PWAInstaller() {
     const handler = (e: Event) => {
       e.preventDefault()
       setPrompt(e as BeforeInstallPromptEvent)
-      // Show banner after 30s
       setTimeout(() => setShown(true), 30000)
     }
     window.addEventListener('beforeinstallprompt', handler)
@@ -54,9 +54,11 @@ export default function PWAInstaller() {
           KB
         </div>
         <div className="flex-1 min-w-0">
-          <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>Install App</p>
+          <p className="font-bold text-sm" style={{ color: 'var(--text)' }}>
+            {t.pwa.installTitle}
+          </p>
           <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>
-            Add DJ Kenny Black to your home screen for quick booking access.
+            {t.pwa.installDesc}
           </p>
           <div className="flex gap-2 mt-3">
             <button
@@ -64,14 +66,14 @@ export default function PWAInstaller() {
               className="px-4 py-1.5 text-xs font-bold rounded"
               style={{ background: 'var(--accent)', color: '#fff' }}
             >
-              Install
+              {t.pwa.install}
             </button>
             <button
               onClick={() => setShown(false)}
               className="px-4 py-1.5 text-xs font-bold rounded"
               style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
             >
-              Later
+              {t.pwa.later}
             </button>
           </div>
         </div>

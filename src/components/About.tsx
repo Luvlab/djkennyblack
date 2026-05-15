@@ -1,13 +1,8 @@
 'use client'
 
-const timeline = [
-  { year: '1982', event: 'Stockholm discovers hip hop. Kenny Black is there at the beginning.' },
-  { year: '1988', event: 'Publishes "Electric Boogie: When Hip Hop Came to Sweden 1982–1988"' },
-  { year: '1990s', event: 'Founds Finest Blend Recordings — electro-funk inspired Detroit music' },
-  { year: '2000s', event: 'Establishes Soul Corner — the definitive Stockholm deep house residency' },
-  { year: '2010s', event: 'Launches DJ School — teaching the craft from vinyl up for all ages' },
-  { year: '2020+', event: 'Still going. Still vinyl. Still ahead of the curve.' },
-]
+import { useLang } from '@/context/LangContext'
+
+const timelineYears = ['1982', '1988', '1990s', '2000s', '2010s', '2020+']
 
 const facts = [
   { label: 'Author', value: '"Electric Boogie"' },
@@ -19,6 +14,8 @@ const facts = [
 ]
 
 export default function About() {
+  const { t } = useLang()
+
   return (
     <section
       id="about"
@@ -28,17 +25,17 @@ export default function About() {
       <div className="max-w-screen-xl mx-auto">
         {/* Header */}
         <div className="mb-14">
-          <p className="section-label mb-3">About</p>
+          <p className="section-label mb-3">{t.about.label}</p>
           <div className="accent-line mb-6" />
           <h2
             className="font-black leading-none tracking-tight"
             style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', color: 'var(--text)' }}
           >
-            Pioneer.
+            {t.about.heading1}
             <br />
-            <span style={{ color: 'var(--muted)' }}>Historian.</span>
+            <span style={{ color: 'var(--muted)' }}>{t.about.heading2}</span>
             <br />
-            <span style={{ color: 'var(--accent)' }}>DJ.</span>
+            <span style={{ color: 'var(--accent)' }}>{t.about.heading3}</span>
           </h2>
         </div>
 
@@ -47,35 +44,9 @@ export default function About() {
           {/* Left: Bio */}
           <div>
             <div className="space-y-5" style={{ color: 'var(--muted)', lineHeight: '1.8' }}>
-              <p>
-                Kenny Black is not just a DJ — he is a chapter in Swedish music history.
-                When hip hop arrived in Stockholm in 1982, Kenny was in the room. He has
-                spent the four decades since preserving, documenting, and advancing the
-                culture he helped build.
-              </p>
-              <p>
-                As the founder of{' '}
-                <span style={{ color: 'var(--text)' }}>Finest Blend Recordings</span>, a label
-                rooted in electro-funk inspired Detroit music, and author of{' '}
-                <span style={{ color: 'var(--text)', fontStyle: 'italic' }}>
-                  Electric Boogie: When Hip Hop Came to Sweden
-                </span>
-                , Kenny brings scholarship and soul to everything he touches.
-              </p>
-              <p>
-                Behind the decks, his approach is simple: vinyl first, crowd always. Whether
-                it is a deep house marathon at an underground Stockholm club, a soulful
-                after-work session at{' '}
-                <span style={{ color: 'var(--text)' }}>Elite Hotel Marina Tower</span>, or an
-                intimate dinner party in Södermalm — Kenny reads the room and takes you
-                somewhere you did not know you wanted to go.
-              </p>
-              <p>
-                His{' '}
-                <span style={{ color: 'var(--text)' }}>DJ School</span> passes the knowledge
-                forward — hands-on vinyl and digital training for beginners to advanced
-                students of all ages.
-              </p>
+              {t.about.bio.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
             </div>
 
             {/* Fact grid */}
@@ -113,7 +84,7 @@ export default function About() {
               className="text-xs font-bold tracking-widest uppercase mb-8"
               style={{ color: 'var(--accent)' }}
             >
-              Timeline
+              {t.about.timelineLabel}
             </p>
             <div className="relative">
               {/* Vertical line */}
@@ -123,25 +94,20 @@ export default function About() {
               />
 
               <div className="space-y-8">
-                {timeline.map((item, i) => (
+                {t.about.timeline.map((event, i) => (
                   <div key={i} className="flex gap-6 relative">
                     {/* Year */}
-                    <div
-                      className="w-24 flex-shrink-0 text-right pr-4 pt-1"
-                    >
+                    <div className="w-24 flex-shrink-0 text-right pr-4 pt-1">
                       <span
                         className="text-xs font-black tracking-wider"
                         style={{ color: i === 0 ? 'var(--accent)' : 'var(--muted-2)' }}
                       >
-                        {item.year}
+                        {timelineYears[i]}
                       </span>
                     </div>
 
                     {/* Dot */}
-                    <div
-                      className="relative flex-shrink-0 mt-1.5"
-                      style={{ zIndex: 1 }}
-                    >
+                    <div className="relative flex-shrink-0 mt-1.5" style={{ zIndex: 1 }}>
                       <div
                         className="w-3 h-3 rounded-full border-2"
                         style={{
@@ -156,7 +122,7 @@ export default function About() {
                       className="text-sm leading-relaxed pb-2"
                       style={{ color: 'var(--muted)' }}
                     >
-                      {item.event}
+                      {event}
                     </p>
                   </div>
                 ))}
@@ -177,10 +143,7 @@ export default function About() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 text-xs font-bold tracking-widest uppercase rounded border transition-all duration-200"
-                  style={{
-                    border: '1px solid var(--border)',
-                    color: 'var(--muted)',
-                  }}
+                  style={{ border: '1px solid var(--border)', color: 'var(--muted)' }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = 'var(--accent)'
                     e.currentTarget.style.color = 'var(--accent)'

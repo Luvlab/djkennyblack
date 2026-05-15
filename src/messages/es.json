@@ -1,14 +1,124 @@
 {
-  "nav": { "about": "Acerca", "services": "Servicios", "events": "Eventos", "press": "Prensa", "school": "Escuela DJ", "book": "Reservar DJ", "bookNow": "Reservar Ahora" },
-  "hero": { "location": "Estocolmo, Suecia", "tagline": "Pionero · Especialista en Vinilo · 40+ Años", "description": "Pionero del hip hop sueco, DJ de vinilo e historiador musical. Desde cenas íntimas hasta escenarios de festival — creando atmósferas que nunca olvidarás.", "bookCta": "Contratar al DJ", "learnMore": "Saber Más", "stats": { "years": "Años", "since": "Desde", "vinyl": "Vinilo" } },
-  "about": { "label": "Acerca", "heading1": "Pionero.", "heading2": "Historiador.", "heading3": "DJ.", "timelineLabel": "Cronología", "timeline": ["Estocolmo descubre el hip hop. Kenny Black está ahí desde el principio.", "Publica \"Electric Boogie: When Hip Hop Came to Sweden 1982–1988\"", "Funda Finest Blend Recordings — música de Detroit inspirada en el electro-funk", "Establece Soul Corner — la residencia de deep house definitiva de Estocolmo", "Lanza la Escuela de DJ — enseñando el oficio desde el vinilo para todas las edades", "Sigue adelante. Sigue en vinilo. Siempre a la vanguardia."], "bio": ["Kenny Black no es solo un DJ — es un capítulo en la historia musical sueca. Cuando el hip hop llegó a Estocolmo en 1982, Kenny estaba ahí.", "Como fundador de Finest Blend Recordings y autor de Electric Boogie: When Hip Hop Came to Sweden, Kenny aporta conocimiento y alma a todo lo que toca.", "Detrás de los platos, su filosofía es simple: vinilo primero, el público siempre.", "Su Escuela de DJ transmite el conocimiento — formación práctica en vinilo y digital para principiantes y avanzados de todas las edades."] },
-  "services": { "label": "Servicios", "heading1": "Lo que Aporto", "heading2": "a tu Evento", "checkAvailability": "Consultar Disponibilidad" },
-  "events": { "label": "Eventos", "heading": "En los Platos", "all": "Todos", "upcoming": "Próximos", "past": "Pasados", "noEvents": "No se encontraron eventos." },
-  "testimonials": { "label": "Testimonios", "heading": "Lo que Dicen" },
-  "booking": { "label": "Reserva", "heading1": "Reserva a Kenny", "heading2": "para tu Evento", "description": "Rellena el formulario y Kenny te responderá en 24 horas para hablar de tu evento, preferencias musicales y precios. Ningún evento es demasiado íntimo ni demasiado grande.", "fields": { "name": "Nombre", "email": "Correo", "phone": "Teléfono", "eventType": "Tipo de Evento", "eventDate": "Fecha del Evento", "guests": "Invitados", "venue": "Lugar / Ubicación", "message": "Mensaje / Preferencias Musicales", "namePlaceholder": "Tu nombre", "emailPlaceholder": "tu@correo.com", "phonePlaceholder": "+46 ...", "guestsPlaceholder": "Número aproximado de invitados", "venuePlaceholder": "Nombre del lugar o ciudad", "messagePlaceholder": "Cuéntale a Kenny sobre tu evento, gustos musicales, peticiones especiales..." }, "required": "obligatorio", "submit": "Enviar Solicitud de Reserva", "sending": "Enviando...", "successTitle": "¡Solicitud Enviada!", "successMessage": "Gracias por contactarnos. Kenny te responderá en 24 horas.", "submitAnother": "Enviar Otra", "noPayment": "Sin pago requerido. Kenny confirmará disponibilidad y precio.", "contact": { "base": "Base", "baseValue": "Estocolmo, Suecia — disponible en todo el país", "phone": "Teléfono", "email": "Correo" }, "eventTypes": { "wedding": "Boda", "corporate": "Evento Corporativo", "birthday": "Cumpleaños", "club": "Noche de Club", "bar": "Bar / Restaurante", "festival": "Festival / Al Aire Libre", "private": "Fiesta Privada", "afterwork": "After Work", "other": "Otro" } },
-  "footer": { "rights": "Todos los derechos reservados.", "tagline": "Pionero · Historiador · Especialista en Vinilo" },
-  "player": { "nowPlaying": "Reproduciendo", "selectMix": "Seleccionar Mix", "mixcloud": "Mixcloud" },
-  "theme": { "dark": "Oscuro", "light": "Claro", "system": "Sistema" },
+  "nav": {
+    "about": "Acerca",
+    "services": "Servicios",
+    "events": "Eventos",
+    "press": "Prensa",
+    "school": "Escuela DJ",
+    "book": "Reservar DJ",
+    "bookNow": "Reservar Ahora"
+  },
+  "hero": {
+    "location": "Estocolmo, Suecia",
+    "tagline": "Pionero · Especialista en Vinilo · 40+ Años",
+    "description": "Pionero del hip hop sueco, DJ de vinilo e historiador musical. Desde cenas íntimas hasta escenarios de festival — creando atmósferas que nunca olvidarás.",
+    "bookCta": "Contratar al DJ",
+    "learnMore": "Saber Más",
+    "stats": {
+      "years": "Años",
+      "since": "Desde",
+      "vinyl": "Vinilo"
+    }
+  },
+  "about": {
+    "label": "Acerca",
+    "heading1": "Pionero.",
+    "heading2": "Historiador.",
+    "heading3": "DJ.",
+    "timelineLabel": "Cronología",
+    "timeline": [
+      "Estocolmo descubre el hip hop. Kenny Black está ahí desde el principio.",
+      "Publica \"Electric Boogie: When Hip Hop Came to Sweden 1982–1988\"",
+      "Funda Finest Blend Recordings — música de Detroit inspirada en el electro-funk",
+      "Establece Soul Corner — la residencia de deep house definitiva de Estocolmo",
+      "Lanza la Escuela de DJ — enseñando el oficio desde el vinilo para todas las edades",
+      "Sigue adelante. Sigue en vinilo. Siempre a la vanguardia."
+    ],
+    "bio": [
+      "Kenny Black no es solo un DJ — es un capítulo en la historia musical sueca. Cuando el hip hop llegó a Estocolmo en 1982, Kenny estaba ahí.",
+      "Como fundador de Finest Blend Recordings y autor de Electric Boogie: When Hip Hop Came to Sweden, Kenny aporta conocimiento y alma a todo lo que toca.",
+      "Detrás de los platos, su filosofía es simple: vinilo primero, el público siempre.",
+      "Su Escuela de DJ transmite el conocimiento — formación práctica en vinilo y digital para principiantes y avanzados de todas las edades."
+    ]
+  },
+  "services": {
+    "label": "Servicios",
+    "heading1": "Lo que Aporto",
+    "heading2": "a tu Evento",
+    "checkAvailability": "Consultar Disponibilidad"
+  },
+  "events": {
+    "label": "Eventos",
+    "heading": "En los Platos",
+    "all": "Todos",
+    "upcoming": "Próximos",
+    "past": "Pasados",
+    "noEvents": "No se encontraron eventos."
+  },
+  "testimonials": {
+    "label": "Testimonios",
+    "heading": "Lo que Dicen"
+  },
+  "booking": {
+    "label": "Reserva",
+    "heading1": "Reserva a Kenny",
+    "heading2": "para tu Evento",
+    "description": "Rellena el formulario y Kenny te responderá en 24 horas para hablar de tu evento, preferencias musicales y precios. Ningún evento es demasiado íntimo ni demasiado grande.",
+    "fields": {
+      "name": "Nombre",
+      "email": "Correo",
+      "phone": "Teléfono",
+      "eventType": "Tipo de Evento",
+      "eventDate": "Fecha del Evento",
+      "guests": "Invitados",
+      "venue": "Lugar / Ubicación",
+      "message": "Mensaje / Preferencias Musicales",
+      "namePlaceholder": "Tu nombre",
+      "emailPlaceholder": "tu@correo.com",
+      "phonePlaceholder": "+46 ...",
+      "guestsPlaceholder": "Número aproximado de invitados",
+      "venuePlaceholder": "Nombre del lugar o ciudad",
+      "messagePlaceholder": "Cuéntale a Kenny sobre tu evento, gustos musicales, peticiones especiales..."
+    },
+    "required": "obligatorio",
+    "submit": "Enviar Solicitud de Reserva",
+    "sending": "Enviando...",
+    "successTitle": "¡Solicitud Enviada!",
+    "successMessage": "Gracias por contactarnos. Kenny te responderá en 24 horas.",
+    "submitAnother": "Enviar Otra",
+    "noPayment": "Sin pago requerido. Kenny confirmará disponibilidad y precio.",
+    "contact": {
+      "base": "Base",
+      "baseValue": "Estocolmo, Suecia — disponible en todo el país",
+      "phone": "Teléfono",
+      "email": "Correo"
+    },
+    "eventTypes": {
+      "wedding": "Boda",
+      "corporate": "Evento Corporativo",
+      "birthday": "Cumpleaños",
+      "club": "Noche de Club",
+      "bar": "Bar / Restaurante",
+      "festival": "Festival / Al Aire Libre",
+      "private": "Fiesta Privada",
+      "afterwork": "After Work",
+      "other": "Otro"
+    }
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "tagline": "Pionero · Historiador · Especialista en Vinilo"
+  },
+  "player": {
+    "nowPlaying": "Reproduciendo",
+    "selectMix": "Seleccionar Mix",
+    "mixcloud": "Mixcloud"
+  },
+  "theme": {
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "Sistema"
+  },
   "language": "Idioma",
   "school": {
     "label": "Escuela DJ",
@@ -19,9 +129,66 @@
     "buyBook": "Conseguir el libro",
     "bookLabel": "La guía oficial",
     "bookDesc": "\"DJ Skolan — Lär dig DJa med Kenny Black\" cubre 12 pasos fundamentales: ritmo, BPM, cueing, beatmatching, looping, técnicas de EQ y la construcción de sets completos. Para mayores de 10 años.",
-    "levels": { "heading": "Niveles de curso", "beginner": { "title": "Principiante", "desc": "Sin experiencia necesaria. Aprende el equipo, mezcla básica y fundamentos musicales." }, "intermediate": { "title": "Intermedio", "desc": "Beatmatching de oído, construcción de sets, EQ y transiciones." }, "advanced": { "title": "Avanzado", "desc": "Técnicas profesionales, lectura del público y desarrollo de identidad artística." } },
-    "curriculum": { "heading": "Lo que aprenderás", "items": ["Manejo y cuidado del vinilo", "Beatmatching y control de pitch de oído", "Selección musical y programación", "EQ, mezcla y transiciones", "Herramientas digitales: Serato y Rekordbox", "Lectura del público y gestión de energía", "Historia del DJ — del Bronx a Estocolmo"] },
-    "formats": { "heading": "Formatos de clase", "private": { "title": "Clases privadas", "desc": "Uno a uno con Kenny. Adaptado a tu nivel y objetivos." }, "group": { "title": "Talleres grupales", "desc": "Grupos de hasta 4 estudiantes. Aprendizaje colaborativo con feedback de Kenny." }, "vinyl": { "title": "Masterclass de vinilo", "desc": "Técnica de vinilo, crate digging, sonido analógico y arqueología musical." } },
+    "levels": {
+      "heading": "Niveles de curso",
+      "beginner": {
+        "title": "Principiante",
+        "desc": "Sin experiencia necesaria. Aprende el equipo, mezcla básica y fundamentos musicales."
+      },
+      "intermediate": {
+        "title": "Intermedio",
+        "desc": "Beatmatching de oído, construcción de sets, EQ y transiciones."
+      },
+      "advanced": {
+        "title": "Avanzado",
+        "desc": "Técnicas profesionales, lectura del público y desarrollo de identidad artística."
+      }
+    },
+    "curriculum": {
+      "heading": "Lo que aprenderás",
+      "items": [
+        "Manejo y cuidado del vinilo",
+        "Beatmatching y control de pitch de oído",
+        "Selección musical y programación",
+        "EQ, mezcla y transiciones",
+        "Herramientas digitales: Serato y Rekordbox",
+        "Lectura del público y gestión de energía",
+        "Historia del DJ — del Bronx a Estocolmo"
+      ]
+    },
+    "formats": {
+      "heading": "Formatos de clase",
+      "private": {
+        "title": "Clases privadas",
+        "desc": "Uno a uno con Kenny. Adaptado a tu nivel y objetivos."
+      },
+      "group": {
+        "title": "Talleres grupales",
+        "desc": "Grupos de hasta 4 estudiantes. Aprendizaje colaborativo con feedback de Kenny."
+      },
+      "vinyl": {
+        "title": "Masterclass de vinilo",
+        "desc": "Técnica de vinilo, crate digging, sonido analógico y arqueología musical."
+      }
+    },
     "contactLine": "Reserva por email o usa el formulario. Clases disponibles en sueco e inglés."
+  },
+  "cart": {
+    "title": "Carrito",
+    "empty": "Tu carrito está vacío",
+    "continueShopping": "Continuar Comprando",
+    "remove": "Eliminar",
+    "subtotal": "Subtotal",
+    "shippingNote": "Envío calculado en el pago · Precios en SEK",
+    "checkout": "Pagar",
+    "redirecting": "Redirigiendo…",
+    "clearCart": "Vaciar Carrito",
+    "checkoutFailed": "Error en el pago. Por favor inténtalo de nuevo."
+  },
+  "pwa": {
+    "installTitle": "Instalar App",
+    "installDesc": "Añade DJ Kenny Black a tu pantalla de inicio para reservar rápidamente.",
+    "install": "Instalar",
+    "later": "Más tarde"
   }
 }

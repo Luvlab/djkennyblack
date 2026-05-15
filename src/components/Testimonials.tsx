@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useLang } from '@/context/LangContext'
 import type { Testimonial } from '@/types/database'
 
 const fallback: Testimonial[] = [
@@ -22,6 +23,7 @@ function Stars({ count }: { count: number }) {
 }
 
 export default function Testimonials() {
+  const { t } = useLang()
   const [items, setItems] = useState<Testimonial[]>(fallback)
 
   useEffect(() => {
@@ -44,13 +46,13 @@ export default function Testimonials() {
       <div className="max-w-screen-xl mx-auto">
         {/* Header */}
         <div className="mb-14">
-          <p className="section-label mb-3">Testimonials</p>
+          <p className="section-label mb-3">{t.testimonials.label}</p>
           <div className="accent-line mb-6" />
           <h2
             className="font-black leading-none tracking-tight"
             style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', color: 'var(--text)' }}
           >
-            What They Say
+            {t.testimonials.heading}
           </h2>
         </div>
 

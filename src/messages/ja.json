@@ -1,14 +1,124 @@
 {
-  "nav": { "about": "概要", "services": "サービス", "events": "イベント", "press": "プレス", "school": "DJスクール", "book": "DJ予約", "bookNow": "今すぐ予約" },
-  "hero": { "location": "スウェーデン・ストックホルム", "tagline": "パイオニア · バイナル専門家 · 40年以上", "description": "スウェーデンのヒップホップ先駆者、バイナルDJ、音楽史家。親密なディナーからフェスティバルステージまで——忘れられない空間を創り出します。", "bookCta": "DJを予約する", "learnMore": "詳しく見る", "stats": { "years": "年", "since": "年から", "vinyl": "バイナル" } },
-  "about": { "label": "概要", "heading1": "パイオニア。", "heading2": "歴史家。", "heading3": "DJ。", "timelineLabel": "タイムライン", "timeline": ["ストックホルムがヒップホップを発見。ケニー・ブラックは最初からそこにいた。", "「Electric Boogie: When Hip Hop Came to Sweden 1982–1988」を出版", "Finest Blend Recordings設立——エレクトロファンク影響下のデトロイト音楽", "Soul Corner設立——ストックホルムの定番ディープハウス・レジデンシー", "DJ学校を開校——バイナルから始まる全年齢対象のDJ教育", "今も現役。今もバイナル。今もカーブを先取り。"], "bio": ["ケニー・ブラックは単なるDJではありません——彼はスウェーデン音楽史の一章です。1982年にヒップホップがストックホルムに到着したとき、ケニーはその場にいました。", "Finest Blend Recordingsの創設者であり「Electric Boogie」の著者として、ケニーは触れるものすべてに学識と魂を注ぎ込みます。", "ターンテーブルの前での彼のアプローチはシンプルです：バイナルファースト、オーディエンス常に最優先。", "DJ学校では知識を次世代へ伝えています——全年齢の初心者から上級者まで対応するバイナル・デジタルの実践的トレーニング。"] },
-  "services": { "label": "サービス", "heading1": "イベントに", "heading2": "もたらすもの", "checkAvailability": "空き状況を確認" },
-  "events": { "label": "イベント", "heading": "デッキの上で", "all": "すべて", "upcoming": "近日開催", "past": "過去", "noEvents": "イベントが見つかりません。" },
-  "testimonials": { "label": "お客様の声", "heading": "皆さんの声" },
-  "booking": { "label": "予約", "heading1": "ケニーを予約", "heading2": "あなたのイベントに", "description": "フォームにご記入いただければ、24時間以内にケニーがイベントの詳細、音楽の好み、料金についてご連絡します。", "fields": { "name": "お名前", "email": "メール", "phone": "電話番号", "eventType": "イベント種別", "eventDate": "イベント日", "guests": "ゲスト数", "venue": "会場/場所", "message": "メッセージ/音楽の好み", "namePlaceholder": "お名前", "emailPlaceholder": "your@email.com", "phonePlaceholder": "+46 ...", "guestsPlaceholder": "おおよそのゲスト数", "venuePlaceholder": "会場名または都市名", "messagePlaceholder": "イベントの詳細、音楽の好み、特別なリクエストをケニーにお伝えください..." }, "required": "必須", "submit": "予約リクエストを送信", "sending": "送信中...", "successTitle": "予約リクエストを送信しました！", "successMessage": "ご連絡ありがとうございます。ケニーが24時間以内にご返信します。", "submitAnother": "別の予約を送信", "noPayment": "事前のお支払いは不要です。ケニーが空き状況と料金を確認します。", "contact": { "base": "拠点", "baseValue": "スウェーデン・ストックホルム — 全国対応可能", "phone": "電話", "email": "メール" }, "eventTypes": { "wedding": "結婚式", "corporate": "企業イベント", "birthday": "誕生日パーティー", "club": "クラブナイト", "bar": "バー/レストラン", "festival": "フェスティバル/野外", "private": "プライベートパーティー", "afterwork": "アフターワーク", "other": "その他" } },
-  "footer": { "rights": "All rights reserved.", "tagline": "パイオニア · 歴史家 · バイナル専門家" },
-  "player": { "nowPlaying": "再生中", "selectMix": "ミックスを選択", "mixcloud": "Mixcloud" },
-  "theme": { "dark": "ダーク", "light": "ライト", "system": "システム" },
+  "nav": {
+    "about": "概要",
+    "services": "サービス",
+    "events": "イベント",
+    "press": "プレス",
+    "school": "DJスクール",
+    "book": "DJ予約",
+    "bookNow": "今すぐ予約"
+  },
+  "hero": {
+    "location": "スウェーデン・ストックホルム",
+    "tagline": "パイオニア · バイナル専門家 · 40年以上",
+    "description": "スウェーデンのヒップホップ先駆者、バイナルDJ、音楽史家。親密なディナーからフェスティバルステージまで——忘れられない空間を創り出します。",
+    "bookCta": "DJを予約する",
+    "learnMore": "詳しく見る",
+    "stats": {
+      "years": "年",
+      "since": "年から",
+      "vinyl": "バイナル"
+    }
+  },
+  "about": {
+    "label": "概要",
+    "heading1": "パイオニア。",
+    "heading2": "歴史家。",
+    "heading3": "DJ。",
+    "timelineLabel": "タイムライン",
+    "timeline": [
+      "ストックホルムがヒップホップを発見。ケニー・ブラックは最初からそこにいた。",
+      "「Electric Boogie: When Hip Hop Came to Sweden 1982–1988」を出版",
+      "Finest Blend Recordings設立——エレクトロファンク影響下のデトロイト音楽",
+      "Soul Corner設立——ストックホルムの定番ディープハウス・レジデンシー",
+      "DJ学校を開校——バイナルから始まる全年齢対象のDJ教育",
+      "今も現役。今もバイナル。今もカーブを先取り。"
+    ],
+    "bio": [
+      "ケニー・ブラックは単なるDJではありません——彼はスウェーデン音楽史の一章です。1982年にヒップホップがストックホルムに到着したとき、ケニーはその場にいました。",
+      "Finest Blend Recordingsの創設者であり「Electric Boogie」の著者として、ケニーは触れるものすべてに学識と魂を注ぎ込みます。",
+      "ターンテーブルの前での彼のアプローチはシンプルです：バイナルファースト、オーディエンス常に最優先。",
+      "DJ学校では知識を次世代へ伝えています——全年齢の初心者から上級者まで対応するバイナル・デジタルの実践的トレーニング。"
+    ]
+  },
+  "services": {
+    "label": "サービス",
+    "heading1": "イベントに",
+    "heading2": "もたらすもの",
+    "checkAvailability": "空き状況を確認"
+  },
+  "events": {
+    "label": "イベント",
+    "heading": "デッキの上で",
+    "all": "すべて",
+    "upcoming": "近日開催",
+    "past": "過去",
+    "noEvents": "イベントが見つかりません。"
+  },
+  "testimonials": {
+    "label": "お客様の声",
+    "heading": "皆さんの声"
+  },
+  "booking": {
+    "label": "予約",
+    "heading1": "ケニーを予約",
+    "heading2": "あなたのイベントに",
+    "description": "フォームにご記入いただければ、24時間以内にケニーがイベントの詳細、音楽の好み、料金についてご連絡します。",
+    "fields": {
+      "name": "お名前",
+      "email": "メール",
+      "phone": "電話番号",
+      "eventType": "イベント種別",
+      "eventDate": "イベント日",
+      "guests": "ゲスト数",
+      "venue": "会場/場所",
+      "message": "メッセージ/音楽の好み",
+      "namePlaceholder": "お名前",
+      "emailPlaceholder": "your@email.com",
+      "phonePlaceholder": "+46 ...",
+      "guestsPlaceholder": "おおよそのゲスト数",
+      "venuePlaceholder": "会場名または都市名",
+      "messagePlaceholder": "イベントの詳細、音楽の好み、特別なリクエストをケニーにお伝えください..."
+    },
+    "required": "必須",
+    "submit": "予約リクエストを送信",
+    "sending": "送信中...",
+    "successTitle": "予約リクエストを送信しました！",
+    "successMessage": "ご連絡ありがとうございます。ケニーが24時間以内にご返信します。",
+    "submitAnother": "別の予約を送信",
+    "noPayment": "事前のお支払いは不要です。ケニーが空き状況と料金を確認します。",
+    "contact": {
+      "base": "拠点",
+      "baseValue": "スウェーデン・ストックホルム — 全国対応可能",
+      "phone": "電話",
+      "email": "メール"
+    },
+    "eventTypes": {
+      "wedding": "結婚式",
+      "corporate": "企業イベント",
+      "birthday": "誕生日パーティー",
+      "club": "クラブナイト",
+      "bar": "バー/レストラン",
+      "festival": "フェスティバル/野外",
+      "private": "プライベートパーティー",
+      "afterwork": "アフターワーク",
+      "other": "その他"
+    }
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "tagline": "パイオニア · 歴史家 · バイナル専門家"
+  },
+  "player": {
+    "nowPlaying": "再生中",
+    "selectMix": "ミックスを選択",
+    "mixcloud": "Mixcloud"
+  },
+  "theme": {
+    "dark": "ダーク",
+    "light": "ライト",
+    "system": "システム"
+  },
   "language": "言語",
   "school": {
     "label": "DJスクール",
@@ -19,9 +129,66 @@
     "buyBook": "本を購入",
     "bookLabel": "公式ガイド",
     "bookDesc": "「DJ Skolan」はリズム、BPM、キューイング、ビートマッチング、ループ、EQテクニック、完全なDJセットの構築など12の基本ステップを網羅。10歳以上向け。",
-    "levels": { "heading": "コースレベル", "beginner": { "title": "初心者", "desc": "経験不要。機材、基本的なミキシング、音楽の基礎を学びます。" }, "intermediate": { "title": "中級", "desc": "耳でのビートマッチング、セット構築、EQとトランジション。" }, "advanced": { "title": "上級", "desc": "プロの技術、オーディエンスの読み方、芸術的アイデンティティの構築。" } },
-    "curriculum": { "heading": "学習内容", "items": ["レコードの扱い方とケア", "耳によるビートマッチングとピッチコントロール", "音楽選択とセットプログラミング", "EQ、ミキシングとトランジション", "デジタルツール：Serato & Rekordbox", "オーディエンスの読み方とエネルギー管理", "DJ文化の歴史——ブロンクスからストックホルムへ"] },
-    "formats": { "heading": "レッスン形式", "private": { "title": "プライベートレッスン", "desc": "ケニーと1対1。レベルと目標に完全対応。" }, "group": { "title": "グループワークショップ", "desc": "最大4名。ケニーのフィードバックを得ながら協力して学ぶ。" }, "vinyl": { "title": "バイナルマスタークラス", "desc": "バイナルテクニック、クレートディギング、アナログサウンドの深掘り。" } },
+    "levels": {
+      "heading": "コースレベル",
+      "beginner": {
+        "title": "初心者",
+        "desc": "経験不要。機材、基本的なミキシング、音楽の基礎を学びます。"
+      },
+      "intermediate": {
+        "title": "中級",
+        "desc": "耳でのビートマッチング、セット構築、EQとトランジション。"
+      },
+      "advanced": {
+        "title": "上級",
+        "desc": "プロの技術、オーディエンスの読み方、芸術的アイデンティティの構築。"
+      }
+    },
+    "curriculum": {
+      "heading": "学習内容",
+      "items": [
+        "レコードの扱い方とケア",
+        "耳によるビートマッチングとピッチコントロール",
+        "音楽選択とセットプログラミング",
+        "EQ、ミキシングとトランジション",
+        "デジタルツール：Serato & Rekordbox",
+        "オーディエンスの読み方とエネルギー管理",
+        "DJ文化の歴史——ブロンクスからストックホルムへ"
+      ]
+    },
+    "formats": {
+      "heading": "レッスン形式",
+      "private": {
+        "title": "プライベートレッスン",
+        "desc": "ケニーと1対1。レベルと目標に完全対応。"
+      },
+      "group": {
+        "title": "グループワークショップ",
+        "desc": "最大4名。ケニーのフィードバックを得ながら協力して学ぶ。"
+      },
+      "vinyl": {
+        "title": "バイナルマスタークラス",
+        "desc": "バイナルテクニック、クレートディギング、アナログサウンドの深掘り。"
+      }
+    },
     "contactLine": "メールまたは予約フォームからご予約ください。スウェーデン語と英語でレッスン提供。"
+  },
+  "cart": {
+    "title": "カート",
+    "empty": "カートは空です",
+    "continueShopping": "買い物を続ける",
+    "remove": "削除",
+    "subtotal": "小計",
+    "shippingNote": "送料はチェックアウト時に計算されます · 価格はSEK",
+    "checkout": "レジへ進む",
+    "redirecting": "リダイレクト中…",
+    "clearCart": "カートを空にする",
+    "checkoutFailed": "チェックアウトに失敗しました。もう一度お試しください。"
+  },
+  "pwa": {
+    "installTitle": "アプリをインストール",
+    "installDesc": "DJ Kenny Blackをホーム画面に追加して、すばやく予約できます。",
+    "install": "インストール",
+    "later": "後で"
   }
 }
