@@ -59,10 +59,12 @@ export default function Nav() {
   const isActive = (hash: string) =>
     isHome && (activeHash === hash || (hash === '#about' && activeHash === ''))
 
-  // DJ mixer button style
+  // DJ mixer button style — top edge flush with nav, rounded bottom corners
   const mixerBtn = (active: boolean) => ({
     background: active ? 'var(--accent)' : 'var(--surface-2)',
     border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+    borderTop: 'none',
+    borderRadius: '0 0 8px 8px',
     color: active ? '#fff' : 'var(--muted)',
     boxShadow: active
       ? '0 0 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.12)'
@@ -80,13 +82,13 @@ export default function Nav() {
           borderBottom: scrolled ? '1px solid var(--border)' : 'none',
         }}
       >
-        <div className="max-w-screen-2xl mx-auto px-9 h-12 flex items-center justify-between gap-4">
+        <div className="max-w-screen-2xl mx-auto px-9 h-12 flex items-stretch justify-between gap-4">
 
           {/* Logo */}
           <a
             href="/#"
             onClick={(e) => { e.preventDefault(); close(); setActiveHash(''); if (isHome) window.location.hash = '' }}
-            className="self-stretch flex items-center gap-2.5 flex-shrink-0"
+            className="self-stretch flex items-center gap-2.5 flex-shrink-0 py-1"
           >
             <div
               className="h-full aspect-square flex items-center justify-center font-black text-sm"
@@ -111,7 +113,7 @@ export default function Nav() {
                   key={l.hash}
                   href={hrefFor(l.hash)}
                   onClick={goHash(l.hash)}
-                  className="flex flex-col items-center justify-center px-5 py-2 gap-1.5 tracking-widest uppercase font-black"
+                  className="self-stretch flex flex-col items-center justify-center px-5 gap-1.5 tracking-widest uppercase font-black"
                   style={{ ...mixerBtn(active), minWidth: '80px', fontSize: '0.6rem', textDecoration: 'none' }}
                   onMouseEnter={(e) => {
                     if (!active) {
@@ -143,7 +145,7 @@ export default function Nav() {
           </div>
 
           {/* Right controls */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0 py-1">
             <ThemeToggle />
             <LanguageSwitcher />
 
@@ -183,15 +185,17 @@ export default function Nav() {
               )}
             </button>
 
-            {/* Book Now CTA */}
+            {/* Book Now CTA — same mixer-button style as nav links */}
             <a
               href={hrefFor('#book')}
               onClick={goHash('#book')}
-              className="hidden lg:flex items-center justify-center px-10 py-3 font-black tracking-widest uppercase transition-all duration-200"
-              style={{ background: 'var(--accent)', color: '#fff', fontSize: '0.65rem', textDecoration: 'none' }}
+              className="hidden lg:self-stretch lg:flex flex-col items-center justify-center px-5 gap-1.5 tracking-widest uppercase font-black"
+              style={{ ...mixerBtn(true), minWidth: '80px', fontSize: '0.6rem', textDecoration: 'none' }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.85' }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1' }}
             >
+              <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                style={{ background: '#fff', boxShadow: '0 0 8px rgba(255,255,255,0.9)' }} />
               {t.nav.bookNow}
             </a>
 
