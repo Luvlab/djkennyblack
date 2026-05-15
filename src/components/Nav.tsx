@@ -53,6 +53,7 @@ export default function Nav() {
     { hash: '#school',       label: t.nav.school },
     { hash: '#book',         label: t.nav.book },
     { hash: '#shop',         label: 'Shop' },
+    { hash: '#contact',      label: 'Contact' },
   ]
 
   const isActive = (hash: string) =>
@@ -85,10 +86,10 @@ export default function Nav() {
           <a
             href="/#"
             onClick={(e) => { e.preventDefault(); close(); setActiveHash(''); if (isHome) window.location.hash = '' }}
-            className="flex items-center gap-2.5 flex-shrink-0"
+            className="self-stretch flex items-center gap-2.5 flex-shrink-0"
           >
             <div
-              className="w-9 h-9 flex items-center justify-center font-black text-sm"
+              className="h-full aspect-square flex items-center justify-center font-black text-sm"
               style={{ background: 'var(--accent)', color: '#fff' }}
             >
               KB

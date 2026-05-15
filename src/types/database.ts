@@ -203,6 +203,39 @@ export interface Database {
         Update: Partial<Database['public']['Tables']['orders']['Insert']>
         Relationships: []
       }
+      contact_messages: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          phone: string | null
+          subject: string | null
+          message: string
+          status: 'new' | 'read' | 'replied'
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          phone?: string | null
+          subject?: string | null
+          message: string
+          status?: 'new' | 'read' | 'replied'
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          phone?: string | null
+          subject?: string | null
+          message?: string
+          status?: 'new' | 'read' | 'replied'
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: Record<string, never>
     Functions: Record<string, never>
@@ -225,3 +258,4 @@ export type BookingInsert = Database['public']['Tables']['bookings']['Insert']
 export type Event = Database['public']['Tables']['events']['Row']
 export type Testimonial = Database['public']['Tables']['testimonials']['Row']
 export type Service = Database['public']['Tables']['services']['Row']
+export type ContactMessage = Database['public']['Tables']['contact_messages']['Row']

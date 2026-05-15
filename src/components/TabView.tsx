@@ -9,11 +9,12 @@ import Testimonials from './Testimonials'
 import BookingForm from './BookingForm'
 import DJSchool from './DJSchool'
 import ShopSection from './ShopSection'
+import Contact from './Contact'
 
 // Nav (48px) + TickerTape (~44px) = 92px — all non-home content must start below both
 const TOP_OFFSET = '92px'
 
-type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'school' | 'book' | 'shop'
+type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'school' | 'book' | 'shop' | 'contact'
 
 const HASH_MAP: Record<string, Tab> = {
   '':            'home',
@@ -26,6 +27,7 @@ const HASH_MAP: Record<string, Tab> = {
   school:        'school',
   book:          'book',
   shop:          'shop',
+  contact:       'contact',
 }
 
 function getTab(): Tab {
@@ -87,6 +89,7 @@ export default function TabView() {
       {mounted.has('school')       && panel('school',       <DJSchool />)}
       {mounted.has('book')         && panel('book',         <BookingForm />)}
       {mounted.has('shop')         && panel('shop',         <ShopSection />)}
+      {mounted.has('contact')      && panel('contact',      <Contact />)}
     </main>
   )
 }

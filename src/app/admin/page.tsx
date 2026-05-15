@@ -10,28 +10,34 @@ interface Stats {
   events: number
   testimonials: number
   services: number
+  messages: number
+  newMessages: number
 }
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<Stats>({ bookings: 0, pending: 0, events: 0, testimonials: 0, services: 0 })
+  const [stats, setStats] = useState<Stats>({ bookings: 0, pending: 0, events: 0, testimonials: 0, services: 0, messages: 0, newMessages: 0 })
   const [recentBookings, setRecentBookings] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const load = async () => {
-      const [b, e, t, s] = await Promise.all([
+      const [b, e, t, s, m] = await Promise.all([
         supabase.from('bookings').select('id, status'),
         supabase.from('events').select('id'),
         supabase.from('testimonials').select('id'),
         supabase.from('services').select('id'),
+        supabase.from('contact_messages').select('id, status'),
       ])
       const pending = (b.data || []).filter((x) => x.status === 'pending').length
+      const newMessages = (m.data || []).filter((x) => x.status === 'new').length
       setStats({
         bookings: b.data?.length || 0,
         pending,
         events: e.data?.length || 0,
         testimonials: t.data?.length || 0,
         services: s.data?.length || 0,
+        messages: m.data?.length || 0,
+        newMessages,
       })
 
       const { data: recent } = await supabase
@@ -46,10 +52,10 @@ export default function AdminDashboard() {
   }, [])
 
   const cards = [
-    { label: 'Total Bookings', value: stats.bookings, icon: '📅', href: '/admin/bookings', accent: false },
-    { label: 'Pending Review', value: stats.pending, icon: '⏳', href: '/admin/bookings', accent: true },
-    { label: 'Events', value: stats.events, icon: '🎵', href: '/admin/events', accent: false },
-    { label: 'Testimonials', value: stats.testimonials, icon: '⭐', href: '/admin/testimonials', accent: false },
+    { label: 'Total Bookings',  value: stats.bookings,    icon: '📅', href: '/admin/bookings', accent: false },
+    { label: 'Pending Review',  value: stats.pending,     icon: '⏳', href: '/admin/bookings', accent: stats.pending > 0 },
+    { label: 'New Messages',    value: stats.newMessages, icon: '✉️', href: '/admin/contacts', accent: stats.newMessages > 0 },
+    { label: 'Events',          value: stats.events,      icon: '🎵', href: '/admin/events',   accent: false },
   ]
 
   return (

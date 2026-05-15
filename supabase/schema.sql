@@ -255,3 +255,21 @@ INSERT INTO products (slug, name, description, price_sek, price_eur, type, fulfi
     ARRAY['/shop/giftcard.jpg'],
     '{"variants": [{"id": "single", "name": "1 Session (2hrs)"}, {"id": "course", "name": "Full Course (8 sessions)"}]}'
   );
+
+-- Contact messages (from the public Contact section)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name       TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  phone      TEXT,
+  subject    TEXT,
+  message    TEXT NOT NULL,
+  status     TEXT DEFAULT 'new' CHECK (status IN ('new', 'read', 'replied')),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Allow anyone to insert (public contact form)
+ALTER TABLE contact_messages ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public insert contact" ON contact_messages FOR INSERT WITH CHECK (true);
+-- Only service role (admin) can read/update/delete
+CREATE POLICY "Admin all contact"     ON contact_messages FOR ALL USING (auth.role() = 'service_role');

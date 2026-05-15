@@ -9,6 +9,7 @@ import ThemeToggle from '@/components/ThemeToggle'
 const navItems = [
   { href: '/admin',                  label: 'Dashboard',     icon: '📊' },
   { href: '/admin/bookings',         label: 'Bookings',      icon: '📅' },
+  { href: '/admin/contacts',         label: 'Messages',      icon: '✉️' },
   { href: '/admin/events',           label: 'Events',        icon: '🎵' },
   { href: '/admin/testimonials',     label: 'Testimonials',  icon: '⭐' },
   { href: '/admin/services',         label: 'Services',      icon: '🎧' },
