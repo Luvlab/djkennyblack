@@ -8,6 +8,14 @@ import { useCart } from '@/context/CartContext'
 import Nav from '@/components/Nav'
 import Link from 'next/link'
 
+type BuyLink = { name: string; url: string; price?: string; note?: string }
+type BookMeta = {
+  subtitle?: string; author?: string; isbn?: string; publisher?: string
+  year?: number; pages?: number; language?: string; format?: string
+  external_only?: boolean; quote?: string; quote_by?: string
+  buy_links?: BuyLink[]
+}
+
 const FULFILLMENT_LABEL: Record<string, string> = {
   printful: '📦 Ships via print-on-demand (5–10 business days)',
   manual: '📮 Signed and shipped personally by Kenny Black',
@@ -90,118 +98,199 @@ export default function ProductPage() {
             ← Back to Shop
           </Link>
 
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
-            {/* Image */}
-            <div
-              className="aspect-square rounded overflow-hidden flex items-center justify-center"
-              style={{ background: 'var(--surface)' }}
-            >
-              {product.images?.[0] ? (
-                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-9xl opacity-10">
-                  {product.type === 'book' ? '📚' : product.type === 'ticket' ? '🎫' : '👕'}
-                </span>
-              )}
-            </div>
+          {(() => {
+            const meta = product.metadata as BookMeta | null
+            const isExternal = !!meta?.external_only
 
-            {/* Details */}
-            <div className="flex flex-col gap-5">
-              <div>
-                <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--accent)' }}>
-                  {product.type.charAt(0).toUpperCase() + product.type.slice(1)}
-                </p>
-                <h1 className="text-2xl md:text-3xl font-black uppercase tracking-wider leading-tight">
-                  {product.name}
-                </h1>
-              </div>
+            return (
+              <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
+                {/* Image */}
+                <div
+                  className={`overflow-hidden flex items-center justify-center ${isExternal ? 'aspect-[3/4]' : 'aspect-square rounded'}`}
+                  style={{ background: 'var(--surface)' }}
+                >
+                  {product.images?.[0] ? (
+                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-9xl opacity-10">
+                      {product.type === 'book' ? '📚' : product.type === 'ticket' ? '🎫' : '👕'}
+                    </span>
+                  )}
+                </div>
 
-              <p className="text-3xl font-black" style={{ color: 'var(--accent)' }}>
-                {fmt(price)}
-              </p>
+                {/* Details */}
+                <div className="flex flex-col gap-5">
+                  <div>
+                    <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--accent)' }}>
+                      {product.type.charAt(0).toUpperCase() + product.type.slice(1)}
+                    </p>
+                    <h1 className="text-2xl md:text-3xl font-black leading-tight" style={{ color: 'var(--text)' }}>
+                      {product.name}
+                    </h1>
+                    {meta?.author && (
+                      <p className="text-sm font-bold mt-1" style={{ color: 'var(--muted)' }}>av {meta.author}</p>
+                    )}
+                  </div>
 
-              {product.description && (
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
-                  {product.description}
-                </p>
-              )}
+                  {product.description && (
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+                      {product.description}
+                    </p>
+                  )}
 
-              {/* Variants */}
-              {product.variants && product.variants.length > 0 && (
-                <div>
-                  <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--muted)' }}>
-                    Option
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {product.variants.map((v) => (
+                  {/* Book metadata */}
+                  {isExternal && meta && (
+                    <>
+                      {meta.quote && (
+                        <blockquote className="border-l-2 pl-4" style={{ borderColor: 'var(--accent)' }}>
+                          <p className="text-sm italic leading-relaxed" style={{ color: 'var(--muted)' }}>
+                            &ldquo;{meta.quote}&rdquo;
+                          </p>
+                          {meta.quote_by && (
+                            <p className="text-xs font-black mt-1 tracking-wider not-italic" style={{ color: 'var(--accent)' }}>
+                              — {meta.quote_by}
+                            </p>
+                          )}
+                        </blockquote>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-3 py-4 border-t border-b" style={{ borderColor: 'var(--border)' }}>
+                        {[
+                          { label: 'Förlag',  value: meta.publisher },
+                          { label: 'År',      value: meta.year?.toString() },
+                          { label: 'Sidor',   value: meta.pages ? `${meta.pages} s.` : undefined },
+                          { label: 'Språk',   value: meta.language },
+                          { label: 'Format',  value: meta.format },
+                          { label: 'ISBN',    value: meta.isbn },
+                        ].filter((r) => r.value).map((row) => (
+                          <div key={row.label}>
+                            <span className="block text-xs font-bold tracking-widest uppercase" style={{ color: 'var(--muted-2)', fontSize: '0.6rem' }}>{row.label}</span>
+                            <span className="text-sm font-bold" style={{ color: 'var(--text)' }}>{row.value}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Price */}
+                      <p className="text-3xl font-black" style={{ color: 'var(--accent)' }}>
+                        från {fmt(product.price_sek)}
+                      </p>
+
+                      {/* Buy links */}
+                      {meta.buy_links && meta.buy_links.length > 0 && (
+                        <div>
+                          <p className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: 'var(--muted)' }}>
+                            Köp boken
+                          </p>
+                          <div className="flex flex-col gap-2">
+                            {meta.buy_links.map((link) => (
+                              <a
+                                key={link.name}
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-between px-4 py-3 border transition-all duration-150"
+                                style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+                                onMouseEnter={(e) => {
+                                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
+                                  ;(e.currentTarget as HTMLElement).style.background = 'rgba(255,69,0,0.06)'
+                                }}
+                                onMouseLeave={(e) => {
+                                  (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'
+                                  ;(e.currentTarget as HTMLElement).style.background = 'var(--surface)'
+                                }}
+                              >
+                                <div>
+                                  <span className="block text-sm font-black tracking-wider uppercase" style={{ color: 'var(--text)' }}>
+                                    {link.name}
+                                  </span>
+                                  {link.note && (
+                                    <span className="text-xs" style={{ color: 'var(--muted)' }}>{link.note}</span>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-3 flex-shrink-0">
+                                  {link.price && (
+                                    <span className="text-sm font-black" style={{ color: 'var(--accent)' }}>{link.price}</span>
+                                  )}
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ color: 'var(--muted)' }}>
+                                    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
+                                  </svg>
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+
+                  {/* Standard cart flow for non-external products */}
+                  {!isExternal && (
+                    <>
+                      <p className="text-3xl font-black" style={{ color: 'var(--accent)' }}>{fmt(price)}</p>
+
+                      {product.variants && product.variants.length > 0 && (
+                        <div>
+                          <p className="text-xs font-bold tracking-widest uppercase mb-2" style={{ color: 'var(--muted)' }}>Option</p>
+                          <div className="flex flex-wrap gap-2">
+                            {product.variants.map((v) => (
+                              <button
+                                key={v.id}
+                                onClick={() => setSelectedVariant(v)}
+                                className="px-4 py-2 text-sm font-bold border transition-all duration-150"
+                                style={{
+                                  borderColor: selectedVariant?.id === v.id ? 'var(--accent)' : 'var(--border)',
+                                  color: selectedVariant?.id === v.id ? 'var(--accent)' : 'var(--muted)',
+                                  background: selectedVariant?.id === v.id ? 'rgba(255,69,0,0.08)' : 'transparent',
+                                }}
+                              >
+                                {v.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-4">
+                        <p className="text-xs font-bold tracking-widest uppercase" style={{ color: 'var(--muted)' }}>Qty</p>
+                        <div className="flex items-center border" style={{ borderColor: 'var(--border)' }}>
+                          <button onClick={() => setQty((q) => Math.max(1, q - 1))} className="w-10 h-10 flex items-center justify-center text-xl font-bold" style={{ color: 'var(--text)' }}>−</button>
+                          <span className="w-10 text-center text-sm font-black">{qty}</span>
+                          <button onClick={() => setQty((q) => q + 1)} className="w-10 h-10 flex items-center justify-center text-xl font-bold" style={{ color: 'var(--text)' }} disabled={ticketsLeft !== null && qty >= ticketsLeft}>+</button>
+                        </div>
+                      </div>
+
+                      {ticketsLeft !== null && (
+                        <p className="text-xs" style={{ color: ticketsLeft === 0 ? '#ef4444' : 'var(--muted)' }}>
+                          {ticketsLeft === 0 ? 'Sold out' : `${ticketsLeft} ticket${ticketsLeft !== 1 ? 's' : ''} remaining`}
+                        </p>
+                      )}
+
                       <button
-                        key={v.id}
-                        onClick={() => setSelectedVariant(v)}
-                        className="px-4 py-2 text-sm font-bold border transition-all duration-150"
+                        onClick={handleAdd}
+                        disabled={ticketsLeft === 0}
+                        className="w-full py-4 text-sm font-black tracking-widest uppercase transition-all duration-200"
                         style={{
-                          borderColor: selectedVariant?.id === v.id ? 'var(--accent)' : 'var(--border)',
-                          color: selectedVariant?.id === v.id ? 'var(--accent)' : 'var(--muted)',
-                          background: selectedVariant?.id === v.id ? 'rgba(255,69,0,0.08)' : 'transparent',
+                          background: added ? '#22c55e' : ticketsLeft === 0 ? 'var(--muted)' : 'var(--accent)',
+                          color: '#fff',
+                          cursor: ticketsLeft === 0 ? 'not-allowed' : 'pointer',
                         }}
                       >
-                        {v.name}
+                        {ticketsLeft === 0 ? 'Sold Out' : added ? '✓ Added to Cart' : 'Add to Cart'}
                       </button>
-                    ))}
-                  </div>
-                </div>
-              )}
 
-              {/* Qty */}
-              <div className="flex items-center gap-4">
-                <p className="text-xs font-bold tracking-widest uppercase" style={{ color: 'var(--muted)' }}>Qty</p>
-                <div className="flex items-center border" style={{ borderColor: 'var(--border)' }}>
-                  <button
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="w-10 h-10 flex items-center justify-center text-xl font-bold"
-                    style={{ color: 'var(--text)' }}
-                  >
-                    −
-                  </button>
-                  <span className="w-10 text-center text-sm font-black">{qty}</span>
-                  <button
-                    onClick={() => setQty((q) => q + 1)}
-                    className="w-10 h-10 flex items-center justify-center text-xl font-bold"
-                    style={{ color: 'var(--text)' }}
-                    disabled={ticketsLeft !== null && qty >= ticketsLeft}
-                  >
-                    +
-                  </button>
+                      {FULFILLMENT_LABEL[product.fulfillment] && (
+                        <p className="text-xs pt-4" style={{ color: 'var(--muted)', borderTop: '1px solid var(--border)' }}>
+                          {FULFILLMENT_LABEL[product.fulfillment]}
+                        </p>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
-
-              {ticketsLeft !== null && (
-                <p className="text-xs" style={{ color: ticketsLeft === 0 ? '#ef4444' : 'var(--muted)' }}>
-                  {ticketsLeft === 0 ? 'Sold out' : `${ticketsLeft} ticket${ticketsLeft !== 1 ? 's' : ''} remaining`}
-                </p>
-              )}
-
-              {/* Add to cart */}
-              <button
-                onClick={handleAdd}
-                disabled={ticketsLeft === 0}
-                className="w-full py-4 text-sm font-black tracking-widest uppercase transition-all duration-200"
-                style={{
-                  background: added ? '#22c55e' : ticketsLeft === 0 ? 'var(--muted)' : 'var(--accent)',
-                  color: '#fff',
-                  cursor: ticketsLeft === 0 ? 'not-allowed' : 'pointer',
-                }}
-              >
-                {ticketsLeft === 0 ? 'Sold Out' : added ? '✓ Added to Cart' : 'Add to Cart'}
-              </button>
-
-              {/* Fulfillment note */}
-              {FULFILLMENT_LABEL[product.fulfillment] && (
-                <p className="text-xs pt-4" style={{ color: 'var(--muted)', borderTop: '1px solid var(--border)' }}>
-                  {FULFILLMENT_LABEL[product.fulfillment]}
-                </p>
-              )}
-            </div>
-          </div>
+            )
+          })()}
         </div>
       </main>
     </>

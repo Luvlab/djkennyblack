@@ -8,6 +8,14 @@ import { useCart } from '@/context/CartContext'
 
 type Filter = 'all' | 'book' | 'ticket' | 'merch' | 'digital'
 
+type BuyLink = { name: string; url: string; price?: string; note?: string }
+type BookMeta = {
+  subtitle?: string; author?: string; isbn?: string; publisher?: string
+  year?: number; pages?: number; language?: string; format?: string
+  external_only?: boolean; quote?: string; quote_by?: string
+  buy_links?: BuyLink[]
+}
+
 const FILTERS: { key: Filter; label: string }[] = [
   { key: 'all',     label: 'All' },
   { key: 'book',    label: 'Books' },
@@ -18,10 +26,6 @@ const FILTERS: { key: Filter; label: string }[] = [
 
 const TYPE_ICON: Record<string, string> = {
   book: '📚', ticket: '🎫', merch: '👕', digital: '⬇️',
-}
-
-const TYPE_BADGE: Record<string, string> = {
-  book: 'Book', ticket: 'Ticket', merch: 'Merch', digital: 'Digital',
 }
 
 export default function ShopSection() {
@@ -44,7 +48,6 @@ export default function ShopSection() {
     <section id="shop" className="py-28 min-h-screen" style={{ background: 'var(--bg)' }}>
       <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
 
-        {/* Section header — left aligned, consistent with other sections */}
         <div className="mb-20">
           <p className="section-label mb-4">Store</p>
           <h2
@@ -76,7 +79,6 @@ export default function ShopSection() {
           ))}
         </div>
 
-        {/* Product grid */}
         {loading ? (
           <div className="py-24 text-xs tracking-widest uppercase" style={{ color: 'var(--muted)' }}>
             Loading…
@@ -87,9 +89,12 @@ export default function ShopSection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} onAdd={add} />
-            ))}
+            {filtered.map((product) => {
+              const meta = product.metadata as BookMeta | null
+              return meta?.external_only
+                ? <BookCard key={product.id} product={product} meta={meta} />
+                : <ProductCard key={product.id} product={product} onAdd={add} />
+            })}
           </div>
         )}
       </div>
@@ -97,6 +102,166 @@ export default function ShopSection() {
   )
 }
 
+/* ── Book card — external buy links, no cart ──────────────────────────────── */
+function BookCard({ product, meta }: { product: Product; meta: BookMeta }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div
+      className="group flex flex-col overflow-hidden border transition-all duration-300 sm:col-span-2"
+      style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+    >
+      <div className="grid sm:grid-cols-2 gap-0">
+        {/* Cover image */}
+        <Link href={`/shop/${product.slug}`} className="block overflow-hidden" style={{ background: 'var(--bg)' }}>
+          <div className="aspect-[3/4] sm:aspect-auto sm:h-full flex items-center justify-center overflow-hidden" style={{ minHeight: '280px' }}>
+            {product.images?.[0] ? (
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            ) : (
+              <span className="text-7xl opacity-10">📚</span>
+            )}
+          </div>
+        </Link>
+
+        {/* Info */}
+        <div className="flex flex-col p-6 gap-5">
+          {/* Badge + title */}
+          <div>
+            <span
+              className="text-xs px-2 py-0.5 font-bold uppercase tracking-wider"
+              style={{ background: 'rgba(255,69,0,0.1)', color: 'var(--accent)' }}
+            >
+              Book
+            </span>
+            <Link href={`/shop/${product.slug}`}>
+              <h3 className="text-lg font-black leading-tight mt-3 hover:underline" style={{ color: 'var(--text)' }}>
+                {product.name}
+              </h3>
+            </Link>
+            {meta.author && (
+              <p className="text-xs font-bold mt-1 tracking-wider" style={{ color: 'var(--muted)' }}>
+                av {meta.author}
+              </p>
+            )}
+          </div>
+
+          {/* Description */}
+          {product.description && (
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--muted)' }}>
+              {product.description}
+            </p>
+          )}
+
+          {/* Quote */}
+          {meta.quote && (
+            <blockquote className="border-l-2 pl-4 italic" style={{ borderColor: 'var(--accent)' }}>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
+                &ldquo;{meta.quote}&rdquo;
+              </p>
+              {meta.quote_by && (
+                <p className="text-xs font-bold mt-1 not-italic tracking-wider" style={{ color: 'var(--accent)' }}>
+                  — {meta.quote_by}
+                </p>
+              )}
+            </blockquote>
+          )}
+
+          {/* Book specs */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+            {[
+              { label: 'Förlag',    value: meta.publisher },
+              { label: 'År',        value: meta.year?.toString() },
+              { label: 'Sidor',     value: meta.pages?.toString() },
+              { label: 'Språk',     value: meta.language },
+              { label: 'Format',    value: meta.format },
+              { label: 'ISBN',      value: meta.isbn },
+            ].filter((r) => r.value).map((row) => (
+              <div key={row.label}>
+                <span className="block" style={{ fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--muted-2)' }}>
+                  {row.label}
+                </span>
+                <span className="block text-xs font-bold" style={{ color: 'var(--text)' }}>{row.value}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Price + buy */}
+          <div className="mt-auto pt-4 border-t" style={{ borderColor: 'var(--border)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <span className="font-black text-2xl" style={{ color: 'var(--accent)' }}>
+                från {Math.round(product.price_sek)} SEK
+              </span>
+              <Link
+                href={`/shop/${product.slug}`}
+                className="text-xs font-bold tracking-widest uppercase"
+                style={{ color: 'var(--muted)' }}
+              >
+                Mer info →
+              </Link>
+            </div>
+
+            {/* Buy links toggle */}
+            <button
+              onClick={() => setOpen((o) => !o)}
+              className="w-full py-3 text-sm font-black tracking-widest uppercase transition-all duration-200"
+              style={{ background: 'var(--accent)', color: '#fff' }}
+            >
+              {open ? 'Stäng ▲' : 'Köp boken ▼'}
+            </button>
+
+            {open && meta.buy_links && meta.buy_links.length > 0 && (
+              <div className="mt-3 flex flex-col gap-2">
+                {meta.buy_links.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between px-4 py-2.5 border transition-all duration-150"
+                    style={{ borderColor: 'var(--border)', background: 'var(--bg)' }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)'
+                      ;(e.currentTarget as HTMLElement).style.background = 'rgba(255,69,0,0.06)'
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'
+                      ;(e.currentTarget as HTMLElement).style.background = 'var(--bg)'
+                    }}
+                  >
+                    <div>
+                      <span className="block text-xs font-black tracking-wider uppercase" style={{ color: 'var(--text)' }}>
+                        {link.name}
+                      </span>
+                      {link.note && (
+                        <span className="block text-xs" style={{ color: 'var(--muted-2)' }}>{link.note}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {link.price && (
+                        <span className="text-xs font-black" style={{ color: 'var(--accent)' }}>{link.price}</span>
+                      )}
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ color: 'var(--muted)' }}>
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                      </svg>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── Standard product card ────────────────────────────────────────────────── */
 function ProductCard({
   product,
   onAdd,
@@ -135,7 +300,7 @@ function ProductCard({
             className="text-xs px-2 py-0.5 flex-shrink-0 font-bold uppercase tracking-wider"
             style={{ background: 'rgba(255,69,0,0.1)', color: 'var(--accent)' }}
           >
-            {TYPE_BADGE[product.type]}
+            {product.type.charAt(0).toUpperCase() + product.type.slice(1)}
           </span>
         </div>
 
