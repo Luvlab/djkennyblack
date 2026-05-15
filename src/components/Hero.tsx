@@ -277,7 +277,7 @@ export default function Hero() {
       }} />
 
       {/* ── Main content — left aligned ── */}
-      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-9 pb-[9rem] sm:pb-[11rem] flex flex-col items-start justify-center min-h-0">
+      <div className="relative z-10 flex-1 max-w-screen-xl mx-auto w-full px-5 lg:px-8 pb-[9rem] sm:pb-[11rem] flex flex-col items-start justify-center min-h-0">
 
         <p className="section-label mb-4 sm:mb-10">{t.hero.location}</p>
 

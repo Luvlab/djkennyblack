@@ -22,7 +22,7 @@ export default function About() {
       className="relative py-28"
       style={{ background: 'var(--surface)' }}
     >
-      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
+      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
         {/* Header */}
         <div className="mb-20">
           <p className="section-label mb-4">{t.about.label}</p>

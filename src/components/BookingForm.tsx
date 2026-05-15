@@ -92,7 +92,7 @@ export default function BookingForm() {
       className="py-28"
       style={{ background: 'var(--surface)' }}
     >
-      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
+      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           {/* Left: copy */}
           <div>

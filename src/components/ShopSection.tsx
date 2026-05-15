@@ -42,7 +42,7 @@ export default function ShopSection() {
 
   return (
     <section id="shop" className="py-28 min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
+      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
 
         {/* Section header — left aligned, consistent with other sections */}
         <div className="mb-20">

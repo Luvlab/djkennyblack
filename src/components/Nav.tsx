@@ -82,7 +82,7 @@ export default function Nav() {
           borderBottom: scrolled ? '1px solid var(--border)' : 'none',
         }}
       >
-        <div className="max-w-screen-2xl mx-auto px-9 h-12 flex items-stretch justify-between gap-4">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 h-12 flex items-stretch justify-between gap-4">
 
           {/* Logo */}
           <a

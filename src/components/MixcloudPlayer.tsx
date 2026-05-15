@@ -78,7 +78,7 @@ export default function MixcloudPlayer() {
       }}
     >
       {/* Now playing info row */}
-      <div className="px-9 py-1.5 flex items-center gap-3 min-w-0">
+      <div className="px-4 sm:px-6 py-1.5 flex items-center gap-3 min-w-0">
         <div
           className="w-1.5 h-1.5 rounded-full flex-shrink-0"
           style={{
@@ -124,7 +124,7 @@ export default function MixcloudPlayer() {
       </div>
 
       {/* Iframe player */}
-      <div className="px-9">
+      <div className="px-4 sm:px-6">
         <iframe
           ref={iframeRef}
           key={currentIndex}
@@ -143,7 +143,7 @@ export default function MixcloudPlayer() {
       </div>
 
       {/* Mix selector */}
-      <div className="px-9 py-1.5 overflow-x-auto flex gap-1.5 no-scrollbar">
+      <div className="px-4 sm:px-6 py-1.5 overflow-x-auto flex gap-1.5 no-scrollbar">
         {mixes.map((mix, i) => (
           <button
             key={i}

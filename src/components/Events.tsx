@@ -129,7 +129,7 @@ export default function Events() {
 
   return (
     <section id="events" className="py-28 min-h-screen" style={{ background: 'var(--surface)' }}>
-      <div className="max-w-screen-xl mx-auto px-10 lg:px-16">
+      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
 
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-6">
