@@ -56,14 +56,18 @@ export default function AdminLogin() {
     }
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
+  const isPlaceholder = !supabaseUrl || supabaseUrl.includes('placeholder') || supabaseUrl === 'https://your-project.supabase.co'
+
   const inputStyle = {
     width: '100%',
-    padding: '12px 16px',
-    fontSize: '14px',
+    padding: '16px 20px',
+    fontSize: '16px',
     background: 'var(--bg)',
-    border: '1px solid var(--border)',
+    border: '2px solid var(--border)',
     color: 'var(--text)',
     outline: 'none',
+    borderRadius: '2px',
   }
 
   return (
@@ -88,7 +92,15 @@ export default function AdminLogin() {
           </p>
         </div>
 
-        {!sent ? (
+        {isPlaceholder ? (
+          <div className="text-center space-y-3">
+            <p className="text-sm font-bold" style={{ color: '#ff4444' }}>Supabase not configured</p>
+            <p className="text-xs leading-relaxed" style={{ color: 'var(--muted)' }}>
+              Set <code className="px-1" style={{ background: 'var(--surface)', color: 'var(--accent)' }}>NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
+              <code className="px-1" style={{ background: 'var(--surface)', color: 'var(--accent)' }}>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> in your environment variables.
+            </p>
+          </div>
+        ) : !sent ? (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label
@@ -116,7 +128,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 font-black text-sm tracking-widest uppercase transition-all duration-200"
+              className="w-full py-6 font-black text-sm tracking-widest uppercase transition-all duration-200"
               style={{
                 background: loading ? 'var(--surface)' : 'var(--accent)',
                 color: loading ? 'var(--muted)' : '#fff',
@@ -177,7 +189,7 @@ export default function AdminLogin() {
               <button
                 type="submit"
                 disabled={verifying || code.length < 6}
-                className="w-full py-3 font-black text-sm tracking-widest uppercase"
+                className="w-full py-6 font-black text-sm tracking-widest uppercase"
                 style={{
                   background: verifying || code.length < 6 ? 'var(--surface)' : 'var(--accent)',
                   color: verifying || code.length < 6 ? 'var(--muted)' : '#fff',

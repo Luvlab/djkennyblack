@@ -7,8 +7,9 @@ import Services from './Services'
 import Events from './Events'
 import Testimonials from './Testimonials'
 import BookingForm from './BookingForm'
+import DJSchool from './DJSchool'
 
-type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'book'
+type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'school' | 'book'
 
 const HASH_MAP: Record<string, Tab> = {
   '': 'home',
@@ -18,6 +19,7 @@ const HASH_MAP: Record<string, Tab> = {
   events: 'events',
   testimonials: 'testimonials',
   press: 'testimonials',
+  school: 'school',
   book: 'book',
 }
 
@@ -63,6 +65,7 @@ export default function TabView() {
       {mounted.has('services') && panel('services', <Services />)}
       {mounted.has('events') && panel('events', <Events />)}
       {mounted.has('testimonials') && panel('testimonials', <Testimonials />)}
+      {mounted.has('school') && panel('school', <DJSchool />)}
       {mounted.has('book') && panel('book', <BookingForm />)}
     </main>
   )

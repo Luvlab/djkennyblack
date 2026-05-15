@@ -1,5 +1,5 @@
 {
-  "nav": { "about": "Sobre", "services": "Serviços", "events": "Eventos", "press": "Imprensa", "book": "Reservar", "bookNow": "Reservar Agora" },
+  "nav": { "about": "Sobre", "services": "Serviços", "events": "Eventos", "press": "Imprensa", "school": "Escola DJ", "book": "Reservar DJ", "bookNow": "Reservar Agora" },
   "hero": { "location": "Estocolmo, Suécia", "tagline": "Pioneiro · Especialista em Vinil · 40+ Anos", "description": "Pioneiro do hip hop sueco, DJ de vinil e historiador musical. De jantares íntimos a palcos de festival — criando atmosferas que nunca esquecerá.", "bookCta": "Contratar o DJ", "learnMore": "Saiba Mais", "stats": { "years": "Anos", "since": "Desde", "vinyl": "Vinil" } },
   "about": { "label": "Sobre", "heading1": "Pioneiro.", "heading2": "Historiador.", "heading3": "DJ.", "timelineLabel": "Cronologia", "timeline": ["Estocolmo descobre o hip hop. Kenny Black está lá desde o início.", "Publica \"Electric Boogie: When Hip Hop Came to Sweden 1982–1988\"", "Funda a Finest Blend Recordings — música de Detroit inspirada em electro-funk", "Estabelece o Soul Corner — a residência de deep house definitiva de Estocolmo", "Lança a DJ School — ensinando o ofício desde o vinil para todas as idades", "Continua em frente. Continua no vinil. Sempre à frente do seu tempo."], "bio": ["Kenny Black não é apenas um DJ — ele é um capítulo da história musical sueca. Quando o hip hop chegou a Estocolmo em 1982, Kenny estava lá.", "Como fundador da Finest Blend Recordings e autor de Electric Boogie: When Hip Hop Came to Sweden, Kenny traz erudição e alma a tudo o que toca.", "Atrás dos pratos, a sua filosofia é simples: vinil primeiro, público sempre.", "A sua DJ School passa o conhecimento adiante — formação prática em vinil e digital para iniciantes e avançados de todas as idades."] },
   "services": { "label": "Serviços", "heading1": "O que Trago", "heading2": "para o seu Evento", "checkAvailability": "Verificar Disponibilidade" },
@@ -9,5 +9,19 @@
   "footer": { "rights": "Todos os direitos reservados.", "tagline": "Pioneiro · Historiador · Especialista em Vinil" },
   "player": { "nowPlaying": "A Reproduzir", "selectMix": "Selecionar Mix", "mixcloud": "Mixcloud" },
   "theme": { "dark": "Escuro", "light": "Claro", "system": "Sistema" },
-  "language": "Idioma"
+  "language": "Idioma",
+  "school": {
+    "label": "Escola DJ",
+    "heading1": "Aprenda a ser DJ",
+    "heading2": "com um pioneiro",
+    "description": "Kenny Black ensina a arte do DJing há mais de duas décadas. Ele escreveu o livro sobre isso — literalmente. Seja pegando a agulha pela primeira vez ou aperfeiçoando sua técnica para o palco — é aqui que você começa.",
+    "cta": "Agendar uma aula",
+    "buyBook": "Obter o livro",
+    "bookLabel": "O guia oficial",
+    "bookDesc": "\"DJ Skolan\" cobre 12 passos fundamentais: ritmo, BPM, cueing, beatmatching, looping, técnicas de EQ e construção de sets completos. Para maiores de 10 anos.",
+    "levels": { "heading": "Níveis do curso", "beginner": { "title": "Iniciante", "desc": "Sem experiência necessária. Aprenda o equipamento, mixagem básica e fundamentos musicais." }, "intermediate": { "title": "Intermediário", "desc": "Beatmatching de ouvido, construção de sets, EQ e transições." }, "advanced": { "title": "Avançado", "desc": "Técnicas profissionais, leitura do público e desenvolvimento de identidade artística." } },
+    "curriculum": { "heading": "O que você aprenderá", "items": ["Manuseio e cuidado com vinil", "Beatmatching e controle de pitch de ouvido", "Seleção musical e programação", "EQ, mixagem e transições", "Ferramentas digitais: Serato & Rekordbox", "Leitura do público e gestão de energia", "História da cultura DJ — do Bronx a Estocolmo"] },
+    "formats": { "heading": "Formatos de aula", "private": { "title": "Aulas privadas", "desc": "Um a um com Kenny. Totalmente adaptado ao seu nível e objetivos." }, "group": { "title": "Workshops em grupo", "desc": "Grupos de até 4 alunos. Aprendizado colaborativo com feedback de Kenny." }, "vinyl": { "title": "Masterclass de vinil", "desc": "Técnica de vinil, crate digging, som analógico e arqueologia musical." } },
+    "contactLine": "Reserve por email ou use o formulário. Aulas disponíveis em sueco e inglês."
+  }
 }

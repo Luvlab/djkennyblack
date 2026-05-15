@@ -1,5 +1,5 @@
 {
-  "nav": { "about": "À Propos", "services": "Services", "events": "Événements", "press": "Presse", "book": "Réserver", "bookNow": "Réserver Maintenant" },
+  "nav": { "about": "À Propos", "services": "Services", "events": "Événements", "press": "Presse", "school": "École DJ", "book": "Réserver DJ", "bookNow": "Réserver Maintenant" },
   "hero": { "location": "Stockholm, Suède", "tagline": "Pionnier · Spécialiste Vinyle · 40+ Ans", "description": "Pionnier du hip hop suédois, DJ vinyle et historien de la musique. Des dîners intimes aux scènes de festival — créant des atmosphères inoubliables.", "bookCta": "Réserver le DJ", "learnMore": "En Savoir Plus", "stats": { "years": "Ans", "since": "Depuis", "vinyl": "Vinyle" } },
   "about": { "label": "À Propos", "heading1": "Pionnier.", "heading2": "Historien.", "heading3": "DJ.", "timelineLabel": "Chronologie", "timeline": ["Stockholm découvre le hip hop. Kenny Black est là dès le début.", "Publie \"Electric Boogie: When Hip Hop Came to Sweden 1982–1988\"", "Fonde Finest Blend Recordings — musique de Detroit inspirée de l'électro-funk", "Crée Soul Corner — la résidence de deep house incontournable de Stockholm", "Lance la DJ School — enseigner le métier depuis le vinyle pour tous les âges", "Toujours en route. Toujours vinyle. Toujours en avance sur son temps."], "bio": ["Kenny Black n'est pas seulement un DJ — il est un chapitre de l'histoire musicale suédoise. Quand le hip hop est arrivé à Stockholm en 1982, Kenny était là.", "En tant que fondateur de Finest Blend Recordings et auteur d'Electric Boogie: When Hip Hop Came to Sweden, Kenny apporte érudition et âme à tout ce qu'il touche.", "Derrière les platines, son approche est simple : vinyle d'abord, public toujours.", "Sa DJ School transmet le savoir — formation pratique vinyle et numérique pour débutants et avancés de tous âges."] },
   "services": { "label": "Services", "heading1": "Ce que j'apporte", "heading2": "à votre Événement", "checkAvailability": "Vérifier la Disponibilité" },
@@ -9,5 +9,19 @@
   "footer": { "rights": "Tous droits réservés.", "tagline": "Pionnier · Historien · Spécialiste Vinyle" },
   "player": { "nowPlaying": "En Lecture", "selectMix": "Choisir un Mix", "mixcloud": "Mixcloud" },
   "theme": { "dark": "Sombre", "light": "Clair", "system": "Système" },
-  "language": "Langue"
+  "language": "Langue",
+  "school": {
+    "label": "École DJ",
+    "heading1": "Apprenez le DJing",
+    "heading2": "avec un pionnier",
+    "description": "Kenny Black enseigne l'art du DJing depuis plus de deux décennies. Il a écrit le livre là-dessus — littéralement. Que vous preniez l'aiguille pour la première fois ou que vous perfectionniez votre technique pour la scène, c'est ici que vous commencez.",
+    "cta": "Réserver un cours",
+    "buyBook": "Obtenir le livre",
+    "bookLabel": "Le guide officiel",
+    "bookDesc": "\"DJ Skolan — Lär dig DJa med Kenny Black\" couvre 12 étapes fondamentales : rythme, BPM, cueing, beatmatching, looping, techniques d'EQ et construction de sets complets. Dès 10 ans.",
+    "levels": { "heading": "Niveaux de cours", "beginner": { "title": "Débutant", "desc": "Aucune expérience requise. Apprenez le matériel, le mixage de base et les fondamentaux musicaux." }, "intermediate": { "title": "Intermédiaire", "desc": "Beatmatching à l'oreille, construction de sets, EQ et transitions." }, "advanced": { "title": "Avancé", "desc": "Techniques professionnelles, lecture du public et développement de l'identité artistique." } },
+    "curriculum": { "heading": "Ce que vous apprendrez", "items": ["Manipulation et entretien du vinyle", "Beatmatching et contrôle du pitch à l'oreille", "Sélection musicale et programmation", "EQ, mixage et transitions", "Outils numériques : Serato & Rekordbox", "Lecture du public et gestion de l'énergie", "Histoire du DJ — du Bronx à Stockholm"] },
+    "formats": { "heading": "Formats de cours", "private": { "title": "Cours privés", "desc": "En tête-à-tête avec Kenny. Entièrement adapté à votre niveau et vos objectifs." }, "group": { "title": "Ateliers en groupe", "desc": "Groupes de 4 étudiants maximum. Apprentissage collaboratif avec feedback de Kenny." }, "vinyl": { "title": "Masterclass vinyle", "desc": "Technique vinyle, crate digging, son analogique et archéologie musicale." } },
+    "contactLine": "Réservez par email ou utilisez le formulaire. Cours disponibles en suédois et en anglais."
+  }
 }

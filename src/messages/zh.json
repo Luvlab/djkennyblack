@@ -1,5 +1,5 @@
 {
-  "nav": { "about": "关于", "services": "服务", "events": "活动", "press": "媒体", "book": "预约", "bookNow": "立即预约" },
+  "nav": { "about": "关于", "services": "服务", "events": "活动", "press": "媒体", "school": "DJ学校", "book": "预约DJ", "bookNow": "立即预约" },
   "hero": { "location": "瑞典斯德哥尔摩", "tagline": "先驱 · 黑胶专家 · 40余年经验", "description": "瑞典嘻哈先驱、黑胶DJ与音乐史学家。从私密晚宴到音乐节舞台——营造令人难忘的氛围。", "bookCta": "预约DJ", "learnMore": "了解更多", "stats": { "years": "年", "since": "自", "vinyl": "黑胶" } },
   "about": { "label": "关于", "heading1": "先驱。", "heading2": "史学家。", "heading3": "DJ。", "timelineLabel": "时间线", "timeline": ["斯德哥尔摩发现嘻哈，Kenny Black从一开始就在场。", "出版《Electric Boogie: When Hip Hop Came to Sweden 1982–1988》", "创立Finest Blend Recordings——融合电子放克风格的底特律音乐厂牌", "建立Soul Corner——斯德哥尔摩最具代表性的深度浩室驻场", "创办DJ学校——从黑胶起步，面向各年龄层传授DJ技艺", "依然在路上。依然黑胶。依然引领潮流。"], "bio": ["Kenny Black不只是一位DJ——他是瑞典音乐史上的一个章节。1982年嘻哈音乐来到斯德哥尔摩时，Kenny就在现场。", "作为Finest Blend Recordings的创始人和《Electric Boogie: When Hip Hop Came to Sweden》的作者，Kenny将学识与灵魂融入他所做的一切。", "在唱片机后面，他的理念很简单：黑胶优先，观众至上。", "他的DJ学校传承知识——为各年龄层初学者和进阶学生提供实践性的黑胶与数字培训。"] },
   "services": { "label": "服务", "heading1": "我为您的", "heading2": "活动带来的", "checkAvailability": "查询档期" },
@@ -9,5 +9,19 @@
   "footer": { "rights": "版权所有。", "tagline": "先驱 · 史学家 · 黑胶专家" },
   "player": { "nowPlaying": "正在播放", "selectMix": "选择混音", "mixcloud": "Mixcloud" },
   "theme": { "dark": "深色", "light": "浅色", "system": "跟随系统" },
-  "language": "语言"
+  "language": "语言",
+  "school": {
+    "label": "DJ学校",
+    "heading1": "学习DJ技术",
+    "heading2": "跟随先驱",
+    "description": "肯尼·布莱克教授DJ艺术已逾二十年。他为此专门写了一本书——真的。无论您是第一次拿起唱针，还是在为舞台打磨技术，这里就是您的起点。",
+    "cta": "预约课程",
+    "buyBook": "购买书籍",
+    "bookLabel": "官方教程",
+    "bookDesc": "《DJ Skolan》涵盖12个基础步骤：节奏、BPM、提示、节拍匹配、循环、EQ技术以及完整DJ套曲的构建。适合10岁及以上人群。",
+    "levels": { "heading": "课程级别", "beginner": { "title": "初学者", "desc": "无需经验。学习设备、基础混音和音乐基础知识。" }, "intermediate": { "title": "中级", "desc": "靠耳感进行节拍匹配、套曲构建、EQ和过渡技术。" }, "advanced": { "title": "高级", "desc": "专业技术、读懂观众以及发展艺术身份。" } },
+    "curriculum": { "heading": "学习内容", "items": ["黑胶唱片的处理、保养和设置", "靠耳感进行节拍匹配和音调控制", "音乐选择和套曲编排", "EQ、混音和过渡", "数字工具：Serato & Rekordbox", "读懂观众和能量管理", "DJ文化历史——从布朗克斯到斯德哥尔摩"] },
+    "formats": { "heading": "课程形式", "private": { "title": "私人课程", "desc": "与肯尼一对一。完全根据您的水平和目标量身定制。" }, "group": { "title": "小组工作坊", "desc": "最多4名学生。在肯尼的反馈下协作学习。" }, "vinyl": { "title": "黑胶大师班", "desc": "深入了解黑胶技术、挖掘唱片箱、模拟音效和音乐考古。" } },
+    "contactLine": "通过电子邮件或预约表格预订。课程提供瑞典语和英语。"
+  }
 }

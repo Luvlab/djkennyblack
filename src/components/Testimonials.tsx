@@ -38,7 +38,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="py-24 px-4"
+      className="py-24 px-5 sm:px-8"
       style={{ background: 'var(--bg)' }}
     >
       <div className="max-w-screen-xl mx-auto">

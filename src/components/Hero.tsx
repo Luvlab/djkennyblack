@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useLang } from '@/context/LangContext'
 
 const genres = [
   'Deep House', 'Soul', 'Funk', 'Old School Hip Hop', 'Vinyl Only',
@@ -10,6 +11,7 @@ const genres = [
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { t } = useLang()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -77,11 +79,11 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div className="relative z-10 max-w-screen-xl mx-auto px-4 pt-28 pb-16 flex flex-col items-center text-center">
+      <div className="relative z-10 max-w-screen-xl mx-auto px-5 sm:px-8 pt-28 pb-16 flex flex-col items-center text-center">
         {/* Eyebrow */}
         <div className="section-label mb-6 flex items-center gap-3">
           <span className="accent-line" />
-          Stockholm, Sweden
+          {t.hero.location}
           <span className="accent-line" />
         </div>
 
@@ -111,36 +113,35 @@ export default function Hero() {
             textTransform: 'uppercase',
           }}
         >
-          Pioneer · Vinyl Specialist · 40+ Years
+          {t.hero.tagline}
         </p>
 
         <p
           className="max-w-lg mb-10 leading-relaxed"
           style={{ color: 'var(--muted)', fontSize: '0.95rem' }}
         >
-          Swedish hip hop pioneer, vinyl DJ, and music historian. From intimate dinners
-          to festival stages — creating atmospheres you will never forget.
+          {t.hero.description}
         </p>
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none sm:w-auto">
           <a
-            href="#book"
-            className="px-8 py-4 font-bold text-sm tracking-widest uppercase rounded transition-all duration-200 glow-accent"
+            href="/#book"
+            className="px-10 py-8 font-bold text-sm tracking-widest uppercase rounded transition-all duration-200 glow-accent flex items-center justify-center"
             style={{ background: 'var(--accent)', color: '#fff' }}
           >
-            Book the DJ
+            {t.hero.bookCta}
           </a>
           <a
-            href="#about"
-            className="px-8 py-4 font-bold text-sm tracking-widest uppercase rounded border transition-all duration-200"
+            href="/#about"
+            className="px-10 py-8 font-bold text-sm tracking-widest uppercase rounded border transition-all duration-200 flex items-center justify-center"
             style={{
-              border: '1px solid var(--border)',
+              border: '2px solid var(--border)',
               color: 'var(--text)',
               background: 'transparent',
             }}
           >
-            Learn More
+            {t.hero.learnMore}
           </a>
         </div>
 
@@ -150,9 +151,9 @@ export default function Hero() {
           style={{ borderColor: 'var(--border)' }}
         >
           {[
-            { value: '40+', label: 'Years' },
-            { value: '1982', label: 'Since' },
-            { value: 'Vinyl', label: 'Specialist' },
+            { value: '40+', label: t.hero.stats.years },
+            { value: '1982', label: t.hero.stats.since },
+            { value: 'Vinyl', label: t.hero.stats.vinyl },
           ].map((stat) => (
             <div key={stat.label} className="flex flex-col items-center">
               <span

@@ -49,6 +49,8 @@ export default function Nav() {
     { hash: '#services', label: t.nav.services },
     { hash: '#events', label: t.nav.events },
     { hash: '#testimonials', label: t.nav.press },
+    { hash: '#school', label: t.nav.school },
+    { hash: '#book', label: t.nav.book },
   ]
 
   const isActive = (hash: string) =>
