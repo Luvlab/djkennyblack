@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DJ Kenny Black — Booking Web App
 
-## Getting Started
+Stockholm-based DJ booking site for **DJ Kenny Black** (Kenny Black Event AB). Built mobile-first with a dark, minimalist DJ aesthetic.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework:** Next.js 16 (App Router, TypeScript)
+- **Styling:** Tailwind CSS + CSS custom properties
+- **Database:** Supabase (PostgreSQL)
+- **Hosting:** Vercel
+- **Music Player:** Mixcloud Widget API + animated VU meter
+
+## Features
+
+- Animated hero with canvas waveform visualization
+- Genre ticker scroll
+- About section with career timeline
+- DB-driven services, events, testimonials
+- Booking form → Supabase `bookings` table
+- Mixcloud footer player (9 mixes from @soulcorner-kennyblack)
+- VU meter that animates with play/pause state
+- 100% mobile-first responsive
+
+## Setup
+
+### 1. Supabase
+
+Create a project at [supabase.com](https://supabase.com), then run the schema:
+
+```sql
+-- Copy and run: supabase/schema.sql
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cp .env.local.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Then fill in your Supabase URL and anon key:
 
-## Learn More
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Run locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. Deploy to Vercel
 
-## Deploy on Vercel
+```bash
+vercel --prod
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Add the environment variables in Vercel project settings.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Mixcloud
+
+Mixes stream from [@soulcorner-kennyblack](https://www.mixcloud.com/soulcorner-kennyblack/).
+
+The VU meter animates using a spring physics simulation when playing — since cross-origin audio analysis is blocked by browsers, the meter uses a seeded pseudo-random oscillator that syncs to play/pause state.
+
+## Contact
+
+Kenny Black Event AB  
++46 73 941 40 65  
+kennyblack@gmail.com  
+[@djkennyblackevent](https://instagram.com/djkennyblackevent)
