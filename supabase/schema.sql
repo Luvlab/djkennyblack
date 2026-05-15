@@ -140,3 +140,118 @@ INSERT INTO site_settings (key, value, label, type, group_name) VALUES
   ('show_booking_form', 'true', 'Show Booking Form', 'boolean', 'features'),
   ('show_events', 'true', 'Show Events Section', 'boolean', 'features')
 ON CONFLICT (key) DO NOTHING;
+
+-- ─────────────────────────────────────────────
+-- SHOP TABLES
+-- ─────────────────────────────────────────────
+
+CREATE TYPE product_type AS ENUM ('book', 'ticket', 'merch', 'digital');
+CREATE TYPE order_status AS ENUM ('pending', 'paid', 'fulfilled', 'refunded', 'cancelled');
+CREATE TYPE fulfillment_type AS ENUM ('printful', 'manual', 'digital', 'ticket');
+
+-- Products
+CREATE TABLE IF NOT EXISTS products (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  description TEXT,
+  price_sek INTEGER NOT NULL,          -- price in öre (SEK cents)
+  price_eur INTEGER,                   -- price in euro cents
+  type product_type NOT NULL DEFAULT 'merch',
+  fulfillment fulfillment_type NOT NULL DEFAULT 'printful',
+  images TEXT[] DEFAULT '{}',
+  printful_sync_id TEXT,               -- Printful product ID
+  printful_variant_ids JSONB,          -- {size: printful_variant_id}
+  event_id UUID REFERENCES events(id), -- for tickets: which event
+  ticket_quantity INTEGER,             -- NULL = unlimited
+  tickets_sold INTEGER DEFAULT 0,
+  digital_file_url TEXT,               -- for digital products
+  variants JSONB DEFAULT '[]',         -- [{name: "S", printful_id: "..."}, ...]
+  is_active BOOLEAN DEFAULT true,
+  is_featured BOOLEAN DEFAULT false,
+  sort_order INTEGER DEFAULT 0,
+  metadata JSONB DEFAULT '{}',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Orders
+CREATE TABLE IF NOT EXISTS orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_number TEXT UNIQUE NOT NULL,
+  customer_name TEXT NOT NULL,
+  customer_email TEXT NOT NULL,
+  customer_phone TEXT,
+  shipping_address JSONB,
+  items JSONB NOT NULL,                -- snapshot of ordered items + variants
+  subtotal INTEGER NOT NULL,           -- in öre
+  shipping INTEGER DEFAULT 0,
+  total INTEGER NOT NULL,
+  currency TEXT DEFAULT 'SEK',
+  status order_status DEFAULT 'pending',
+  stripe_session_id TEXT,
+  stripe_payment_intent TEXT,
+  printful_order_id TEXT,
+  ticket_codes JSONB DEFAULT '[]',     -- generated ticket codes
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- RLS
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read active products" ON products FOR SELECT USING (is_active = true);
+CREATE POLICY "Public insert orders" ON orders FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public read own orders" ON orders FOR SELECT USING (true);
+
+-- Seed products
+INSERT INTO products (slug, name, description, price_sek, price_eur, type, fulfillment, is_featured, sort_order, images, metadata) VALUES
+  (
+    'electric-boogie-book',
+    'Electric Boogie — Book',
+    'The definitive history of how hip hop came to Sweden. Written by Kenny Black, who was there when it happened. Covers 1982–1988 — the formative years of Swedish hip hop culture. Limited physical copies signed by the author. Also available as an instant digital PDF download.',
+    29900, 2490, 'book', 'manual', true, 1,
+    ARRAY['/shop/book-cover.jpg'],
+    '{"author": "Kenny Black", "year": "2024", "pages": "240", "isbn": "978-0-000-00000-0", "variants": [{"id": "signed", "name": "Signed Physical Copy", "price_sek": 39900}, {"id": "digital", "name": "Digital PDF", "price_sek": 14900}]}'
+  ),
+  (
+    'kenny-black-tee',
+    'Kenny Black T-Shirt',
+    'Premium heavyweight cotton tee. Kenny Black "Soul Corner" logo print on front — inspired by the original Stockholm deep house residency. Printed on demand via Printful.',
+    34900, 2990, 'merch', 'printful', true, 2,
+    ARRAY['/shop/tee-black.jpg'],
+    '{"variants": [{"id": "S", "name": "S"}, {"id": "M", "name": "M"}, {"id": "L", "name": "L"}, {"id": "XL", "name": "XL"}, {"id": "XXL", "name": "XXL"}], "colors": ["Black", "White"]}'
+  ),
+  (
+    'kenny-black-hoodie',
+    'Soul Corner Hoodie',
+    'Heavyweight 80% cotton hoodie. "Soul Corner Stockholm" embroidered logo. The kind of hoodie you wear to a vinyl session at 2am. Printed on demand via Printful.',
+    69900, 5990, 'merch', 'printful', true, 3,
+    ARRAY['/shop/hoodie-black.jpg'],
+    '{"variants": [{"id": "S", "name": "S"}, {"id": "M", "name": "M"}, {"id": "L", "name": "L"}, {"id": "XL", "name": "XL"}, {"id": "XXL", "name": "XXL"}], "colors": ["Black", "Navy"]}'
+  ),
+  (
+    'electric-boogie-poster',
+    'Electric Boogie Poster',
+    'Museum-quality 50×70cm art print. The original Electric Boogie cover art — Swedish hip hop history on your wall. Printed on archival 200gsm paper via Printful.',
+    29900, 2490, 'merch', 'printful', false, 4,
+    ARRAY['/shop/poster.jpg'],
+    '{"variants": [{"id": "A3", "name": "A3 (30×42cm)"}, {"id": "50x70", "name": "50×70cm"}, {"id": "A2", "name": "A2 (42×59cm)"}]}'
+  ),
+  (
+    'vinyl-tote',
+    'Vinyl Record Tote Bag',
+    'Heavy-duty canvas tote. "Vinyl First" screen printed in signature orange. Fits exactly 20 12-inch records — tested personally by Kenny Black.',
+    19900, 1690, 'merch', 'printful', false, 5,
+    ARRAY['/shop/tote.jpg'],
+    '{"variants": []}'
+  ),
+  (
+    'dj-school-gift-card',
+    'DJ School Gift Card',
+    'Give someone the gift of learning to DJ. Redeemable for any DJ School session with Kenny Black. Valid for 12 months. Delivered instantly by email.',
+    79900, 6990, 'digital', 'digital', false, 6,
+    ARRAY['/shop/giftcard.jpg'],
+    '{"variants": [{"id": "single", "name": "1 Session (2hrs)"}, {"id": "course", "name": "Full Course (8 sessions)"}]}'
+  );

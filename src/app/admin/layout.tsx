@@ -15,6 +15,8 @@ const navItems = [
   { href: '/admin/events', label: 'Events', icon: '🎵' },
   { href: '/admin/testimonials', label: 'Testimonials', icon: '⭐' },
   { href: '/admin/services', label: 'Services', icon: '🎧' },
+  { href: '/admin/shop/products', label: 'Products', icon: '🛍️' },
+  { href: '/admin/shop/orders', label: 'Orders', icon: '📦' },
   { href: '/admin/settings', label: 'Settings & CSS', icon: '⚙️' },
 ]
 

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { cookies, headers } from 'next/headers'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { LangProvider } from '@/context/LangContext'
+import { CartProvider } from '@/context/CartContext'
+import CartDrawer from '@/components/CartDrawer'
 import PWAInstaller from '@/components/PWAInstaller'
 import './globals.css'
 
@@ -60,8 +62,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-screen antialiased" style={{ background: 'var(--bg)', color: 'var(--text)' }}>
         <ThemeProvider>
           <LangProvider geoCountry={geoCountry || country}>
-            {children}
-            <PWAInstaller />
+            <CartProvider>
+              {children}
+              <CartDrawer />
+              <PWAInstaller />
+            </CartProvider>
           </LangProvider>
         </ThemeProvider>
       </body>

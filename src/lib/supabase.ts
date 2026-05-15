@@ -5,3 +5,6 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'https://placeholder
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? 'placeholder-key'
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+
+// Factory for components that prefer calling createClient() rather than using the singleton
+export const getSupabaseClient = () => supabase
