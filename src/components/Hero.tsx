@@ -59,9 +59,9 @@ export default function Hero() {
   const freqDataRef  = useRef<Uint8Array<ArrayBuffer> | null>(null)
   const micStreamRef = useRef<MediaStream | null>(null)
 
-  // ── Sensitivity ──────────────────────────────────────────────────────────
-  const [sensitivity, setSensitivity] = useState(2.5)
-  const sensitivityRef = useRef(2.5)
+  // ── Sensitivity (in dB; converted to linear multiplier when applied) ─────
+  const [sensitivity, setSensitivity] = useState(8)   // dB, ≈ 2.5× linear
+  const sensitivityRef = useRef(8)
 
   // Desktop-only: does this browser support getDisplayMedia?
   const supportsSystemAudio =
@@ -240,7 +240,7 @@ export default function Hero() {
         const freq  = 20 * Math.pow(1000, tPos)
         const numBins = freqDataRef.current.length
         const bin   = Math.min(Math.round((freq / nyquist) * numBins), numBins - 1)
-        const raw   = Math.min(1, (freqDataRef.current[bin] / 255) * sensitivityRef.current)
+        const raw   = Math.min(1, (freqDataRef.current[bin] / 255) * Math.pow(10, sensitivityRef.current / 20))
 
         const diff = raw - displayRef.current[i]
         displayRef.current[i] += diff > 0 ? diff * 0.60 : diff * 0.15
@@ -544,14 +544,14 @@ export default function Hero() {
                     Sensitivity
                   </span>
                   <span style={{ fontSize: '0.52rem', fontWeight: 900, color: 'var(--accent)', letterSpacing: '0.05em' }}>
-                    {sensitivity.toFixed(1)}×
+                    {sensitivity >= 0 ? '+' : ''}{sensitivity} dB
                   </span>
                 </div>
                 <input
                   type="range"
-                  min={0.5}
-                  max={8}
-                  step={0.1}
+                  min={-6}
+                  max={24}
+                  step={1}
                   value={sensitivity}
                   onChange={(e) => {
                     const v = parseFloat(e.target.value)
