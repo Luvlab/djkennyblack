@@ -227,7 +227,7 @@ export default function Contact() {
                   { label: 'Instagram', href: 'https://instagram.com/djkennyblackevent' },
                   { label: 'Mixcloud',  href: 'https://www.mixcloud.com/soulcorner-kennyblack/' },
                   { label: 'Bandcamp',  href: 'https://finestblend.bandcamp.com' },
-                  { label: 'Discogs',   href: 'https://www.discogs.com/artist/DJ_Kenny_Black_AB' },
+                  { label: 'Discogs',   href: 'https://www.discogs.com/artist/205605-Kenny-Black' },
                 ].map((s) => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                     className="px-5 py-2.5 text-xs font-bold tracking-widest uppercase border transition-all duration-200"

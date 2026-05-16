@@ -10,7 +10,7 @@ const facts = [
   { label: 'Format', value: 'Vinyl First' },
   { label: 'Base', value: 'Stockholm, SE' },
   { label: 'Mixcloud', value: '@soulcorner-kennyblack' },
-  { label: 'Discogs', value: 'DJ_Kenny_Black_AB' },
+  { label: 'Discogs', value: 'Kenny-Black #205605' },
 ]
 
 export default function About() {
@@ -135,7 +135,7 @@ export default function About() {
                 { label: 'Instagram', href: 'https://instagram.com/djkennyblackevent' },
                 { label: 'Mixcloud', href: 'https://www.mixcloud.com/soulcorner-kennyblack/' },
                 { label: 'Bandcamp', href: 'https://finestblend.bandcamp.com' },
-                { label: 'Discogs', href: 'https://www.discogs.com/artist/DJ_Kenny_Black_AB' },
+                { label: 'Discogs', href: 'https://www.discogs.com/artist/205605-Kenny-Black' },
               ].map((s) => (
                 <a
                   key={s.label}

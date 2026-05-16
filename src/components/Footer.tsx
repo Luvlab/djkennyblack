@@ -7,7 +7,7 @@ const socials = [
   { label: 'Mixcloud', href: 'https://www.mixcloud.com/soulcorner-kennyblack/' },
   { label: 'Facebook', href: 'https://www.facebook.com/djkennyblackevent/' },
   { label: 'Bandcamp', href: 'https://finestblend.bandcamp.com' },
-  { label: 'Discogs', href: 'https://www.discogs.com/artist/DJ_Kenny_Black_AB' },
+  { label: 'Discogs', href: 'https://www.discogs.com/artist/205605-Kenny-Black' },
 ]
 
 export default function Footer() {
