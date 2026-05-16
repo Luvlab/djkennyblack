@@ -49,7 +49,7 @@
   },
   "events": {
     "label": "Eventos",
-    "heading": "Nas Pickups",
+    "heading": "Nos Pratos",
     "all": "Todos",
     "upcoming": "Próximos",
     "past": "Passados",
@@ -133,15 +133,15 @@
       "heading": "Níveis do curso",
       "beginner": {
         "title": "Iniciante",
-        "desc": "Sem experiência necessária. Aprenda o equipamento, mixagem básica e fundamentos musicais."
+        "desc": "Sem experiência necessária. Aprenda o equipamento, mixagem básica, fundamentos musicais e a história da cultura DJ."
       },
       "intermediate": {
         "title": "Intermediário",
-        "desc": "Beatmatching de ouvido, construção de sets, EQ e transições."
+        "desc": "Beatmatching de ouvido, construção de sets, EQ e transições. Desenvolva seu próprio som e estilo de programação."
       },
       "advanced": {
         "title": "Avançado",
-        "desc": "Técnicas profissionais, leitura do público e desenvolvimento de identidade artística."
+        "desc": "Técnicas profissionais, leitura do público e desenvolvimento de identidade artística. Habilidades de performance prontas para o palco."
       }
     },
     "curriculum": {

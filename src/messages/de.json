@@ -133,15 +133,15 @@
       "heading": "Kursstufen",
       "beginner": {
         "title": "Anfänger",
-        "desc": "Keine Erfahrung erforderlich. Lerne Ausrüstung, Basis-Mixing und Musikgrundlagen."
+        "desc": "Keine Erfahrung erforderlich. Lerne Ausrüstung, Basis-Mixing, Musikgrundlagen und die Geschichte der DJ-Kultur."
       },
       "intermediate": {
         "title": "Mittelstufe",
-        "desc": "Beatmatching nach Gehör, Set-Aufbau, EQ und Übergänge."
+        "desc": "Beatmatching nach Gehör, Set-Aufbau, EQ und Übergänge. Entwickle deinen eigenen Sound und Programmierstil."
       },
       "advanced": {
         "title": "Fortgeschritten",
-        "desc": "Professionelle Techniken, Publikumslesen und Entwicklung der künstlerischen Identität."
+        "desc": "Professionelle Techniken, Publikumslesen und Entwicklung der künstlerischen Identität. Bühnenreife Performance-Fähigkeiten."
       }
     },
     "curriculum": {

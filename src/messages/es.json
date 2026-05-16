@@ -133,15 +133,15 @@
       "heading": "Niveles de curso",
       "beginner": {
         "title": "Principiante",
-        "desc": "Sin experiencia necesaria. Aprende el equipo, mezcla básica y fundamentos musicales."
+        "desc": "Sin experiencia necesaria. Aprende el equipo, mezcla básica, fundamentos musicales e historia de la cultura DJ."
       },
       "intermediate": {
         "title": "Intermedio",
-        "desc": "Beatmatching de oído, construcción de sets, EQ y transiciones."
+        "desc": "Beatmatching de oído, construcción de sets, EQ y transiciones. Desarrolla tu propio sonido y estilo de programación."
       },
       "advanced": {
         "title": "Avanzado",
-        "desc": "Técnicas profesionales, lectura del público y desarrollo de identidad artística."
+        "desc": "Técnicas profesionales, lectura del público y desarrollo de identidad artística. Habilidades de actuación listas para el escenario."
       }
     },
     "curriculum": {

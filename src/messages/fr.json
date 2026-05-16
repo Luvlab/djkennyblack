@@ -89,7 +89,7 @@
     "noPayment": "Aucun paiement requis. Kenny confirmera les disponibilités et les tarifs.",
     "contact": {
       "base": "Base",
-      "baseValue": "Stockholm, Suède — disponible dans toute la Scandinavie",
+      "baseValue": "Stockholm, Suède — disponible partout en Suède",
       "phone": "Téléphone",
       "email": "Email"
     },
@@ -133,15 +133,15 @@
       "heading": "Niveaux de cours",
       "beginner": {
         "title": "Débutant",
-        "desc": "Aucune expérience requise. Apprenez le matériel, le mixage de base et les fondamentaux musicaux."
+        "desc": "Aucune expérience requise. Apprenez le matériel, le mixage de base, les fondamentaux musicaux et l'histoire de la culture DJ."
       },
       "intermediate": {
         "title": "Intermédiaire",
-        "desc": "Beatmatching à l'oreille, construction de sets, EQ et transitions."
+        "desc": "Beatmatching à l'oreille, construction de sets, EQ et transitions. Développez votre propre son et style de programmation."
       },
       "advanced": {
         "title": "Avancé",
-        "desc": "Techniques professionnelles, lecture du public et développement de l'identité artistique."
+        "desc": "Techniques professionnelles, lecture du public et développement de l'identité artistique. Compétences de performance prêtes pour la scène."
       }
     },
     "curriculum": {
