@@ -61,14 +61,15 @@ export default function Nav() {
 
   // DJ mixer button style — top edge flush with nav, rounded bottom corners
   const mixerBtn = (active: boolean) => ({
-    background: active ? 'var(--accent)' : 'var(--surface-2)',
-    border: `1px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+    background: active ? 'var(--accent)' : 'rgba(0,0,0,0.55)',
+    border: `1px solid ${active ? 'var(--accent)' : 'rgba(255,255,255,0.10)'}`,
     borderTop: 'none',
     borderRadius: '0 0 8px 8px',
-    color: active ? '#fff' : 'var(--muted)',
+    color: active ? '#fff' : 'rgba(255,255,255,0.78)',
+    backdropFilter: 'blur(10px)',
     boxShadow: active
       ? '0 0 16px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.12)'
-      : 'inset 0 1px 0 rgba(255,255,255,0.04)',
+      : 'inset 0 1px 0 rgba(255,255,255,0.06)',
     transition: 'all 0.12s ease',
   })
 
@@ -124,8 +125,8 @@ export default function Nav() {
                   onMouseLeave={(e) => {
                     if (!active) {
                       const el = e.currentTarget as HTMLElement
-                      el.style.borderColor = 'var(--border)'
-                      el.style.color = 'var(--muted)'
+                      el.style.borderColor = 'rgba(255,255,255,0.10)'
+                      el.style.color = 'rgba(255,255,255,0.78)'
                     }
                   }}
                 >
