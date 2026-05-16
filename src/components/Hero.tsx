@@ -331,10 +331,10 @@ export default function Hero() {
         pointerEvents: 'none',
       }} />
 
-      {/* ── Main content — pinned exactly between header (92px) and player (130px) ── */}
+      {/* ── Main content — pinned between nav (48px) and ticker+player (160px) ── */}
       <div
         className="absolute inset-x-0 z-10 overflow-hidden"
-        style={{ top: '92px', bottom: '130px' }}
+        style={{ top: '48px', bottom: '160px' }}
       >
         <div className="h-full max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-start justify-center">
 
@@ -430,7 +430,7 @@ export default function Hero() {
       </div>
 
       {/* ── Background mode switcher — sits just above player ── */}
-      <div className="absolute z-20 flex flex-col gap-1.5" style={{ bottom: '138px', right: '1.25rem' }}>
+      <div className="absolute z-20 flex flex-col gap-1.5" style={{ bottom: '168px', right: '1.25rem' }}>
         <button
           onClick={() => setBgMode('spectrum')}
           title="Spectrum"
@@ -475,7 +475,7 @@ export default function Hero() {
 
       {/* ── Audio capture status + controls ── */}
       {bgMode === 'spectrum' && (
-        <div className="absolute z-20 flex flex-col gap-2" style={{ bottom: '138px', left: '1.25rem' }}>
+        <div className="absolute z-20 flex flex-col gap-2" style={{ bottom: '168px', left: '1.25rem' }}>
 
           {/* Source toggle — mic vs system audio (desktop only) */}
           {supportsSystemAudio && micState !== 'requesting' && (
@@ -596,7 +596,7 @@ export default function Hero() {
 
       {/* Slideshow dots */}
       {bgMode === 'images' && heroImages.length > 1 && (
-        <div className="absolute z-20 flex gap-1.5" style={{ bottom: '138px', left: '1.25rem' }}>
+        <div className="absolute z-20 flex gap-1.5" style={{ bottom: '168px', left: '1.25rem' }}>
           {heroImages.map((_, i) => (
             <button key={i} onClick={() => setSlideIdx(i)}
               className="transition-all duration-300"

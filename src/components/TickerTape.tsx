@@ -27,9 +27,10 @@ export default function TickerTape() {
 
   return (
     <div
-      className="fixed top-12 left-0 right-0 z-[49] overflow-hidden border-b py-3"
+      className="fixed left-0 right-0 z-[41] overflow-hidden border-t py-3"
       style={{
-        background: 'color-mix(in srgb, var(--bg) 95%, transparent)',
+        bottom: '120px',
+        background: 'color-mix(in srgb, var(--bg) 90%, transparent)',
         backdropFilter: 'blur(12px)',
         borderColor: 'var(--border)',
       }}
@@ -39,7 +40,7 @@ export default function TickerTape() {
           <span
             key={i}
             className="font-black tracking-widest uppercase flex items-center gap-8"
-            style={{ color: 'var(--muted-2)', fontSize: '0.65rem' }}
+            style={{ color: 'var(--text)', fontSize: '0.65rem' }}
           >
             {g}
             <span style={{ color: 'var(--accent)', fontSize: '0.4rem' }}>◆</span>
