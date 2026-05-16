@@ -250,7 +250,7 @@ export default function Hero() {
         if (lvl < 0.005) continue
 
         const x    = i * slot + gap * 0.5
-        const barH = lvl * H * 0.75
+        const barH = lvl * H
         const [r, g, bl] = specRGB(tPos)
 
         const alpha = 0.15 + lvl * 0.38
