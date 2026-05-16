@@ -16,7 +16,7 @@ export default function DJSchool() {
 
   return (
     <section className="py-28 min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
+      <div className="max-w-screen-xl mx-auto px-4 lg:px-6">
 
         {/* Header */}
         <div className="mb-20">

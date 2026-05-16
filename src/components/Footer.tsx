@@ -17,7 +17,7 @@ export default function Footer() {
     <footer style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)' }}>
       {/* Footer content */}
       <div
-        className="max-w-screen-xl mx-auto px-5 lg:px-8 py-8"
+        className="max-w-screen-xl mx-auto px-4 lg:px-6 py-8"
       >
         <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
           {/* Brand */}

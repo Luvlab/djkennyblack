@@ -336,7 +336,7 @@ export default function Hero() {
         className="absolute inset-x-0 z-10 overflow-hidden"
         style={{ top: '92px', bottom: '130px' }}
       >
-        <div className="h-full max-w-screen-xl mx-auto px-5 lg:px-8 flex flex-col items-start justify-center">
+        <div className="h-full max-w-screen-xl mx-auto px-4 lg:px-6 flex flex-col items-start justify-center">
 
           <p className="section-label mb-3 sm:mb-6">{t.hero.location}</p>
 

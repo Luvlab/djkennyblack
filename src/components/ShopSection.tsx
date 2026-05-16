@@ -46,7 +46,7 @@ export default function ShopSection() {
 
   return (
     <section id="shop" className="py-28 min-h-screen" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
+      <div className="max-w-screen-xl mx-auto px-4 lg:px-6">
 
         <div className="mb-20">
           <p className="section-label mb-4">Store</p>

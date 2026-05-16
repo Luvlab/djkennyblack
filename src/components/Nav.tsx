@@ -8,10 +8,55 @@ import LanguageSwitcher from './LanguageSwitcher'
 import { useLang } from '@/context/LangContext'
 import { useCart } from '@/context/CartContext'
 
+/* ── Random display fonts ──────────────────────────────────────────────────── */
+type DispFont = { family: string; w: string }
+
+const FONTS: DispFont[] = [
+  { family: 'Bebas Neue',       w: '400' },
+  { family: 'Black Ops One',    w: '400' },
+  { family: 'Orbitron',         w: '900' },
+  { family: 'Syncopate',        w: '700' },
+  { family: 'Russo One',        w: '400' },
+  { family: 'Teko',             w: '700' },
+  { family: 'Press Start 2P',   w: '400' },
+  { family: 'Boogaloo',         w: '400' },
+  { family: 'Alfa Slab One',    w: '400' },
+  { family: 'Bangers',          w: '400' },
+  { family: 'Permanent Marker', w: '400' },
+  { family: 'Righteous',        w: '400' },
+  { family: 'Chakra Petch',     w: '700' },
+  { family: 'Rock Salt',        w: '400' },
+  { family: 'Black Han Sans',   w: '400' },
+  { family: 'Exo 2',            w: '900' },
+]
+
+const loadedFonts = new Set<string>()
+
+function loadFont(f: DispFont) {
+  if (typeof document === 'undefined' || loadedFonts.has(f.family)) return
+  loadedFonts.add(f.family)
+  const el = document.createElement('link')
+  el.rel = 'stylesheet'
+  el.href = `https://fonts.googleapis.com/css2?family=${f.family.replace(/ /g, '+')}:wght@${f.w}&display=swap`
+  document.head.appendChild(el)
+}
+
+function pickDifferent(current: DispFont | null, notSameAs: DispFont | null): DispFont {
+  const pool = FONTS.filter(
+    f => f.family !== current?.family && f.family !== notSameAs?.family
+  )
+  const picked = pool[Math.floor(Math.random() * pool.length)]
+  loadFont(picked)
+  return picked
+}
+
+/* ── Component ─────────────────────────────────────────────────────────────── */
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled]   = useState(false)
+  const [menuOpen, setMenuOpen]   = useState(false)
   const [activeHash, setActiveHash] = useState('')
+  const [kbFont, setKbFont]       = useState<DispFont | null>(null)
+  const [titleFont, setTitleFont] = useState<DispFont | null>(null)
   const { t } = useLang()
   const { count, openCart } = useCart()
   const pathname = usePathname()
@@ -32,8 +77,6 @@ export default function Nav() {
 
   const close = () => setMenuOpen(false)
 
-  // For in-page hash links: prevent default + set hash directly so hashchange fires.
-  // For cross-page hash links: let the browser navigate normally.
   const goHash = (hash: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
     close()
     if (isHome) {
@@ -42,8 +85,19 @@ export default function Nav() {
     }
   }
 
-  // Full href for non-home use
   const hrefFor = (hash: string) => (isHome ? hash : `/${hash}`)
+
+  // Click logo → randomise both fonts independently
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    close()
+    setActiveHash('')
+    if (isHome) window.location.hash = ''
+    const newKb    = pickDifferent(kbFont, titleFont)
+    const newTitle = pickDifferent(titleFont, newKb)
+    setKbFont(newKb)
+    setTitleFont(newTitle)
+  }
 
   const links = [
     { hash: '#about',        label: t.nav.about },
@@ -59,7 +113,6 @@ export default function Nav() {
   const isActive = (hash: string) =>
     isHome && (activeHash === hash || (hash === '#about' && activeHash === ''))
 
-  // DJ mixer button style — top edge flush with nav, rounded bottom corners
   const mixerBtn = (active: boolean) => ({
     background: active ? 'var(--accent)' : 'rgba(0,0,0,0.55)',
     border: `1px solid ${active ? 'var(--accent)' : 'rgba(255,255,255,0.10)'}`,
@@ -83,29 +136,49 @@ export default function Nav() {
           borderBottom: scrolled ? '1px solid var(--border)' : 'none',
         }}
       >
-        <div className="max-w-screen-2xl mx-auto px-0 sm:px-4 h-12 flex items-stretch justify-between gap-2 sm:gap-4">
+        {/* Full-width — no max-w, no horizontal padding */}
+        <div className="h-12 flex items-stretch justify-between">
 
-          {/* Logo */}
+          {/* ── Logo ── */}
           <a
             href="/#"
-            onClick={(e) => { e.preventDefault(); close(); setActiveHash(''); if (isHome) window.location.hash = '' }}
-            className="self-stretch flex items-center gap-2.5 flex-shrink-0"
+            onClick={handleLogoClick}
+            title="Click to change fonts"
+            className="self-stretch flex items-center gap-3 flex-shrink-0 select-none"
+            style={{ cursor: 'pointer' }}
           >
+            {/* KB square — fills full nav height */}
             <div
-              className="h-full aspect-square flex items-center justify-center font-black text-sm"
-              style={{ background: 'var(--accent)', color: '#fff' }}
+              className="h-full aspect-square flex items-center justify-center text-base"
+              style={{
+                background: 'var(--accent)',
+                color: '#fff',
+                fontFamily: kbFont ? `'${kbFont.family}', sans-serif` : undefined,
+                fontWeight: kbFont ? Number(kbFont.w) : 900,
+                transition: 'font-family 0.2s',
+              }}
             >
               KB
             </div>
+
+            {/* App title */}
             <span
-              className="font-black tracking-widest uppercase hidden sm:block"
-              style={{ color: 'var(--text)', fontSize: '0.8rem', letterSpacing: '0.15em' }}
+              className="uppercase hidden sm:block"
+              style={{
+                color: 'var(--text)',
+                fontSize: '1rem',
+                letterSpacing: '0.1em',
+                fontFamily: titleFont ? `'${titleFont.family}', sans-serif` : undefined,
+                fontWeight: titleFont ? Number(titleFont.w) : 900,
+                transition: 'font-family 0.2s',
+                whiteSpace: 'nowrap',
+              }}
             >
               Kenny Black
             </span>
           </a>
 
-          {/* Desktop nav — DJ mixer channel buttons */}
+          {/* ── Desktop nav ── */}
           <div className="hidden lg:flex items-center gap-1.5 flex-1 justify-center">
             {links.map((l) => {
               const active = isActive(l.hash)
@@ -130,7 +203,6 @@ export default function Nav() {
                     }
                   }}
                 >
-                  {/* LED indicator */}
                   <span
                     className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                     style={{
@@ -142,11 +214,10 @@ export default function Nav() {
                 </a>
               )
             })}
-
           </div>
 
-          {/* Right controls */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          {/* ── Right controls ── */}
+          <div className="flex items-center gap-2 flex-shrink-0 pr-2">
             <ThemeToggle />
             <LanguageSwitcher />
 
@@ -156,8 +227,7 @@ export default function Nav() {
               className="relative flex items-center justify-center transition-all duration-200"
               aria-label="Open cart"
               style={{
-                width: '40px',
-                height: '40px',
+                width: '40px', height: '40px',
                 background: 'var(--surface-2)',
                 border: '1px solid var(--border)',
                 color: 'var(--muted)',
@@ -186,7 +256,7 @@ export default function Nav() {
               )}
             </button>
 
-            {/* Book Now CTA — same mixer-button style as nav links */}
+            {/* Book Now */}
             <a
               href={hrefFor('#book')}
               onClick={goHash('#book')}
@@ -227,7 +297,7 @@ export default function Nav() {
         </div>
       </nav>
 
-      {/* Mobile full-screen menu */}
+      {/* ── Mobile full-screen menu ── */}
       <div
         className="fixed inset-0 z-40 flex flex-col justify-center items-center lg:hidden"
         style={{

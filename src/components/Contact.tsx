@@ -64,7 +64,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-28" style={{ background: 'var(--surface)' }}>
-      <div className="max-w-screen-xl mx-auto px-5 lg:px-8">
+      <div className="max-w-screen-xl mx-auto px-4 lg:px-6">
 
         {/* Header */}
         <div className="mb-20">
