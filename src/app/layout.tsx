@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { cookies, headers } from 'next/headers'
+import { createClient } from '@supabase/supabase-js'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { LangProvider } from '@/context/LangContext'
 import { CartProvider } from '@/context/CartContext'
@@ -11,17 +12,72 @@ import './globals.css'
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'DJ Kenny Black — Stockholm',
-  description: 'Book DJ Kenny Black for your event. Stockholm-based DJ and music pioneer with 40+ years experience. Deep house, soul, funk, vinyl sets.',
-  keywords: ['DJ Kenny Black', 'Stockholm DJ', 'boka DJ', 'wedding DJ Stockholm', 'deep house', 'soul funk DJ'],
-  manifest: '/manifest.json',
-  appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'DJ Kenny Black' },
-  openGraph: {
-    title: 'DJ Kenny Black — Stockholm',
-    description: 'Pioneer. Vinyl Specialist. 40+ Years.',
-    type: 'website',
-  },
+const SEO_DEFAULTS = {
+  title:         "DJ Kenny Black — Stockholm's Pioneer Vinyl DJ",
+  description:   'Book DJ Kenny Black for your event. Swedish hip hop pioneer, vinyl specialist and music historian. Deep house, soul, funk. 40+ years on the decks.',
+  ogImage:       '',
+  ogImageAlt:    'DJ Kenny Black behind the decks',
+  siteUrl:       'https://djkennyblack.vercel.app',
+  twitterHandle: '',
+  keywords:      ['DJ Kenny Black', 'Stockholm DJ', 'boka DJ', 'deep house', 'soul funk DJ', 'vinyl DJ'],
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  try {
+    const sb = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+    )
+    const { data } = await sb.from('site_settings').select('key, value')
+      .in('key', ['seo_title','seo_description','seo_og_image','seo_og_image_alt',
+                  'seo_canonical_url','seo_twitter_handle','seo_keywords'])
+
+    const s: Record<string, string> = {}
+    data?.forEach((d) => { if (d.value) s[d.key] = d.value })
+
+    const title         = s.seo_title          || SEO_DEFAULTS.title
+    const description   = s.seo_description    || SEO_DEFAULTS.description
+    const ogImage       = s.seo_og_image        || SEO_DEFAULTS.ogImage
+    const ogImageAlt    = s.seo_og_image_alt    || SEO_DEFAULTS.ogImageAlt
+    const siteUrl       = s.seo_canonical_url   || SEO_DEFAULTS.siteUrl
+    const twitterHandle = s.seo_twitter_handle  || SEO_DEFAULTS.twitterHandle
+    const keywords      = s.seo_keywords
+      ? s.seo_keywords.split(',').map((k) => k.trim()).filter(Boolean)
+      : SEO_DEFAULTS.keywords
+
+    return {
+      title,
+      description,
+      keywords,
+      manifest: '/manifest.json',
+      metadataBase: new URL(siteUrl),
+      alternates: { canonical: '/' },
+      appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'DJ Kenny Black' },
+      openGraph: {
+        title,
+        description,
+        type: 'website',
+        url: siteUrl,
+        siteName: 'DJ Kenny Black',
+        ...(ogImage ? { images: [{ url: ogImage, alt: ogImageAlt, width: 1200, height: 630 }] } : {}),
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        ...(twitterHandle ? { creator: twitterHandle, site: twitterHandle } : {}),
+        ...(ogImage ? { images: [ogImage] } : {}),
+      },
+    }
+  } catch {
+    return {
+      title: SEO_DEFAULTS.title,
+      description: SEO_DEFAULTS.description,
+      keywords: SEO_DEFAULTS.keywords,
+      manifest: '/manifest.json',
+      openGraph: { title: SEO_DEFAULTS.title, description: SEO_DEFAULTS.description, type: 'website' },
+    }
+  }
 }
 
 export const viewport: Viewport = {

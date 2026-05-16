@@ -16,6 +16,7 @@ const navItems = [
   { href: '/admin/services',      label: 'Services',     icon: '🎧' },
   { href: '/admin/shop/products', label: 'Products',     icon: '🛍️' },
   { href: '/admin/shop/orders',   label: 'Orders',       icon: '📦' },
+  { href: '/admin/seo',            label: 'SEO & Sharing', icon: '🔍' },
   { href: '/admin/settings',      label: 'Settings',     icon: '⚙️' },
 ]
 
