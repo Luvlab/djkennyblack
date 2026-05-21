@@ -1,58 +1,51 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { NextResponse, type NextRequest } from 'next/server'
 
-const SESSION_SECRET = process.env.SESSION_SECRET || 'kb-session-secret-change-me'
+export async function proxy(request: NextRequest) {
+  let response = NextResponse.next({ request })
 
-async function getKey(secret: string): Promise<CryptoKey> {
-  return crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign', 'verify']
-  )
-}
-
-async function verifyToken(token: string): Promise<boolean> {
-  try {
-    const decoded = atob(token.replace(/-/g, '+').replace(/_/g, '/'))
-    const dotIndex = decoded.lastIndexOf('.')
-    if (dotIndex === -1) return false
-    const timestamp = decoded.slice(0, dotIndex)
-    const sigHex = decoded.slice(dotIndex + 1)
-
-    const key = await getKey(SESSION_SECRET)
-    const sigBytes = new Uint8Array(sigHex.match(/.{2}/g)!.map((h) => parseInt(h, 16)))
-    const valid = await crypto.subtle.verify('HMAC', key, sigBytes, new TextEncoder().encode(timestamp))
-
-    if (!valid) return false
-    if (Date.now() - parseInt(timestamp) > 7 * 24 * 60 * 60 * 1000) return false
-    return true
-  } catch {
-    return false
-  }
-}
-
-export async function proxy(req: NextRequest) {
-  const { pathname } = req.nextUrl
-
-  if (
-    pathname === '/admin/login' ||
-    pathname.startsWith('/api/admin/auth') ||
-    pathname.startsWith('/_next')
-  ) {
-    return NextResponse.next()
-  }
-
-  if (pathname.startsWith('/admin')) {
-    const cookie = req.cookies.get('kb-admin')
-    if (!cookie || !(await verifyToken(cookie.value))) {
-      return NextResponse.redirect(new URL('/admin/login', req.url))
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
+          response = NextResponse.next({ request })
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options)
+          )
+        },
+      },
     }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const path = request.nextUrl.pathname
+  const isAdminPath = path.startsWith('/admin')
+  const isLoginPage = path === '/admin/login'
+
+  // Not logged in → redirect to login
+  if (isAdminPath && !isLoginPage && !user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/admin/login'
+    return NextResponse.redirect(url)
   }
 
-  return NextResponse.next()
+  // Already logged in → skip login page
+  if (isLoginPage && user) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/admin'
+    return NextResponse.redirect(url)
+  }
+
+  return response
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/auth/callback'],
 }

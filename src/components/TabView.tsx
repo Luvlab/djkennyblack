@@ -6,6 +6,7 @@ import About from './About'
 import Services from './Services'
 import Events from './Events'
 import Testimonials from './Testimonials'
+import Archive from './Archive'
 import BookingForm from './BookingForm'
 import DJSchool from './DJSchool'
 import ShopSection from './ShopSection'
@@ -14,7 +15,7 @@ import Contact from './Contact'
 // Nav (48px) + TickerTape (~44px) = 92px — all non-home content must start below both
 const TOP_OFFSET = '92px'
 
-type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'school' | 'book' | 'shop' | 'contact'
+type Tab = 'home' | 'about' | 'services' | 'events' | 'testimonials' | 'archive' | 'school' | 'book' | 'shop' | 'contact'
 
 const HASH_MAP: Record<string, Tab> = {
   '':            'home',
@@ -24,6 +25,9 @@ const HASH_MAP: Record<string, Tab> = {
   events:        'events',
   testimonials:  'testimonials',
   press:         'testimonials',
+  archive:       'archive',
+  shha:          'archive',
+  history:       'archive',
   school:        'school',
   book:          'book',
   shop:          'shop',
@@ -86,6 +90,7 @@ export default function TabView() {
       {mounted.has('services')     && panel('services',     <Services />)}
       {mounted.has('events')       && panel('events',       <Events />)}
       {mounted.has('testimonials') && panel('testimonials', <Testimonials />)}
+      {mounted.has('archive')      && panel('archive',      <Archive />)}
       {mounted.has('school')       && panel('school',       <DJSchool />)}
       {mounted.has('book')         && panel('book',         <BookingForm />)}
       {mounted.has('shop')         && panel('shop',         <ShopSection />)}
